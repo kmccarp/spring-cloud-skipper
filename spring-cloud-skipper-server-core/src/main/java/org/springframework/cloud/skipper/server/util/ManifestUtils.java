@@ -109,7 +109,7 @@ public class ManifestUtils {
 			for (Template template : templates) {
 				String templateAsString = new String(template.getData());
 				com.samskivert.mustache.Template mustacheTemplate = Mustache.compiler().compile(templateAsString);
-				sb.append("\n---\n# Source: " + template.getName() + "\n");
+				sb.append("\n---\n# Source: ").append(template.getName()).append("\n");
 				sb.append(mustacheTemplate.execute(model));
 			}
 		}

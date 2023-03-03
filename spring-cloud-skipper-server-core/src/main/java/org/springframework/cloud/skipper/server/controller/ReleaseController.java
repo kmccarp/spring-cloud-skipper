@@ -248,16 +248,14 @@ public class ReleaseController {
 	@ResponseStatus(HttpStatus.OK)
 	public CollectionModel<EntityModel<Release>> list() {
 		List<Release> releaseList = this.releaseService.list();
-		CollectionModel<EntityModel<Release>> resources = this.releaseResourceAssembler.toCollectionModel(releaseList);
-		return resources;
+		return this.releaseResourceAssembler.toCollectionModel(releaseList);
 	}
 
 	@RequestMapping(path = "/list/{name}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public CollectionModel<EntityModel<Release>> list(@PathVariable("name") String releaseName) {
 		List<Release> releaseList = this.releaseService.list(releaseName);
-		CollectionModel<EntityModel<Release>> resources = this.releaseResourceAssembler.toCollectionModel(releaseList);
-		return resources;
+		return this.releaseResourceAssembler.toCollectionModel(releaseList);
 	}
 
 	@GetMapping("/actuator/{name}/{app}/{id}")

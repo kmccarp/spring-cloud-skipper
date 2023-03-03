@@ -79,7 +79,7 @@ public class ReleaseService {
 
 	private final DeployerRepository deployerRepository;
 
-	private PackageMetadataService packageMetadataService;
+	private final PackageMetadataService packageMetadataService;
 
 	public ReleaseService(PackageMetadataRepository packageMetadataRepository,
 						  ReleaseRepository releaseRepository,
@@ -262,7 +262,7 @@ public class ReleaseService {
 					ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
 					return releaseManager.statusReactive(release);
 				})
-				.collectMap(release -> release.getName(), release -> release.getInfo());
+				.collectMap(Release::getName, Release::getInfo);
 	}
 
 	/**
@@ -279,14 +279,12 @@ public class ReleaseService {
 					String kind = ManifestUtils.resolveKind(release.getManifest().getData());
 					return this.releaseManagerFactory.getReleaseManager(kind);
 				}, release -> release)
-				.flatMap(m -> {
-					return Flux.fromIterable(m.entrySet())
+				.flatMap(m -> Flux.fromIterable(m.entrySet())
 							.flatMap(e -> e.getKey().deploymentState(new ArrayList<>(e.getValue())))
 							.reduce((to, from) -> {
 								to.putAll(from);
 								return to;
-							});
-				});
+							}));
 	}
 
 	/**

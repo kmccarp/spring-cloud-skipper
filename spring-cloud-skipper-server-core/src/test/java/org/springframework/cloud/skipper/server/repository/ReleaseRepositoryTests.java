@@ -47,9 +47,9 @@ import static org.assertj.core.api.Java6Assertions.fail;
 @Transactional
 public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 
-	private static Long REMOTE_REPO = 1L;
+	private static Long remoteRepo = 1L;
 
-	private static Long LOCAL_REPO = 2L;
+	private static Long localRepo = 2L;
 
 	@Autowired
 	private ReleaseRepository releaseRepository;
@@ -68,7 +68,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		PackageMetadata packageMetadata1 = new PackageMetadata();
 		packageMetadata1.setApiVersion("skipper.spring.io/v1");
 		packageMetadata1.setKind("SpringCloudDeployerApplication");
-		packageMetadata1.setRepositoryId(REMOTE_REPO);
+		packageMetadata1.setRepositoryId(remoteRepo);
 		packageMetadata1.setRepositoryName("local");
 		packageMetadata1.setName("package1");
 		packageMetadata1.setVersion("1.0.0");
@@ -80,7 +80,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		PackageMetadata packageMetadata2 = new PackageMetadata();
 		packageMetadata2.setApiVersion("skipper.spring.io/v1");
 		packageMetadata2.setKind("SpringCloudDeployerApplication");
-		packageMetadata2.setRepositoryId(LOCAL_REPO);
+		packageMetadata2.setRepositoryId(localRepo);
 		packageMetadata2.setRepositoryName("local");
 		packageMetadata2.setName("package2");
 		packageMetadata2.setVersion("1.0.1");
@@ -254,11 +254,11 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		Long packageMetadataId2 = this.packageMetadataRepository.findByName("package2").get(0).getId();
 
 		List<Release> foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
+				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(remoteRepo, packageMetadataId1);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(6);
 
 		foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(LOCAL_REPO, packageMetadataId2);
+				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(localRepo, packageMetadataId2);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(11);
 
 		// findByNameAndVersionOrderByApiVersionDesc
@@ -356,9 +356,9 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 					.isEqualTo(String.format("Release with the name [%s] doesn't exist", release16.getName()));
 		}
 
-		this.packageMetadataRepository.deleteByRepositoryIdAndName(REMOTE_REPO, "package1");
+		this.packageMetadataRepository.deleteByRepositoryIdAndName(remoteRepo, "package1");
 		foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
+				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(remoteRepo, packageMetadataId1);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(6);
 
 		try {
@@ -432,7 +432,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 
 		PackageMetadata packageMetadata1 = new PackageMetadata();
 		packageMetadata1.setApiVersion("skipper.spring.io/v1");
-		packageMetadata1.setRepositoryId(LOCAL_REPO);
+		packageMetadata1.setRepositoryId(localRepo);
 		packageMetadata1.setKind("SpringCloudDeployerApplication");
 		String repoName = "local";
 		packageMetadata1.setRepositoryId(this.repositoryRepository.findByName(repoName).getId());
@@ -493,7 +493,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata1.getName(),
 				PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 		List<Release> foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO,
+				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(remoteRepo,
 						ticktockPackageMetadataId);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(0);
 
@@ -504,7 +504,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 
 		PackageMetadata packageMetadata1 = new PackageMetadata();
 		packageMetadata1.setApiVersion("skipper.spring.io/v1");
-		packageMetadata1.setRepositoryId(LOCAL_REPO);
+		packageMetadata1.setRepositoryId(localRepo);
 		packageMetadata1.setKind("SpringCloudDeployerApplication");
 		String repoName = "test";
 		packageMetadata1.setRepositoryId(this.repositoryRepository.findByName(repoName).getId());
