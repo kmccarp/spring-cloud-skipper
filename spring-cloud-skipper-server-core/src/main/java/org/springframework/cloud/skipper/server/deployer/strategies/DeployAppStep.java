@@ -107,7 +107,7 @@ public class DeployAppStep {
 				.findByReleaseNameAndReleaseVersionRequired(
 						existingRelease.getName(), existingRelease.getVersion());
 		Map<String, String> existingAppNamesAndDeploymentIds = (existingAppDeployerData != null) ?
-				existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
+				existingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
 
 		for (Map.Entry<String, String> existingEntry : existingAppNamesAndDeploymentIds.entrySet()) {
 			String existingName = existingEntry.getKey();

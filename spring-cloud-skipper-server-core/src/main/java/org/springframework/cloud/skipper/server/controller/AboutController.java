@@ -126,29 +126,29 @@ public class AboutController {
 	}
 
 	private String constructUrl(String url, String version) {
-		final String VERSION_TAG = "{version}";
-		final String REPOSITORY_TAG = "{repository}";
-		if (url.contains(VERSION_TAG)) {
-			url = StringUtils.replace(url, VERSION_TAG, version);
-			url = StringUtils.replace(url, REPOSITORY_TAG, repoSelector(version));
+		final String versionTag = "{version}";
+		final String repositoryTag = "{repository}";
+		if (url.contains(versionTag)) {
+			url = StringUtils.replace(url, versionTag, version);
+			url = StringUtils.replace(url, repositoryTag, repoSelector(version));
 		}
 		return url;
 	}
 
 	private String repoSelector(String version) {
-		final String REPO_SNAPSHOT_ROOT = "https://repo.spring.io/libs-snapshot";
-		final String REPO_MILESTONE_ROOT = "https://repo.spring.io/libs-milestone";
-		final String MAVEN_ROOT = "https://repo.maven.apache.org/maven2";
+		final String repoSnapshotRoot = "https://repo.spring.io/libs-snapshot";
+		final String repoMilestoneRoot = "https://repo.spring.io/libs-milestone";
+		final String mavenRoot = "https://repo.maven.apache.org/maven2";
 
-		String result = MAVEN_ROOT;
+		String result = mavenRoot;
 		if (version.endsWith("BUILD-SNAPSHOT")) {
-			result = REPO_SNAPSHOT_ROOT;
+			result = repoSnapshotRoot;
 		}
 		else if (version.contains(".M")) {
-			result = REPO_MILESTONE_ROOT;
+			result = repoMilestoneRoot;
 		}
 		else if (version.contains(".RC")) {
-			result = REPO_MILESTONE_ROOT;
+			result = repoMilestoneRoot;
 		}
 		return result;
 	}

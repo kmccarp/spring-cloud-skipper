@@ -147,14 +147,14 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 		Release release = skipperClient
 				.upgrade(getUpgradeRequest(releaseName, packageName, packageVersion, file, properties, timeoutExpression, force, appNames));
 		StringBuilder sb = new StringBuilder();
-		sb.append(release.getName() + " has been upgraded.  Now at version v" + release.getVersion() + ".");
+		sb.append(release.getName() + " has been upgraded.  Now at version v").append(release.getVersion()).append(".");
 		return sb.toString();
 	}
 
 	private void updateStatus(StringBuilder sb, Release release) {
-		sb.append("Release Status: " + release.getInfo().getStatus().getStatusCode() + "\n");
+		sb.append("Release Status: ").append(release.getInfo().getStatus().getStatusCode()).append("\n");
 		if (StringUtils.hasText(release.getInfo().getStatus().getPlatformStatus())) {
-			sb.append("Platform Status: " + release.getInfo().getStatus().getPlatformStatusPrettyPrint());
+			sb.append("Platform Status: ").append(release.getInfo().getStatus().getPlatformStatusPrettyPrint());
 		}
 		else {
 			sb.append("Platform Status: unknown");
@@ -166,7 +166,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 				+ "are mutually exclusive.");
 		if (yamlFile != null) {
 			String extension = FilenameUtils.getExtension(yamlFile.getName());
-			Assert.isTrue((extension.equalsIgnoreCase("yml") || extension.equalsIgnoreCase("yaml")),
+			Assert.isTrue(("yml".equalsIgnoreCase(extension) || "yaml".equalsIgnoreCase(extension)),
 					"The file should be YAML file");
 		}
 	}
@@ -212,7 +212,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 		Release release = skipperClient.rollback(rollbackRequest);
 		StringBuilder sb = new StringBuilder();
-		sb.append(release.getName() + " has been rolled back.  Now at version v" + release.getVersion() + ".");
+		sb.append(release.getName() + " has been rolled back.  Now at version v").append(release.getVersion()).append(".");
 		return sb.toString();
 	}
 

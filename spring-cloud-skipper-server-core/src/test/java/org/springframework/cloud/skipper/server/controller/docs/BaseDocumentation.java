@@ -266,8 +266,7 @@ public abstract class BaseDocumentation {
 	protected static String convertObjectToJson(Object object) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		String json = mapper.writeValueAsString(object);
-		return json;
+		return mapper.writeValueAsString(object);
 	}
 
 }

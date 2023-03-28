@@ -85,7 +85,7 @@ public class ActuatorService {
 	private String deploymentId(String releaseName, String appName) {
 		return this.releaseService.status(releaseName).getStatus().getAppStatusList().stream()
 				.filter(as -> appName.equals(as.getDeploymentId()))
-				.map(as -> as.getDeploymentId())
+				.map(AppStatus::getDeploymentId)
 				.findFirst().orElseThrow(() -> new IllegalArgumentException(
 						String.format("app %s is not found in release %s", appName, releaseName)));
 	}

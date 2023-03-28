@@ -43,7 +43,7 @@ public class PackageMetadataRepositoryImpl implements PackageMetadataRepositoryC
 		List<PackageMetadata> packageMetadataList = this.packageMetadataRepositoryObjectProvider.getIfAvailable()
 				.findByNameAndVersionOrderByApiVersionDesc(packageName,
 						packageVersion);
-		if (packageMetadataList.size() == 0) {
+		if (packageMetadataList.isEmpty()) {
 			return null;
 		}
 		if (packageMetadataList.size() == 1) {

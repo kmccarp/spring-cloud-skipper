@@ -74,7 +74,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 		this.releaseRepository = releaseRepository;
 	}
 
-	public final static Predicate<Release> DEFAULT_RELEASE_ACTIVITY_CHECK =
+	public static final Predicate<Release> DEFAULT_RELEASE_ACTIVITY_CHECK =
 			release -> !release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED);
 
 
@@ -150,9 +150,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 			}
 		}
 		else {
-			errorMessages.add(String.format("Can not delete package {}, repositoryId {} does not exist.",
-					packageMetadata.getName(),
-					packageMetadata.getRepositoryId()));
+			errorMessages.add(String.format("Can not delete package {}, repositoryId {} does not exist."));
 		}
 		return false;
 	}
@@ -250,7 +248,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 		URI uri = resource.getURI();
 		StringBuilder stringBuilder = new StringBuilder();
 		String scheme = uri.getScheme();
-		if (scheme.equals("file")) {
+		if ("file".equals(scheme)) {
 			stringBuilder.append("file");
 			if (uri.getPath() != null) {
 				stringBuilder.append(uri.getPath().replaceAll("/", "_"));
@@ -260,7 +258,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 				stringBuilder.append(relativeFilename.replaceAll("/", "_"));
 			}
 		}
-		else if (scheme.equals("http") || scheme.equals("https")) {
+		else if ("http".equals(scheme) || "https".equals(scheme)) {
 			stringBuilder.append(uri.getHost()).append(uri.getPath().replaceAll("/", "_"));
 		}
 		else {
