@@ -51,7 +51,7 @@ public class SkipperErrorAttributes extends DefaultErrorAttributes {
 		if (error != null) {
 			// pass in name and version if ReleaseNotFoundException
 			if (error instanceof ReleaseNotFoundException) {
-				ReleaseNotFoundException e = ((ReleaseNotFoundException) error);
+				ReleaseNotFoundException e = (ReleaseNotFoundException) error;
 				if (e.getReleaseName() != null) {
 					errorAttributes.put("releaseName", e.getReleaseName());
 				}

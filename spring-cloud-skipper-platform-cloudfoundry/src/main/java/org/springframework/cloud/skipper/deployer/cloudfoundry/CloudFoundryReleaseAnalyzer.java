@@ -88,7 +88,7 @@ public class CloudFoundryReleaseAnalyzer {
 			Release replacingRelease,
 			List<ApplicationManifestDifference> applicationManifestDifferences, List<String> allApplicationNames,
 			boolean isForceUpdate) {
-		Set<String> appsToUpgrade = new LinkedHashSet<String>();
+		Set<String> appsToUpgrade = new LinkedHashSet<>();
 		ReleaseDifference releaseDifference = new ReleaseDifference();
 		releaseDifference.setDifferences(applicationManifestDifferences);
 		if (!releaseDifference.areEqual()) {

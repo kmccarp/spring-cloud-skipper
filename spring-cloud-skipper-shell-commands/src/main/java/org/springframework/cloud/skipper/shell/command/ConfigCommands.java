@@ -80,7 +80,7 @@ public class ConfigCommands extends AbstractSkipperCommand {
 		this.targetHolder.changeTarget(new Target(uri, username, password, skipSslValidation),
 				credentialsProviderCommand);
 
-		return (this.targetHolder.getTarget().getTargetResultMessage());
+		return this.targetHolder.getTarget().getTargetResultMessage();
 	}
 
 	@ShellMethod(key = "skipper info", value = "Show the Skipper server being used.")

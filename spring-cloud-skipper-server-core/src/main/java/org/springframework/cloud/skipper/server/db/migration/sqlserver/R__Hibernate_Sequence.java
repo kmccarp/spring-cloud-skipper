@@ -45,11 +45,11 @@ public class R__Hibernate_Sequence extends AbstractMigration {
 	// SQL state [S0001]; error code [2714]; There is already an object named 'hibernate_sequence' in the database.;
 	// nested exception is com.microsoft.sqlserver.jdbc.SQLServerException:
 	// There is already an object named 'hibernate_sequence' in the database.
-	private final static List<SqlCommand> commands = Arrays.asList(
+	private static final List<SqlCommand> commands = Arrays.asList(
 			SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", 2714));
 
 	// sequence of tsql commands to change table to sequence
-	private final static List<SqlCommand> fixcommands = Arrays.asList(
+	private static final List<SqlCommand> fixcommands = Arrays.asList(
 			SqlCommand.from("exec sp_rename 'hibernate_sequence', 'hibernate_sequence_old';  \n" +
 					"declare @max int;\n" +
 					"select @max = max(next_val) from hibernate_sequence_old;\n" +

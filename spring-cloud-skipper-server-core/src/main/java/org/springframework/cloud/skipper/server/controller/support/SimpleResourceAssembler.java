@@ -58,7 +58,7 @@ public class SimpleResourceAssembler<T> implements RepresentationModelAssembler<
 	public CollectionModel<EntityModel<T>> toCollectionModel(Iterable<? extends T> entities) {
 
 		Assert.notNull(entities, "Entities must not be null!");
-		List<EntityModel<T>> result = new ArrayList<EntityModel<T>>();
+		List<EntityModel<T>> result = new ArrayList<>();
 
 		for (T entity : entities) {
 			result.add(toModel(entity));

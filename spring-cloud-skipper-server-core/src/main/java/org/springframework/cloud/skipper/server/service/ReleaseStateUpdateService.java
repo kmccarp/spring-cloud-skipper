@@ -97,10 +97,10 @@ public class ReleaseStateUpdateService {
 					log.error("Info.LastDeployed can not be null for release {}", release);
 					return Mono.empty();
 				}
-				boolean isNewApp = (info.getLastDeployed().getTime() > (now - 120000));
+				boolean isNewApp = info.getLastDeployed().getTime() > (now - 120000);
 				log.debug("Considering updating state for {}-v{}", release.getName(), release.getVersion());
 				log.debug("fullPoll = {}, isNewApp = {}, doInitialPoll = {}", fullPoll, isNewApp, doInitialPoll);
-				boolean poll = fullPoll || (isNewApp) || doInitialPoll;
+				boolean poll = fullPoll || isNewApp || doInitialPoll;
 				if (poll) {
 					String kind = ManifestUtils.resolveKind(release.getManifest().getData());
 					ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
