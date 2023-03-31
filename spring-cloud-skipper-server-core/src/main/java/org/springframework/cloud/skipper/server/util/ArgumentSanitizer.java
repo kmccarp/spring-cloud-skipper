@@ -39,7 +39,7 @@ public class ArgumentSanitizer {
 	private static final String[] KEYS_TO_SANITIZE = { "password", "secret", "key", "token", ".*credentials.*",
 			"vcap_services" };
 
-	private static Pattern[] keysToSanitize;
+	private static final Pattern[] keysToSanitize;
 
 	static {
 		keysToSanitize = new Pattern[KEYS_TO_SANITIZE.length];

@@ -35,9 +35,6 @@ public class CloudFoundryHealthCheckStep {
 
 	public boolean isHealthy(Release replacingRelease) {
 		AppStatus appStatus = cfManifestApplicationDeployer.status(replacingRelease);
-		if (appStatus.getState() == DeploymentState.deployed) {
-			return true;
-		}
-		return false;
+		return appStatus.getState() == DeploymentState.deployed;
 	}
 }

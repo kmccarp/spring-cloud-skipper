@@ -83,9 +83,7 @@ public class DeployerConfigurationMetadataResolver implements ApplicationContext
 				g.getProperties().values().stream()
 					.filter(propertyEmptyOrAnyMatch(deployerProperties.getPropertyIncludes()))
 					.filter(propertyNoneMatch(deployerProperties.getPropertyExcludes()))
-					.forEach(p -> {
-						metadataProperties.add(p);
-					});
+					.forEach(metadataProperties::add);
 			});
 		return metadataProperties;
 	}

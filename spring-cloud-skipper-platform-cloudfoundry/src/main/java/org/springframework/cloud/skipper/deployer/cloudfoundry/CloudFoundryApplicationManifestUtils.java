@@ -61,10 +61,9 @@ public class CloudFoundryApplicationManifestUtils {
 
 	public static ApplicationManifest updateApplicationName(Release release) {
 		String name = release.getName() + "-v" + release.getVersion();
-		ApplicationManifest cfApplicationManifest = ApplicationManifest.builder()
+		return ApplicationManifest.builder()
 				.name(name)
 				.build();
-		return cfApplicationManifest;
 	}
 
 	public static Map<String, String> getCFManifestMap(ApplicationManifest applicationManifest) {

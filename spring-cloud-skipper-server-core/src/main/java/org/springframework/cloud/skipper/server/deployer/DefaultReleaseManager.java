@@ -194,7 +194,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 				.findByReleaseNameAndReleaseVersionRequired(
 						existingRelease.getName(), existingRelease.getVersion());
 		Map<String, String> existingAppNamesAndDeploymentIds = (existingAppDeployerData != null) ?
-				existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
+				existingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
 		List<AppStatus> appStatuses = status(existingRelease).getInfo().getStatus().getAppStatusList();
 
 		Map<String, Object> model = calculateAppCountsForRelease(replacingRelease, existingAppNamesAndDeploymentIds,
@@ -253,7 +253,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 		// have been explicitly
 		// set to null.
 		if (deploymentPropertiesMap == null) {
-			deploymentPropertiesMap = new TreeMap<String, Object>();
+			deploymentPropertiesMap = new TreeMap<>();
 		}
 		deploymentPropertiesMap.put(SPRING_CLOUD_DEPLOYER_COUNT, appsCount);
 	}
@@ -296,7 +296,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 						Mono<Map<String, DeploymentState>> cachedEntry = cache.get(CacheKey.of(e.getValue(), e.getKey()));
 						return cachedEntry.flatMap(m -> m.isEmpty() ? fallback : Mono.just(m));
 					})
-					.reduce(new HashMap<String, DeploymentState>(), (to, from) -> {
+					.reduce(new HashMap<>(), (to, from) -> {
 						to.putAll(from);
 						return to;
 					});
@@ -344,10 +344,8 @@ public class DefaultReleaseManager implements ReleaseManager {
 						String deploymentId = nameDeploymentId.getValue();
 						return appDeployer.statusReactive(deploymentId);
 					})
-					.map(appStatus -> copyStatus(appStatus))
-					.flatMap(appStatus -> {
-						return Mono.zip(Mono.just(appStatus), cache.get(CacheKey.of(deploymentIds, appDeployer)));
-					})
+					.map(DefaultReleaseManager::copyStatus)
+					.flatMap(appStatus -> Mono.zip(Mono.just(appStatus), cache.get(CacheKey.of(deploymentIds, appDeployer))))
 					.map(zip -> {
 						AppStatus appStatus = zip.getT1();
 						Map<String, DeploymentState> deploymentStateMap = zip.getT2();
@@ -480,12 +478,12 @@ public class DefaultReleaseManager implements ReleaseManager {
 	@Override
 	public LogInfo getLog(Release release, String appName) {
 		if (release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
-			return new LogInfo(Collections.EMPTY_MAP);
+			return new LogInfo(Collections.emptyMap());
 		}
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
 				.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
 		if (appDeployerData == null) {
-			return new LogInfo(Collections.EMPTY_MAP);
+			return new LogInfo(Collections.emptyMap());
 		}
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
 				.getAppDeployer();
@@ -548,7 +546,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 				.getAppDeployer();
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
 				.findByReleaseNameAndReleaseVersionRequired(release.getName(), release.getVersion());
-		List<String> deploymentIds = (appDeployerData != null) ? appDeployerData.getDeploymentIds() : Collections.EMPTY_LIST;
+		List<String> deploymentIds = (appDeployerData != null) ? appDeployerData.getDeploymentIds() : Collections.emptyList();
 		logger.debug("DeploymentIds to undeploy {}", deploymentIds);
 		if (!deploymentIds.isEmpty()) {
 			for (String deploymentId : deploymentIds) {
