@@ -33,7 +33,7 @@ import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 public class SkipperFlywayMigrationStrategy implements FlywayMigrationStrategy {
 
 	private static final Logger logger = LoggerFactory.getLogger(SkipperFlywayMigrationStrategy.class);
-	private final static MigrationVersion INITIAL = MigrationVersion.fromVersion("1");
+	private static final MigrationVersion INITIAL = MigrationVersion.fromVersion("1");
 
 	@Override
 	public void migrate(Flyway flyway) {

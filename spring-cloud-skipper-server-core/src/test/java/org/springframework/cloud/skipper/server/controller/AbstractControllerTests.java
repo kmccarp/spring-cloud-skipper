@@ -157,8 +157,7 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 				.andExpect(status().isCreated()).andReturn();
 		Release release = convertContentToRelease(result.getResponse().getContentAsString());
 		assertReleaseIsDeployedSuccessfully(releaseName, release.getVersion());
-		Release updatedRelease = this.releaseRepository.findByNameAndVersion(releaseName, release.getVersion());
-		return updatedRelease;
+		return this.releaseRepository.findByNameAndVersion(releaseName, release.getVersion());
 	}
 
 	protected void cancel(String releaseName, int expectStatus, boolean accepted) throws Exception {

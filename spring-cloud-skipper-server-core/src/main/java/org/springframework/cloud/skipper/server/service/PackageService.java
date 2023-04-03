@@ -279,7 +279,7 @@ public class PackageService implements ResourceLoaderAware {
 					uploadRequest.getVersion().trim());
 		}
 		Assert.notNull(uploadRequest.getExtension(), "Extension can not be null");
-		Assert.isTrue(uploadRequest.getExtension().equals("zip"), "Extension must be 'zip', not "
+		Assert.isTrue("zip".equals(uploadRequest.getExtension()), "Extension must be 'zip', not "
 				+ uploadRequest.getExtension());
 		Assert.notNull(uploadRequest.getPackageFileAsBytes(), "Package file as bytes must not be null");
 		Assert.isTrue(uploadRequest.getPackageFileAsBytes().length != 0, "Package file as bytes must not be empty");

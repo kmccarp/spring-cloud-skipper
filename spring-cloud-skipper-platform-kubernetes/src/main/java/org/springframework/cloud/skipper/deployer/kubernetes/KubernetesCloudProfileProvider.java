@@ -23,7 +23,7 @@ import org.springframework.core.env.Environment;
  */
 public class KubernetesCloudProfileProvider implements CloudProfileProvider {
 
-	public final static String PROFILE = "kubernetes";
+	public static final String PROFILE = "kubernetes";
 
 	@Override
 	public boolean isCloudPlatform(Environment environment) {

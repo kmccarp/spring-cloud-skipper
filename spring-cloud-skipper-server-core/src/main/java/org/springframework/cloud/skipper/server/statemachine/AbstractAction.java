@@ -56,5 +56,5 @@ public abstract class AbstractAction implements Action<SkipperStates, SkipperEve
 	 *
 	 * @param context the context
 	 */
-	abstract protected void executeInternal(StateContext<SkipperStates, SkipperEvents> context);
+	protected abstract void executeInternal(StateContext<SkipperStates, SkipperEvents> context);
 }
