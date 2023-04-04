@@ -140,15 +140,15 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		// Upload new package
 		assertThat(packageService).isNotNull();
 		PackageMetadata uploadedPackageMetadata = this.packageService.upload(uploadProperties);
-		assertThat(uploadedPackageMetadata.getName().equals("log")).isTrue();
-		assertThat(uploadedPackageMetadata.getVersion().equals("9.9.9")).isTrue();
+		assertThat("log".equals(uploadedPackageMetadata.getName())).isTrue();
+		assertThat("9.9.9".equals(uploadedPackageMetadata.getVersion())).isTrue();
 		assertThat(uploadedPackageMetadata.getId()).isNotNull();
 
 		// Retrieve new package
 		PackageMetadata retrievedPackageMetadata = packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("log",
 				"9.9.9");
-		assertThat(retrievedPackageMetadata.getName().equals("log")).isTrue();
-		assertThat(retrievedPackageMetadata.getVersion().equals("9.9.9")).isTrue();
+		assertThat("log".equals(retrievedPackageMetadata.getName())).isTrue();
+		assertThat("9.9.9".equals(retrievedPackageMetadata.getVersion())).isTrue();
 		assertThat(retrievedPackageMetadata).isNotNull();
 		assertThat(retrievedPackageMetadata.getPackageFile().getPackageBytes()).isNotNull();
 		byte[] retrievedPackageBytes = retrievedPackageMetadata.getPackageFile().getPackageBytes();
@@ -261,7 +261,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		assertThat(packageName).isIn("time", "log");
 		assertThat(pkgContent).isNotNull();
 		assertConfigValues(pkgContent);
-		if (packageName.equals("log")) {
+		if ("log".equals(packageName)) {
 			assertThat(pkgContent.getMetadata().getName()).isEqualTo("log");
 			assertThat(pkgContent.getMetadata().getVersion()).isEqualTo("2.0.0");
 		}
@@ -278,10 +278,10 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		Yaml yaml = new Yaml(new SafeConstructor());
 		Map<String, Object> logConfigValueMap = (Map<String, Object>) yaml.load(configValues.getRaw());
 		assertThat(logConfigValueMap).containsKeys("version", "spec");
-		if (pkg.getMetadata().getName().equals("log")) {
+		if ("log".equals(pkg.getMetadata().getName())) {
 			assertThat(logConfigValueMap.get("version")).isEqualTo("1.1.0.RELEASE");
 		}
-		if (pkg.getMetadata().getName().equals("time")) {
+		if ("time".equals(pkg.getMetadata().getName())) {
 			assertThat(logConfigValueMap.get("version")).isEqualTo("1.2.0.RELEASE");
 		}
 		Map<String, Object> spec = (Map<String, Object>) logConfigValueMap.get("spec");

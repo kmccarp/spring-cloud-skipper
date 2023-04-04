@@ -123,7 +123,7 @@ public class ConfigValueUtils {
 	private static Map<String, Object> mergePackagesIncludingDependencies(Package pkg,
 			Map<String, Object> overrideMap) {
 		List<Package> dependencies = pkg.getDependencies();
-		if (dependencies.size() == 0) {
+		if (dependencies.isEmpty()) {
 			return overrideMap;
 		}
 		Map<String, Object> mergedValues = new TreeMap<>();

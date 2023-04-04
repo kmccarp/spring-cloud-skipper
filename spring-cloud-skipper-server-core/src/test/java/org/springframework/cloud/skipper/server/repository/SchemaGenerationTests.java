@@ -70,7 +70,7 @@ public class SchemaGenerationTests extends AbstractIntegrationTest {
 
 		logger.info(
 				"\n\nGenerating DDL scripts for the following dialects:\n\n"
-						+ supportedHibernateDialects.stream().map((db) -> db + "Dialect").collect(Collectors.joining("\n")) + "\n");
+						+ supportedHibernateDialects.stream().map(db -> db + "Dialect").collect(Collectors.joining("\n")) + "\n");
 
 		for (String supportedHibernateDialect : supportedHibernateDialects) {
 			generateDdlFiles(supportedHibernateDialect, tempDir, persistenceUnitInfo);

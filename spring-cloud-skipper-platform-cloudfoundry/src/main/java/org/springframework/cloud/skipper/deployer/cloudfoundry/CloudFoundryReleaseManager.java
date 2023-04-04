@@ -189,7 +189,7 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 		String applicationName = applicationManifest.getName();
 		if (StringUtils.hasText(appName)) {
 			Assert.isTrue(applicationName.equalsIgnoreCase(appName),
-					String.format("Application name % is different from the CF manifest: %", appName, applicationName));
+					String.format("Application name % is different from the CF manifest: %", appName));
 		}
 		String logMessage = this.platformCloudFoundryOperations.getCloudFoundryOperations(release.getPlatformName()).applications()
 				.logs(LogsRequest.builder().name(applicationName).build())

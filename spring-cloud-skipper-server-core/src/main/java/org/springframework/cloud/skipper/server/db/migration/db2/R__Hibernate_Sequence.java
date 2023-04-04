@@ -35,7 +35,7 @@ public class R__Hibernate_Sequence extends AbstractMigration {
 	// StatementCallback; bad SQL grammar [create sequence hibernate_sequence start with 1 increment by 1];
 	// nested exception is com.ibm.db2.jcc.am.SqlSyntaxErrorException:
 	// DB2 SQL Error: SQLCODE=-601, SQLSTATE=42710, SQLERRMC=HIBERNATE_SEQUENCE;SEQUENCE, DRIVER=4.19.26
-	private final static List<SqlCommand> commands = Arrays.asList(
+	private static final List<SqlCommand> commands = Arrays.asList(
 			SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", -601));
 
 	public R__Hibernate_Sequence() {

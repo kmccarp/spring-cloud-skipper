@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LogTestNameRule extends TestWatcher {
 
-	private final static Logger log = LoggerFactory.getLogger("junit.logTestName");
+	private static final Logger log = LoggerFactory.getLogger("junit.logTestName");
 
 	@Override
 	protected void starting(Description description) {

@@ -412,16 +412,12 @@ public class StateMachineConfiguration {
 
 		@Bean
 		public Guard<SkipperStates, SkipperEvents> rollbackInstallGuard() {
-			return context -> {
-				return context.getExtendedState().getVariables().containsKey(SkipperEventHeaders.INSTALL_REQUEST);
-			};
+			return context -> context.getExtendedState().getVariables().containsKey(SkipperEventHeaders.INSTALL_REQUEST);
 		}
 
 		@Bean
 		public Guard<SkipperStates, SkipperEvents> rollbackUpgradeGuard() {
-			return context -> {
-				return context.getExtendedState().getVariables().containsKey(SkipperEventHeaders.UPGRADE_REQUEST);
-			};
+			return context -> context.getExtendedState().getVariables().containsKey(SkipperEventHeaders.UPGRADE_REQUEST);
 		}
 	}
 
