@@ -30,7 +30,7 @@ import org.springframework.boot.ApplicationArguments;
  */
 public abstract class ShellUtils {
 
-	private final static List<String> helpArgs = Arrays.asList("-h", "--h", "-help", "--help", "help", "h");
+	private static final List<String> helpArgs = Arrays.asList("-h", "--h", "-help", "--help", "help", "h");
 
 	/**
 	 * Checks if given application arguments contains any usual help option.

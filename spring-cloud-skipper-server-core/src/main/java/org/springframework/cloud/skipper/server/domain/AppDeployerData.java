@@ -88,7 +88,7 @@ public class AppDeployerData extends AbstractEntity {
 			TypeReference<Map<String, String>> typeRef = new TypeReference<Map<String, String>>() {
 			};
 			return (this.deploymentData != null) ? mapper.readValue(this.deploymentData, typeRef) :
-					Collections.EMPTY_MAP;
+					Collections.emptyMap();
 		}
 		catch (Exception e) {
 			throw new SkipperException("Could not parse appNameDeploymentIdMap JSON:" + this.deploymentData, e);

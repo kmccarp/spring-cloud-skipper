@@ -38,7 +38,7 @@ public class DeployerConfigurationMetadataResolverTests {
 	@Test
 	public void testNoFiltersFindsAll() {
 		this.contextRunner
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -54,7 +54,7 @@ public class DeployerConfigurationMetadataResolverTests {
 				.withPropertyValues(
 						"spring.cloud.skipper.server.deployer-properties.group-excludes=spring.cloud.deployer.local.port-range"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -70,7 +70,7 @@ public class DeployerConfigurationMetadataResolverTests {
 				.withPropertyValues(
 						"spring.cloud.skipper.server.deployer-properties.property-excludes=spring.cloud.deployer.local.port-range.low"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -86,7 +86,7 @@ public class DeployerConfigurationMetadataResolverTests {
 				.withPropertyValues(
 						"spring.cloud.skipper.server.deployer-properties.group-includes=spring.cloud.deployer.local.port-range"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -102,7 +102,7 @@ public class DeployerConfigurationMetadataResolverTests {
 				.withPropertyValues(
 						"spring.cloud.skipper.server.deployer-properties.property-includes=spring.cloud.deployer.local.port-range.low"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -118,7 +118,7 @@ public class DeployerConfigurationMetadataResolverTests {
 				.withPropertyValues(
 						"spring.cloud.skipper.server.deployer-properties.property-includes=spring.cloud.deployer.local.port-range.low,spring.cloud.deployer.local.port-range.high"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
@@ -135,7 +135,7 @@ public class DeployerConfigurationMetadataResolverTests {
 						"spring.cloud.skipper.server.deployer-properties.group-includes=spring.cloud.deployer.local.port-range",
 						"spring.cloud.skipper.server.deployer-properties.property-excludes=spring.cloud.deployer.local.port-range.low"
 				)
-				.run((context) -> {
+				.run(context -> {
 					SkipperServerProperties skipperServerProperties = context.getBean(SkipperServerProperties.class);
 					DeployerConfigurationMetadataResolver resolver = new DeployerConfigurationMetadataResolver(
 							skipperServerProperties.getDeployerProperties());
