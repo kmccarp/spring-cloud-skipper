@@ -126,7 +126,7 @@ public class CloudFoundryManifestApplicationDeployer {
 	public static String getResourceLocation(String specResource, String specVersion) {
 		Assert.hasText(specResource, "Spec resource must not be empty");
 		if (specVersion != null) {
-			if ((specResource.startsWith("maven") || specResource.startsWith("docker"))) {
+			if (specResource.startsWith("maven") || specResource.startsWith("docker")) {
 				if (specResource.endsWith(":" + specVersion)) {
 					return specResource;
 				}

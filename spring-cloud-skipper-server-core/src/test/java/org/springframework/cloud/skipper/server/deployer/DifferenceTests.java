@@ -36,9 +36,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DifferenceTests {
 
-	private SpringCloudDeployerApplicationManifestReader applicationManifestReader = new SpringCloudDeployerApplicationManifestReader();
+	private final SpringCloudDeployerApplicationManifestReader applicationManifestReader = new SpringCloudDeployerApplicationManifestReader();
 
-	private ApplicationManifestDifferenceFactory applicationManifestDifferenceFactory = new ApplicationManifestDifferenceFactory();
+	private final ApplicationManifestDifferenceFactory applicationManifestDifferenceFactory = new ApplicationManifestDifferenceFactory();
 
 	@Test
 	public void versionDifference() {

@@ -35,10 +35,14 @@ public class ReleaseDifferenceSummaryGenerator {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (releaseDifference.getDifferences() != null) {
 			stringBuilder.append("Release Difference Summary between existing release ");
-			stringBuilder.append("[name: " + existingReleaseName + "version: " + existingReleaseVersion + "]");
+			stringBuilder.append("[name: ").append(existingReleaseName).append("version: ").append(existingReleaseVersion).append("]");
 			stringBuilder.append(" and replacing release ");
 			stringBuilder
-					.append("[name: " + replacingReleseName + "version: " + replacingReleaseVersion + "]\n");
+					.append("[name: ")
+					.append(replacingReleseName)
+					.append("version: ")
+					.append(replacingReleaseVersion)
+					.append("]\n");
 			ApplicationManifestDifferenceSummaryGenerator applicationManifestDifferenceSummaryGenerator = new ApplicationManifestDifferenceSummaryGenerator();
 			for (ApplicationManifestDifference applicationManifestDifference : releaseDifference.getDifferences()) {
 				if (!applicationManifestDifference.areEqual()) {

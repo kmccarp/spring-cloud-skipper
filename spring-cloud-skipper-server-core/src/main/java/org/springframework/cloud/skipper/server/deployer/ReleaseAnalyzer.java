@@ -49,7 +49,7 @@ public class ReleaseAnalyzer {
 	private final SpringCloudDeployerApplicationManifestReader applicationManifestReader;
 	private final Logger logger = LoggerFactory.getLogger(ReleaseAnalyzer.class);
 	private final DelegatingResourceLoader delegatingResourceLoader;
-	private ApplicationManifestDifferenceFactory applicationManifestDifferenceFactory = new ApplicationManifestDifferenceFactory();
+	private final ApplicationManifestDifferenceFactory applicationManifestDifferenceFactory = new ApplicationManifestDifferenceFactory();
 
 	public ReleaseAnalyzer(SpringCloudDeployerApplicationManifestReader applicationManifestReader,
 			DelegatingResourceLoader delegatingResourceLoader) {
@@ -76,15 +76,15 @@ public class ReleaseAnalyzer {
 				.read(replacingRelease.getManifest().getData());
 		if (existingRelease.getPkg().getDependencies().size() == replacingRelease.getPkg().getDependencies()
 				.size()) {
-			if (existingRelease.getPkg().getDependencies().size() == 0) {
+			if (existingRelease.getPkg().getDependencies().isEmpty()) {
 				logger.info("Existing Package and Upgrade Package both have no dependent packages.");
 				return analyzeTopLevelPackagesOnly(existingApplicationSpecList,
 						replacingApplicationSpecList,
 						existingRelease, replacingRelease, isForceUpdate, appNamesToUpdate);
 			}
 			else {
-				if (existingRelease.getPkg().getTemplates().size() == 0 &&
-						replacingRelease.getPkg().getTemplates().size() == 0) {
+				if (existingRelease.getPkg().getTemplates().isEmpty() &&
+						replacingRelease.getPkg().getTemplates().isEmpty()) {
 					logger.info("Existing Package and Upgrade package both have no top level templates");
 					return analyzeDependentPackagesOnly(existingApplicationSpecList,
 							replacingApplicationSpecList,
@@ -106,7 +106,7 @@ public class ReleaseAnalyzer {
 		List<String> appNames = new ArrayList<>();
 		List<? extends SpringCloudDeployerApplicationManifest> applicationSpecList = this.applicationManifestReader
 				.read(release.getManifest().getData());
-		if (release.getPkg().getDependencies().size() == 0) {
+		if (release.getPkg().getDependencies().isEmpty()) {
 			appNames.add(applicationSpecList.get(0).getApplicationName());
 		}
 		else {
@@ -182,7 +182,7 @@ public class ReleaseAnalyzer {
 	private ReleaseAnalysisReport createReleaseAnalysisReport(Release existingRelease,
 			Release replacingRelease, List<ApplicationManifestDifference> applicationManifestDifferences,
 			boolean isForceUpdate, List<String> appNamesToUpdate) {
-		Set<String> appsToUpgrade = new LinkedHashSet<String>();
+		Set<String> appsToUpgrade = new LinkedHashSet<>();
 		ReleaseDifference releaseDifference = new ReleaseDifference();
 		releaseDifference.setDifferences(applicationManifestDifferences);
 		if (!releaseDifference.areEqual()) {

@@ -54,7 +54,7 @@ public class SkipperStateMachineService {
 
 	private static final Logger log = LoggerFactory.getLogger(SkipperStateMachineService.class);
 
-	public final static String STATEMACHINE_FACTORY_BEAN_NAME = "skipperStateMachineFactory";
+	public static final String STATEMACHINE_FACTORY_BEAN_NAME = "skipperStateMachineFactory";
 
 	private final StateMachineService<SkipperStates, SkipperEvents> stateMachineService;
 
@@ -410,7 +410,7 @@ public class SkipperStateMachineService {
 		 * Controlled exit which acts as a fallback in case either {@link #ROLLBACK_EXIT_INSTALL}
 		 * or {@link #ROLLBACK_EXIT_UPGRADE} cannot be chosen for some reason.
 		 */
-		ROLLBACK_EXIT;
+		ROLLBACK_EXIT
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class SkipperStateMachineService {
 		/**
 		 * Main level event instructing a rollback request.
 		 */
-		ROLLBACK;
+		ROLLBACK
 	}
 
 	/**
@@ -565,6 +565,6 @@ public class SkipperStateMachineService {
 		/**
 		 * Variable internally used in a an upgrade state for current status.
 		 */
-		UPGRADE_STATUS;
+		UPGRADE_STATUS
 	}
 }

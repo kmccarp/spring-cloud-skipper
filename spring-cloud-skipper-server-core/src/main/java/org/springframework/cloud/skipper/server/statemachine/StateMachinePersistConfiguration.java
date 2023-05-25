@@ -46,8 +46,8 @@ public class StateMachinePersistConfiguration {
 	public StateMachineRuntimePersister<SkipperStates, SkipperEvents, String> stateMachineRuntimePersister(
 			JpaStateMachineRepository jpaStateMachineRepository) {
 		// create these manually to be able to add extended state variable filter
-		KryoStateMachineSerialisationService<SkipperStates, SkipperEvents> serialisationService = new KryoStateMachineSerialisationService<SkipperStates, SkipperEvents>();
-		JpaRepositoryStateMachinePersist<SkipperStates, SkipperEvents> persist = new JpaRepositoryStateMachinePersist<SkipperStates, SkipperEvents>(
+		KryoStateMachineSerialisationService<SkipperStates, SkipperEvents> serialisationService = new KryoStateMachineSerialisationService<>();
+		JpaRepositoryStateMachinePersist<SkipperStates, SkipperEvents> persist = new JpaRepositoryStateMachinePersist<>(
 				jpaStateMachineRepository, serialisationService);
 
 		JpaPersistingStateMachineInterceptor<SkipperStates, SkipperEvents, String> interceptor = new JpaPersistingStateMachineInterceptor<>(
@@ -61,13 +61,11 @@ public class StateMachinePersistConfiguration {
 
 		@Override
 		public Map<Object, Object> apply(StateMachine<SkipperStates, SkipperEvents> stateMachine) {
-			return stateMachine.getExtendedState().getVariables().entrySet().stream().filter(e -> {
-				return !(ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.SOURCE_RELEASE)
+			return stateMachine.getExtendedState().getVariables().entrySet().stream().filter(e -> !(ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.SOURCE_RELEASE)
 						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.TARGET_RELEASE)
 						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE)
 						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE_ANALYSIS_REPORT)
-						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.ERROR));
-			}).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.ERROR))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		}
 	}
 }

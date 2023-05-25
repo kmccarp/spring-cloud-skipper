@@ -55,7 +55,7 @@ public class LogsDocumentation extends BaseDocumentation {
 	@Test
 	public void getLogsofReleaseByAppName() throws Exception {
 		Release release = createTestRelease();
-		when(this.releaseService.getLog(release.getName(), "myapp")).thenReturn(new LogInfo(Collections.EMPTY_MAP));
+		when(this.releaseService.getLog(release.getName(), "myapp")).thenReturn(new LogInfo(Collections.emptyMap()));
 
 		this.mockMvc.perform(
 				get("/api/release/logs/{releaseName}/{appName}",

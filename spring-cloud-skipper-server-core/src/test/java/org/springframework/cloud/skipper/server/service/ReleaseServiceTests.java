@@ -383,10 +383,10 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		repo.setLocal(true);
 		this.repositoryRepository.save(repo);
 
-		boolean DELETE_RELEASE_PACKAGE = true;
-		String RELEASE_ONE = "RELEASE_ONE";
-		String RELEASE_TWO = "RELEASE_TWO";
-		String RELEASE_THREE = "RELEASE_THREE";
+		boolean deleteReleasePackage = true;
+		String releaseOne = "RELEASE_ONE";
+		String releaseTwo = "RELEASE_TWO";
+		String releaseThree = "RELEASE_THREE";
 
 		// 3 versions of package "log" exists
 		PackageIdentifier logPackageIdentifier = new PackageIdentifier();
@@ -400,15 +400,15 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(3);
 
 		// Install 2 releases (RELEASE_ONE, RELEASE_TWO) from the same "log" package
-		install(RELEASE_ONE, logPackageIdentifier);
-		install(RELEASE_TWO, logPackageIdentifier);
+		install(releaseOne, logPackageIdentifier);
+		install(releaseTwo, logPackageIdentifier);
 
-		assertReleaseStatus(RELEASE_ONE, StatusCode.DEPLOYED);
-		assertReleaseStatus(RELEASE_TWO, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseOne, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseTwo, StatusCode.DEPLOYED);
 
 		// Attempt to delete release one together with its package
 		try {
-			delete(RELEASE_ONE, DELETE_RELEASE_PACKAGE);
+			delete(releaseOne, deleteReleasePackage);
 			fail("Attempt to delete a package with other deployed releases should fail");
 		}
 		catch (PackageDeleteException se) {
@@ -417,17 +417,17 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 
 		// Verify that neither the releases nor the package have been deleted
-		assertReleaseStatus(RELEASE_ONE, StatusCode.DEPLOYED);
-		assertReleaseStatus(RELEASE_TWO, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseOne, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseTwo, StatusCode.DEPLOYED);
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(3);
 
 		// Install a third release (RELEASE_THREE) from the same package (log)
-		install(RELEASE_THREE, logPackageIdentifier);
-		assertReleaseStatus(RELEASE_THREE, StatusCode.DEPLOYED);
+		install(releaseThree, logPackageIdentifier);
+		assertReleaseStatus(releaseThree, StatusCode.DEPLOYED);
 
 		// Attempt to delete release one together with its package
 		try {
-			delete(RELEASE_ONE, DELETE_RELEASE_PACKAGE);
+			delete(releaseOne, deleteReleasePackage);
 			fail("Attempt to delete a package with other deployed releases must fail.");
 		}
 		catch (PackageDeleteException se) {
@@ -436,30 +436,30 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 
 		// Verify that nothing has been deleted
-		assertReleaseStatus(RELEASE_ONE, StatusCode.DEPLOYED);
-		assertReleaseStatus(RELEASE_TWO, StatusCode.DEPLOYED);
-		assertReleaseStatus(RELEASE_THREE, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseOne, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseTwo, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseThree, StatusCode.DEPLOYED);
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(3);
 
 		// Delete releases two and three without without deleting their package.
-		delete(RELEASE_TWO, !DELETE_RELEASE_PACKAGE);
-		delete(RELEASE_THREE, !DELETE_RELEASE_PACKAGE);
+		delete(releaseTwo, !deleteReleasePackage);
+		delete(releaseThree, !deleteReleasePackage);
 
 		// Release One is still deployed
-		assertReleaseStatus(RELEASE_ONE, StatusCode.DEPLOYED);
+		assertReleaseStatus(releaseOne, StatusCode.DEPLOYED);
 
 		// Releases Two and Three were undeployed
-		assertReleaseStatus(RELEASE_TWO, StatusCode.DELETED);
-		assertReleaseStatus(RELEASE_THREE, StatusCode.DELETED);
+		assertReleaseStatus(releaseTwo, StatusCode.DELETED);
+		assertReleaseStatus(releaseThree, StatusCode.DELETED);
 
 		// Package "log" still has 3 registered versions
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(3);
 
 		// Attempt to delete release one together with its package
-		delete(RELEASE_ONE, DELETE_RELEASE_PACKAGE);
+		delete(releaseOne, deleteReleasePackage);
 
 		// Successful deletion of release and its package.
-		assertReleaseStatus(RELEASE_ONE, StatusCode.DELETED);
+		assertReleaseStatus(releaseOne, StatusCode.DELETED);
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(0);
 	}
 
