@@ -35,8 +35,8 @@ public class PackageMetadataResourceProcessor implements RepresentationModelProc
 	@Override
 	public EntityModel<PackageMetadata> process(EntityModel<PackageMetadata> packageMetadataResource) {
 		Link installLink = linkTo(
-				methodOn(PackageController.class).install(packageMetadataResource.getContent().getId(), null))
-				.withRel("install");
+		methodOn(PackageController.class).install(packageMetadataResource.getContent().getId(), null))
+		.withRel("install");
 		packageMetadataResource.add(installLink);
 		return packageMetadataResource;
 	}

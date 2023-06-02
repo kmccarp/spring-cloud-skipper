@@ -43,14 +43,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeployerInitializationService {
 
 	private final Logger logger = LoggerFactory
-			.getLogger(DeployerInitializationService.class);
+	.getLogger(DeployerInitializationService.class);
 	private static final String KEY_PREFIX = "spring.cloud.deployer.";
 	private final DeployerRepository deployerRepository;
 	private final List<Platform> platforms;
 	private final DeployerConfigurationMetadataResolver resolver;
 
 	public DeployerInitializationService(DeployerRepository deployerRepository, List<Platform> platforms,
-			DeployerConfigurationMetadataResolver resolver) {
+	DeployerConfigurationMetadataResolver resolver) {
 		this.deployerRepository = deployerRepository;
 		this.platforms = platforms;
 		this.resolver = resolver;
@@ -63,23 +63,23 @@ public class DeployerInitializationService {
 		this.platforms.forEach(platform -> {
 			platform.getDeployers().forEach(deployer -> {
 				List<ConfigurationMetadataPropertyEntity> options = createMetadataPropertyEntities(metadataProperties,
-						deployer.getType());
+				deployer.getType());
 				deployer.setOptions(options);
 				this.deployerRepository.save(deployer);
 				logger.info(String.format(
-						"Added '%s' platform account '%s' into deployer repository.",
-						platform.getName(),
-						deployer.getName()));
+				"Added '%s' platform account '%s' into deployer repository.",
+				platform.getName(),
+				deployer.getName()));
 			});
 		});
 	}
 
 	private List<ConfigurationMetadataPropertyEntity> createMetadataPropertyEntities(
-			List<ConfigurationMetadataProperty> metadataProperties, String type) {
+	List<ConfigurationMetadataProperty> metadataProperties, String type) {
 		String prefix = KEY_PREFIX + type;
 		return metadataProperties.stream()
-			.filter(p -> p.getId().startsWith(prefix))
-			.map(ConfigurationMetadataPropertyEntity::new)
-			.collect(Collectors.toList());
+		.filter(p -> p.getId().startsWith(prefix))
+		.map(ConfigurationMetadataPropertyEntity::new)
+		.collect(Collectors.toList());
 	}
 }

@@ -71,7 +71,7 @@ import org.springframework.util.StringUtils;
  * @author Mark Pollack
  * @author Ilayaperumal Gopinathan
  */
-@SuppressWarnings({ "unchecked" })
+@SuppressWarnings({"unchecked"})
 public class DefaultReleaseManager implements ReleaseManager {
 
 	public static final String SPRING_CLOUD_DEPLOYER_COUNT = "spring.cloud.deployer.count";
@@ -94,22 +94,22 @@ public class DefaultReleaseManager implements ReleaseManager {
 	private final SpringCloudDeployerApplicationManifestReader applicationManifestReader;
 
 	private final LoadingCache<CacheKey, Mono<Map<String, DeploymentState>>> cache = Caffeine.newBuilder()
-			.expireAfterWrite(60, TimeUnit.SECONDS)
-			.build(k -> {
-				logger.debug("Building new deploymentStateMap mono");
-				if (k.getAppDeployer() instanceof MultiStateAppDeployer) {
-					MultiStateAppDeployer multiAppDeployer = (MultiStateAppDeployer) k.getAppDeployer();
-					return multiAppDeployer.statesReactive(k.getDeploymentIds().toArray(new String[0])).cache();
-				}
-				// it wasn't MultiStateAppDeployer so we just return empty
-				return Mono.just(new HashMap<>());
-			});
+	.expireAfterWrite(60, TimeUnit.SECONDS)
+	.build(k -> {
+		logger.debug("Building new deploymentStateMap mono");
+		if (k.getAppDeployer() instanceof MultiStateAppDeployer) {
+			MultiStateAppDeployer multiAppDeployer = (MultiStateAppDeployer) k.getAppDeployer();
+			return multiAppDeployer.statesReactive(k.getDeploymentIds().toArray(new String[0])).cache();
+		}
+		// it wasn't MultiStateAppDeployer so we just return empty
+		return Mono.just(new HashMap<>());
+	});
 
 
 	public DefaultReleaseManager(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository, DeployerRepository deployerRepository,
-			ReleaseAnalyzer releaseAnalyzer, AppDeploymentRequestFactory appDeploymentRequestFactory,
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
+	AppDeployerDataRepository appDeployerDataRepository, DeployerRepository deployerRepository,
+	ReleaseAnalyzer releaseAnalyzer, AppDeploymentRequestFactory appDeploymentRequestFactory,
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
 		this.releaseRepository = releaseRepository;
 		this.appDeployerDataRepository = appDeployerDataRepository;
 		this.deployerRepository = deployerRepository;
@@ -121,7 +121,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 	@Override
 	public Collection<String> getSupportedKinds() {
 		return Arrays.asList(SkipperManifestKind.SpringBootApp.name(),
-				SkipperManifestKind.SpringCloudDeployerApplication.name());
+		SkipperManifestKind.SpringCloudDeployerApplication.name());
 	}
 
 	public Release install(Release newRelease) {
@@ -129,15 +129,15 @@ public class DefaultReleaseManager implements ReleaseManager {
 		logger.debug("Manifest = " + ArgumentSanitizer.sanitizeYml(newRelease.getManifest().getData()));
 		// Deploy the application
 		List<? extends SpringCloudDeployerApplicationManifest> applicationSpecList = this.applicationManifestReader
-				.read(release.getManifest().getData());
+		.read(release.getManifest().getData());
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 		Map<String, String> appNameDeploymentIdMap = new HashMap<>();
 		for (SpringCloudDeployerApplicationManifest springCloudDeployerApplicationManifest : applicationSpecList) {
 			AppDeploymentRequest appDeploymentRequest = this.appDeploymentRequestFactory.createAppDeploymentRequest(
-					springCloudDeployerApplicationManifest,
-					release.getName(),
-					String.valueOf(release.getVersion()));
+			springCloudDeployerApplicationManifest,
+			release.getName(),
+			String.valueOf(release.getVersion()));
 			try {
 				String deploymentId = appDeployer.deploy(appDeploymentRequest);
 				String applicationName = springCloudDeployerApplicationManifest.getApplicationName();
@@ -149,10 +149,10 @@ public class DefaultReleaseManager implements ReleaseManager {
 				release.getInfo().setStatus(status);
 				release.getInfo().setDescription("Install failed");
 				throw new SkipperException(String.format("Could not install AppDeployRequest [%s] " +
-								" to platform [%s].  Error Message = [%s]",
-						appDeploymentRequest.toString(),
-						release.getPlatformName(),
-						e.getMessage()), e);
+				" to platform [%s].  Error Message = [%s]",
+				appDeploymentRequest.toString(),
+				release.getPlatformName(),
+				e.getMessage()), e);
 			}
 		}
 
@@ -183,22 +183,22 @@ public class DefaultReleaseManager implements ReleaseManager {
 
 	@Override
 	public ReleaseAnalysisReport createReport(Release existingRelease, Release replacingRelease, boolean initial,
-			boolean isForceUpdate, List<String> appNamesToUpgrade) {
+	boolean isForceUpdate, List<String> appNamesToUpgrade) {
 		ReleaseAnalysisReport releaseAnalysisReport = this.releaseAnalyzer
-				.analyze(existingRelease, replacingRelease, isForceUpdate, appNamesToUpgrade);
+		.analyze(existingRelease, replacingRelease, isForceUpdate, appNamesToUpgrade);
 		List<String> applicationNamesToUpgrade = releaseAnalysisReport.getApplicationNamesToUpgrade();
 		if (releaseAnalysisReport.getReleaseDifference().areEqual() && !isForceUpdate) {
 			throw new ReleaseUpgradeException("Package to upgrade has no difference than existing deployed/deleted package. Not upgrading.");
 		}
 		AppDeployerData existingAppDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersionRequired(
-						existingRelease.getName(), existingRelease.getVersion());
+		.findByReleaseNameAndReleaseVersionRequired(
+		existingRelease.getName(), existingRelease.getVersion());
 		Map<String, String> existingAppNamesAndDeploymentIds = (existingAppDeployerData != null) ?
-				existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
+		existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
 		List<AppStatus> appStatuses = status(existingRelease).getInfo().getStatus().getAppStatusList();
 
 		Map<String, Object> model = calculateAppCountsForRelease(replacingRelease, existingAppNamesAndDeploymentIds,
-				applicationNamesToUpgrade, appStatuses);
+		applicationNamesToUpgrade, appStatuses);
 
 		String manifestData = ManifestUtils.createManifest(replacingRelease.getPkg(), model);
 		Manifest manifest = new Manifest();
@@ -211,10 +211,10 @@ public class DefaultReleaseManager implements ReleaseManager {
 	}
 
 	private Map<String, Object> calculateAppCountsForRelease(Release replacingRelease,
-			Map<String, String> existingAppNamesAndDeploymentIds, List<String> applicationNamesToUpgrade,
-			List<AppStatus> appStatuses) {
+	Map<String, String> existingAppNamesAndDeploymentIds, List<String> applicationNamesToUpgrade,
+	List<AppStatus> appStatuses) {
 		Map<String, Object> model = ConfigValueUtils.mergeConfigValues(replacingRelease.getPkg(),
-				replacingRelease.getConfigValues());
+		replacingRelease.getConfigValues());
 		for (Map.Entry<String, String> existingEntry : existingAppNamesAndDeploymentIds.entrySet()) {
 			String existingName = existingEntry.getKey();
 			if (applicationNamesToUpgrade.contains(existingName)) {
@@ -229,8 +229,8 @@ public class DefaultReleaseManager implements ReleaseManager {
 							for (Map.Entry<String, Object> entry : model.entrySet()) {
 								if (existingName.contains(entry.getKey())) {
 									Map<String, Object> appModel = (Map<String, Object>) model.getOrDefault(
-											entry.getKey(),
-											new TreeMap<String, Object>());
+									entry.getKey(),
+									new TreeMap<String, Object>());
 									updateCountProperty(appModel, appsCount);
 								}
 							}
@@ -245,10 +245,10 @@ public class DefaultReleaseManager implements ReleaseManager {
 
 	private void updateCountProperty(Map<String, Object> model, String appsCount) {
 		Map<String, Object> specMap = (Map<String, Object>) model.getOrDefault(
-				SpringCloudDeployerApplicationManifest.SPEC_STRING,
-				new TreeMap<String, Object>());
+		SpringCloudDeployerApplicationManifest.SPEC_STRING,
+		new TreeMap<String, Object>());
 		Map<String, Object> deploymentPropertiesMap = (Map<String, Object>) specMap
-				.get(SpringCloudDeployerApplicationSpec.DEPLOYMENT_PROPERTIES_STRING);
+		.get(SpringCloudDeployerApplicationSpec.DEPLOYMENT_PROPERTIES_STRING);
 		// explicit null check instead of getOrDefault is required as deploymentProperties could
 		// have been explicitly
 		// set to null.
@@ -260,63 +260,63 @@ public class DefaultReleaseManager implements ReleaseManager {
 
 	public Mono<Map<String, Map<String, DeploymentState>>> deploymentState(List<Release> releases) {
 		return Mono.defer(() -> {
-				Map<AppDeployer, List<String>> appDeployerDeploymentIds = new HashMap<>();
-				Map<String, List<String>> releaseDeploymentIds = new HashMap<>();
-				for (Release release: releases) {
-					List<String> deploymentIds = null;
-					if (!release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
-						AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-								.getAppDeployer();
-						AppDeployerData appDeployerData = this.appDeployerDataRepository
-								.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
-						if (appDeployerData == null) {
-							logger.warn(String.format("Could not get status for release %s-v%s.  No app deployer data found.",
-									release.getName(), release.getVersion()));
+			Map<AppDeployer, List<String>> appDeployerDeploymentIds = new HashMap<>();
+			Map<String, List<String>> releaseDeploymentIds = new HashMap<>();
+			for (Release release : releases) {
+				List<String> deploymentIds = null;
+				if (!release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
+					AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
+					.getAppDeployer();
+					AppDeployerData appDeployerData = this.appDeployerDataRepository
+					.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
+					if (appDeployerData == null) {
+						logger.warn(String.format("Could not get status for release %s-v%s.  No app deployer data found.",
+						release.getName(), release.getVersion()));
+					}
+					else {
+						deploymentIds = appDeployerData.getDeploymentIds();
+						if (appDeployerDeploymentIds.containsKey(appDeployer)) {
+							appDeployerDeploymentIds.get(appDeployer).addAll(deploymentIds);
 						}
 						else {
-							deploymentIds = appDeployerData.getDeploymentIds();
-							if (appDeployerDeploymentIds.containsKey(appDeployer)) {
-								appDeployerDeploymentIds.get(appDeployer).addAll(deploymentIds);
-							}
-							else {
-								appDeployerDeploymentIds.put(appDeployer, new ArrayList<>(deploymentIds));
-							}
-							releaseDeploymentIds.put(release.getName(), new ArrayList<>(deploymentIds));
+							appDeployerDeploymentIds.put(appDeployer, new ArrayList<>(deploymentIds));
 						}
+						releaseDeploymentIds.put(release.getName(), new ArrayList<>(deploymentIds));
 					}
 				}
-				return Mono.zip(Mono.just(appDeployerDeploymentIds), Mono.just(releaseDeploymentIds));
+			}
+			return Mono.zip(Mono.just(appDeployerDeploymentIds), Mono.just(releaseDeploymentIds));
+		})
+		.flatMap(t -> {
+			Mono<Map<String, DeploymentState>> deploymentStates = Flux.fromIterable(t.getT1().entrySet())
+			.flatMap(e -> {
+				Mono<Map<String, DeploymentState>> fallback = Flux.fromIterable(e.getValue())
+				.flatMap(ee -> e.getKey().statusReactive(ee))
+				.collectMap(AppStatus::getDeploymentId, AppStatus::getState);
+				Mono<Map<String, DeploymentState>> cachedEntry = cache.get(CacheKey.of(e.getValue(), e.getKey()));
+				return cachedEntry.flatMap(m -> m.isEmpty() ? fallback : Mono.just(m));
 			})
-			.flatMap(t -> {
-				Mono<Map<String, DeploymentState>> deploymentStates = Flux.fromIterable(t.getT1().entrySet())
-					.flatMap(e -> {
-						Mono<Map<String, DeploymentState>> fallback = Flux.fromIterable(e.getValue())
-							.flatMap(ee -> e.getKey().statusReactive(ee))
-							.collectMap(AppStatus::getDeploymentId, AppStatus::getState);
-						Mono<Map<String, DeploymentState>> cachedEntry = cache.get(CacheKey.of(e.getValue(), e.getKey()));
-						return cachedEntry.flatMap(m -> m.isEmpty() ? fallback : Mono.just(m));
-					})
-					.reduce(new HashMap<String, DeploymentState>(), (to, from) -> {
-						to.putAll(from);
-						return to;
-					});
-				return Mono.zip(deploymentStates, Mono.just(t.getT2()));
-			})
-			.map(t -> {
-				Map<String, DeploymentState> deploymentIdsMap = t.getT1();
-				Map<String, List<String>> releaseDeploymentIds = t.getT2();
-				Map<String, Map<String, DeploymentState>> releasesDeploymentStates = new HashMap<>();
-				for (Release release: releases) {
-					Map<String, DeploymentState> deploymentStates = new HashMap<>();
-					if (releaseDeploymentIds.get(release.getName()) != null) {
-						for (String deploymentId: releaseDeploymentIds.get(release.getName())) {
-							deploymentStates.put(deploymentId, deploymentIdsMap.get(deploymentId));
-						}
-					}
-					releasesDeploymentStates.put(release.getName(), deploymentStates);
-				}
-				return releasesDeploymentStates;
+			.reduce(new HashMap<String, DeploymentState>(), (to, from) -> {
+				to.putAll(from);
+				return to;
 			});
+			return Mono.zip(deploymentStates, Mono.just(t.getT2()));
+		})
+		.map(t -> {
+			Map<String, DeploymentState> deploymentIdsMap = t.getT1();
+			Map<String, List<String>> releaseDeploymentIds = t.getT2();
+			Map<String, Map<String, DeploymentState>> releasesDeploymentStates = new HashMap<>();
+			for (Release release : releases) {
+				Map<String, DeploymentState> deploymentStates = new HashMap<>();
+				if (releaseDeploymentIds.get(release.getName()) != null) {
+					for (String deploymentId : releaseDeploymentIds.get(release.getName())) {
+						deploymentStates.put(deploymentId, deploymentIdsMap.get(deploymentId));
+					}
+				}
+				releasesDeploymentStates.put(release.getName(), deploymentStates);
+			}
+			return releasesDeploymentStates;
+		});
 	}
 
 	public Mono<Release> statusReactive(Release release) {
@@ -325,56 +325,56 @@ public class DefaultReleaseManager implements ReleaseManager {
 				return Mono.just(release);
 			}
 			AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-					.getAppDeployer();
+			.getAppDeployer();
 			AppDeployerData appDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
+			.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
 			if (appDeployerData == null) {
 				logger.warn(String.format("Could not get status for release %s-v%s.  No app deployer data found.",
-					release.getName(), release.getVersion()));
+				release.getName(), release.getVersion()));
 				return Mono.just(release);
 			}
 			List<String> deploymentIds = appDeployerData.getDeploymentIds();
 			logger.info("Getting status for {} using deploymentIds {}", release,
-					StringUtils.collectionToCommaDelimitedString(deploymentIds));
+			StringUtils.collectionToCommaDelimitedString(deploymentIds));
 
 			if (!deploymentIds.isEmpty()) {
 				Map<String, String> appNameDeploymentIdMap = appDeployerData.getDeploymentDataAsMap();
 				return Flux.fromIterable(appNameDeploymentIdMap.entrySet())
-					.flatMap(nameDeploymentId -> {
-						String deploymentId = nameDeploymentId.getValue();
-						return appDeployer.statusReactive(deploymentId);
-					})
-					.map(appStatus -> copyStatus(appStatus))
-					.flatMap(appStatus -> {
-						return Mono.zip(Mono.just(appStatus), cache.get(CacheKey.of(deploymentIds, appDeployer)));
-					})
-					.map(zip -> {
-						AppStatus appStatus = zip.getT1();
-						Map<String, DeploymentState> deploymentStateMap = zip.getT2();
-						Collection<AppInstanceStatus> instanceStatuses = appStatus.getInstances().values();
-						for (AppInstanceStatus instanceStatus : instanceStatuses) {
-								instanceStatus.getAttributes().put(SKIPPER_APPLICATION_NAME_ATTRIBUTE,
-										getAppNameByDeploymentId(appStatus.getDeploymentId(), appNameDeploymentIdMap));
-								instanceStatus.getAttributes().put(SKIPPER_RELEASE_NAME_ATTRIBUTE, release.getName());
-								instanceStatus.getAttributes().put(SKIPPER_RELEASE_VERSION_ATTRIBUTE,
-										"" + release.getVersion());
+				.flatMap(nameDeploymentId -> {
+					String deploymentId = nameDeploymentId.getValue();
+					return appDeployer.statusReactive(deploymentId);
+				})
+				.map(appStatus -> copyStatus(appStatus))
+				.flatMap(appStatus -> {
+					return Mono.zip(Mono.just(appStatus), cache.get(CacheKey.of(deploymentIds, appDeployer)));
+				})
+				.map(zip -> {
+					AppStatus appStatus = zip.getT1();
+					Map<String, DeploymentState> deploymentStateMap = zip.getT2();
+					Collection<AppInstanceStatus> instanceStatuses = appStatus.getInstances().values();
+					for (AppInstanceStatus instanceStatus : instanceStatuses) {
+						instanceStatus.getAttributes().put(SKIPPER_APPLICATION_NAME_ATTRIBUTE,
+						getAppNameByDeploymentId(appStatus.getDeploymentId(), appNameDeploymentIdMap));
+						instanceStatus.getAttributes().put(SKIPPER_RELEASE_NAME_ATTRIBUTE, release.getName());
+						instanceStatus.getAttributes().put(SKIPPER_RELEASE_VERSION_ATTRIBUTE,
+						"" + release.getVersion());
+					}
+					if (appStatus.getState().equals(DeploymentState.failed)
+					|| appStatus.getState().equals(DeploymentState.error)) {
+						// check if we have 'early' status computed via multiStateAppDeployer
+						String deploymentId = appStatus.getDeploymentId();
+						if (deploymentStateMap.containsKey(deploymentId)) {
+							appStatus = AppStatus.of(deploymentId)
+							.generalState(deploymentStateMap.get(deploymentId)).build();
 						}
-						if (appStatus.getState().equals(DeploymentState.failed)
-								|| appStatus.getState().equals(DeploymentState.error)) {
-							// check if we have 'early' status computed via multiStateAppDeployer
-							String deploymentId = appStatus.getDeploymentId();
-							if (deploymentStateMap.containsKey(deploymentId)) {
-								appStatus = AppStatus.of(deploymentId)
-										.generalState(deploymentStateMap.get(deploymentId)).build();
-							}
-						}
-						return appStatus;
-					})
-					.collectList()
-					.map(appStatusList -> {
-						release.getInfo().getStatus().setPlatformStatusAsAppStatusList(appStatusList);
-						return release;
-					});
+					}
+					return appStatus;
+				})
+				.collectList()
+				.map(appStatusList -> {
+					release.getInfo().getStatus().setPlatformStatusAsAppStatusList(appStatusList);
+					return release;
+				});
 			}
 			return Mono.just(release);
 		});
@@ -382,7 +382,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 
 
 	private String getAppNameByDeploymentId(String deploymentId, Map<String, String> appNameDeploymentIdMap) {
-		for(Map.Entry<String, String> appNameDeploymentId: appNameDeploymentIdMap.entrySet()) {
+		for (Map.Entry<String, String> appNameDeploymentId : appNameDeploymentIdMap.entrySet()) {
 			if (deploymentId.equals(appNameDeploymentId.getValue())) {
 				return appNameDeploymentId.getKey();
 			}
@@ -396,18 +396,18 @@ public class DefaultReleaseManager implements ReleaseManager {
 			return release;
 		}
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
+		.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
 		if (appDeployerData == null) {
 			logger.warn(String.format("Could not get status for release %s-v%s.  No app deployer data found.",
-					release.getName(), release.getVersion()));
+			release.getName(), release.getVersion()));
 			return release;
 		}
 		List<String> deploymentIds = appDeployerData.getDeploymentIds();
 		logger.debug("Getting status for {} using deploymentIds {}", release,
-				StringUtils.collectionToCommaDelimitedString(deploymentIds));
+		StringUtils.collectionToCommaDelimitedString(deploymentIds));
 
 		if (!deploymentIds.isEmpty()) {
 			// mainly track deployed and unknown statuses. for any other
@@ -440,11 +440,11 @@ public class DefaultReleaseManager implements ReleaseManager {
 					instanceStatus.getAttributes().put(SKIPPER_RELEASE_VERSION_ATTRIBUTE, "" + release.getVersion());
 				}
 				if (appStatus.getState().equals(DeploymentState.failed) ||
-						appStatus.getState().equals(DeploymentState.error)) {
+				appStatus.getState().equals(DeploymentState.error)) {
 					// check if we have 'early' status computed via multiStateAppDeployer
 					if (deploymentStateMap.containsKey(deploymentId)) {
 						appStatus = AppStatus.of(deploymentId).generalState(deploymentStateMap.get(deploymentId))
-								.build();
+						.build();
 						logger.debug("Set from deploymentStateMap {} {}", deploymentId, appStatus.getState());
 					}
 				}
@@ -452,19 +452,19 @@ public class DefaultReleaseManager implements ReleaseManager {
 				appStatusList.add(appStatus);
 
 				switch (appStatus.getState()) {
-				case deployed:
-					deployedCount++;
-					break;
-				case unknown:
-					unknownCount++;
-					break;
-				case deploying:
-				case undeployed:
-				case partial:
-				case failed:
-				case error:
-				default:
-					break;
+					case deployed:
+						deployedCount++;
+						break;
+					case unknown:
+						unknownCount++;
+						break;
+					case deploying:
+					case undeployed:
+					case partial:
+					case failed:
+					case error:
+					default:
+						break;
 				}
 			}
 			release.getInfo().getStatus().setPlatformStatusAsAppStatusList(appStatusList);
@@ -483,12 +483,12 @@ public class DefaultReleaseManager implements ReleaseManager {
 			return new LogInfo(Collections.EMPTY_MAP);
 		}
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
+		.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
 		if (appDeployerData == null) {
 			return new LogInfo(Collections.EMPTY_MAP);
 		}
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 		Map<String, String> logMap = new HashMap<>();
 		Map<String, String> appNameDeploymentIdMap = appDeployerData.getDeploymentDataAsMap();
 		Map<String, String> logApps = new HashMap<>();
@@ -502,7 +502,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 		else {
 			logApps = appNameDeploymentIdMap;
 		}
-		for (Map.Entry<String, String> deploymentIdEntry: logApps.entrySet()) {
+		for (Map.Entry<String, String> deploymentIdEntry : logApps.entrySet()) {
 			logMap.put(deploymentIdEntry.getValue(), appDeployer.getLog(deploymentIdEntry.getValue()));
 		}
 		logger.debug("getLog:{}:{}:{}", release.getName(), appName, logMap);
@@ -514,29 +514,29 @@ public class DefaultReleaseManager implements ReleaseManager {
 			return release;
 		}
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
+		.findByReleaseNameAndReleaseVersion(release.getName(), release.getVersion());
 		if (appDeployerData == null) {
 			return release;
 		}
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 		Map<String, String> appNameDeploymentIdMap = appDeployerData.getDeploymentDataAsMap();
 
 		Map<String, ScaleRequestItem> apps = new HashMap<>();
 
 		for (Map.Entry<String, String> nameDeploymentId : appNameDeploymentIdMap.entrySet()) {
 			Optional<ScaleRequestItem> requestItem = scaleRequest.getScale().stream()
-				.filter(item -> ObjectUtils.nullSafeEquals(nameDeploymentId.getKey(), item.getName()))
-				.findFirst();
+			.filter(item -> ObjectUtils.nullSafeEquals(nameDeploymentId.getKey(), item.getName()))
+			.findFirst();
 			if (requestItem.isPresent()) {
 				apps.put(nameDeploymentId.getValue(), requestItem.get());
 			}
 		}
 
-		for (Map.Entry<String, ScaleRequestItem> deploymentIdEntry: apps.entrySet()) {
+		for (Map.Entry<String, ScaleRequestItem> deploymentIdEntry : apps.entrySet()) {
 			ScaleRequestItem item = deploymentIdEntry.getValue();
 			AppScaleRequest request = new AppScaleRequest(deploymentIdEntry.getKey(), item.getCount(),
-					item.getProperties());
+			item.getProperties());
 			appDeployer.scale(request);
 		}
 
@@ -545,9 +545,9 @@ public class DefaultReleaseManager implements ReleaseManager {
 
 	public Release delete(Release release) {
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 		AppDeployerData appDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersionRequired(release.getName(), release.getVersion());
+		.findByReleaseNameAndReleaseVersionRequired(release.getName(), release.getVersion());
 		List<String> deploymentIds = (appDeployerData != null) ? appDeployerData.getDeploymentIds() : Collections.EMPTY_LIST;
 		logger.debug("DeploymentIds to undeploy {}", deploymentIds);
 		if (!deploymentIds.isEmpty()) {
@@ -557,7 +557,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 				}
 				catch (Exception e) {
 					logger.error(String.format("Exception undeploying the application with the deploymentId %s. "
-							+ "Exception message: %s", deploymentId, e.getMessage()));
+					+ "Exception message: %s", deploymentId, e.getMessage()));
 				}
 			}
 			Status deletedStatus = new Status();
@@ -576,7 +576,7 @@ public class DefaultReleaseManager implements ReleaseManager {
 		}
 		else {
 			appStatus.getInstances().entrySet().stream().map(Map.Entry::getValue).forEach(e -> builder.with(
-					new MutableAttributesAppInstanceStatus(e.getId(), e.getState(), e.getAttributes())));
+			new MutableAttributesAppInstanceStatus(e.getId(), e.getState(), e.getAttributes())));
 		}
 		return builder.build();
 	}

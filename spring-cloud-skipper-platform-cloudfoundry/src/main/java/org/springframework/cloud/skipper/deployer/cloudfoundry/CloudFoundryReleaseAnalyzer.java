@@ -65,42 +65,42 @@ public class CloudFoundryReleaseAnalyzer {
 	public ReleaseAnalysisReport analyze(Release existingRelease, Release replacingRelease, boolean isForceUpdate) {
 		List<ApplicationManifestDifference> applicationManifestDifferences = new ArrayList<>();
 		ApplicationManifest existingApplicationManifest = this.cfManifestApplicationDeployer
-				.getCFApplicationManifest(existingRelease);
+		.getCFApplicationManifest(existingRelease);
 		ApplicationManifest replacingApplicationManifest = this.cfManifestApplicationDeployer
-				.getCFApplicationManifest(replacingRelease);
+		.getCFApplicationManifest(replacingRelease);
 		if (!existingApplicationManifest.equals(replacingApplicationManifest)) {
 			Map<String, String> existingMap = CloudFoundryApplicationManifestUtils
-					.getCFManifestMap(existingApplicationManifest);
+			.getCFManifestMap(existingApplicationManifest);
 			Map<String, String> replacingMap = CloudFoundryApplicationManifestUtils
-					.getCFManifestMap(replacingApplicationManifest);
+			.getCFManifestMap(replacingApplicationManifest);
 			PropertiesDiff emptyPropertiesDiff = PropertiesDiff.builder().build();
 			PropertiesDiff propertiesDiff = PropertiesDiff.builder().left(existingMap).right(replacingMap).build();
 			ApplicationManifestDifference applicationManifestDifference = new ApplicationManifestDifference(
-					existingApplicationManifest.getName(),
-					emptyPropertiesDiff, emptyPropertiesDiff, emptyPropertiesDiff, propertiesDiff, emptyPropertiesDiff);
+			existingApplicationManifest.getName(),
+			emptyPropertiesDiff, emptyPropertiesDiff, emptyPropertiesDiff, propertiesDiff, emptyPropertiesDiff);
 			applicationManifestDifferences.add(applicationManifestDifference);
 		}
 		return createReleaseAnalysisReport(existingRelease, replacingRelease, applicationManifestDifferences,
-				Arrays.asList(existingApplicationManifest.getName()), isForceUpdate);
+		Arrays.asList(existingApplicationManifest.getName()), isForceUpdate);
 	}
 
 	private ReleaseAnalysisReport createReleaseAnalysisReport(Release existingRelease,
-			Release replacingRelease,
-			List<ApplicationManifestDifference> applicationManifestDifferences, List<String> allApplicationNames,
-			boolean isForceUpdate) {
+	Release replacingRelease,
+	List<ApplicationManifestDifference> applicationManifestDifferences, List<String> allApplicationNames,
+	boolean isForceUpdate) {
 		Set<String> appsToUpgrade = new LinkedHashSet<String>();
 		ReleaseDifference releaseDifference = new ReleaseDifference();
 		releaseDifference.setDifferences(applicationManifestDifferences);
 		if (!releaseDifference.areEqual()) {
 			logger.info("Differences detected between existing and replacing application manifests."
-					+ "Upgrading applications = [" +
-					StringUtils.collectionToCommaDelimitedString(releaseDifference.getChangedApplicationNames()) + "]");
+			+ "Upgrading applications = [" +
+			StringUtils.collectionToCommaDelimitedString(releaseDifference.getChangedApplicationNames()) + "]");
 			appsToUpgrade.addAll(releaseDifference.getChangedApplicationNames());
 		}
 		if (isForceUpdate) {
 			appsToUpgrade.addAll(allApplicationNames);
 		}
 		return new ReleaseAnalysisReport(new ArrayList(appsToUpgrade), releaseDifference, existingRelease,
-				replacingRelease);
+		replacingRelease);
 	}
 }

@@ -41,15 +41,15 @@ public class LogsDocumentation extends BaseDocumentation {
 		Release release = createTestRelease();
 		when(this.releaseService.getLog(release.getName())).thenReturn(new LogInfo(Collections.emptyMap()));
 		final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-				MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+		MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 		this.mockMvc.perform(
-				get("/api/release/logs/{releaseName}", release.getName()).accept(MediaType.APPLICATION_JSON)
-						.contentType(contentType))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseBody()));
+		get("/api/release/logs/{releaseName}", release.getName()).accept(MediaType.APPLICATION_JSON)
+		.contentType(contentType))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseBody()));
 	}
 
 	@Test
@@ -58,11 +58,11 @@ public class LogsDocumentation extends BaseDocumentation {
 		when(this.releaseService.getLog(release.getName(), "myapp")).thenReturn(new LogInfo(Collections.EMPTY_MAP));
 
 		this.mockMvc.perform(
-				get("/api/release/logs/{releaseName}/{appName}",
-						release.getName(), "myapp"))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseBody()));
+		get("/api/release/logs/{releaseName}/{appName}",
+		release.getName(), "myapp"))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseBody()));
 	}
 }

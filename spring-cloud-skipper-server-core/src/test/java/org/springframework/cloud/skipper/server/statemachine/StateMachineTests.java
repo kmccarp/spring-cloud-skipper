@@ -153,36 +153,36 @@ public class StateMachineTests {
 	@Test
 	public void testSimpleInstallShouldNotError() throws Exception {
 		Mockito.when(packageService.downloadPackage(any()))
-				.thenReturn(new org.springframework.cloud.skipper.domain.Package());
+		.thenReturn(new org.springframework.cloud.skipper.domain.Package());
 		Mockito.when(releaseService.install(any(), any())).thenReturn(new Release());
 
 		Message<SkipperEvents> message = MessageBuilder
-			.withPayload(SkipperEvents.INSTALL)
-			.setHeader(SkipperEventHeaders.PACKAGE_METADATA, new PackageMetadata())
-			.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, new InstallProperties())
-			.setHeader(SkipperEventHeaders.VERSION, 1)
-			.build();
+		.withPayload(SkipperEvents.INSTALL)
+		.setHeader(SkipperEventHeaders.PACKAGE_METADATA, new PackageMetadata())
+		.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, new InstallProperties())
+		.setHeader(SkipperEventHeaders.VERSION, 1)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testInstall");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(3)
-						.expectStateEntered(SkipperStates.INSTALL,
-								SkipperStates.INSTALL_INSTALL,
-								SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(3)
+		.expectStateEntered(SkipperStates.INSTALL,
+		SkipperStates.INSTALL_INSTALL,
+		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(errorAction, never()).execute(any());
@@ -196,22 +196,22 @@ public class StateMachineTests {
 		extendedState.getVariables().put(SkipperEventHeaders.INSTALL_REQUEST, new InstallRequest());
 
 		StateMachineContext<SkipperStates, SkipperEvents> stateMachineContext = new DefaultStateMachineContext<>(
-				SkipperStates.INSTALL, SkipperEvents.INSTALL, null, extendedState);
+		SkipperStates.INSTALL, SkipperEvents.INSTALL, null, extendedState);
 		Mockito.when(stateMachineRuntimePersister.read(any())).thenReturn(stateMachineContext);
 
 		StateMachineService<SkipperStates, SkipperEvents> stateMachineService = context.getBean(StateMachineService.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = stateMachineService
-				.acquireStateMachine("testRestoreFromInstallUsingInstallRequest", false);
+		.acquireStateMachine("testRestoreFromInstallUsingInstallRequest", false);
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(2)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(2)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(upgradeCancelAction, never()).execute(any());
@@ -224,31 +224,31 @@ public class StateMachineTests {
 		Release release = new Release();
 		release.setManifest(manifest);
 		Mockito.when(releaseReportService.createReport(any(), any(), any(boolean.class))).thenReturn(new ReleaseAnalysisReport(
-				new ArrayList<>(), new ReleaseDifference(), release, release));
+		new ArrayList<>(), new ReleaseDifference(), release, release));
 		Mockito.when(upgradeStrategy.checkStatus(any()))
-				.thenReturn(true);
+		.thenReturn(true);
 		Mockito.when(upgradeStrategyFactory.getUpgradeStrategy(any())).thenReturn(upgradeStrategy);
 
 		DefaultExtendedState extendedState = new DefaultExtendedState();
 		extendedState.getVariables().put(SkipperEventHeaders.UPGRADE_REQUEST, new UpgradeRequest());
 
 		StateMachineContext<SkipperStates, SkipperEvents> stateMachineContext = new DefaultStateMachineContext<>(
-				SkipperStates.UPGRADE, SkipperEvents.UPGRADE, null, extendedState);
+		SkipperStates.UPGRADE, SkipperEvents.UPGRADE, null, extendedState);
 		Mockito.when(stateMachineRuntimePersister.read(any())).thenReturn(stateMachineContext);
 
 		StateMachineService<SkipperStates, SkipperEvents> stateMachineService = context.getBean(StateMachineService.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = stateMachineService
-				.acquireStateMachine("testRestoreFromUpgradeUsingUpgradeRequest", false);
+		.acquireStateMachine("testRestoreFromUpgradeUsingUpgradeRequest", false);
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(8)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(8)
+		.and()
+		.build();
 		plan.test();
 		Mockito.verify(upgradeCancelAction, never()).execute(any());
 		Mockito.verify(errorAction, never()).execute(any());
@@ -262,22 +262,22 @@ public class StateMachineTests {
 		extendedState.getVariables().put(SkipperEventHeaders.INSTALL_PROPERTIES, new InstallProperties());
 
 		StateMachineContext<SkipperStates, SkipperEvents> stateMachineContext = new DefaultStateMachineContext<>(
-				SkipperStates.INSTALL, SkipperEvents.INSTALL, null, extendedState);
+		SkipperStates.INSTALL, SkipperEvents.INSTALL, null, extendedState);
 		Mockito.when(stateMachineRuntimePersister.read(any())).thenReturn(stateMachineContext);
 
 		StateMachineService<SkipperStates, SkipperEvents> stateMachineService = context.getBean(StateMachineService.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = stateMachineService
-				.acquireStateMachine("testRestoreFromInstallUsingInstallProperties", false);
+		.acquireStateMachine("testRestoreFromInstallUsingInstallProperties", false);
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(2)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(2)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(upgradeCancelAction, never()).execute(any());
@@ -290,35 +290,35 @@ public class StateMachineTests {
 		Release release = new Release();
 		release.setManifest(manifest);
 		Mockito.when(releaseReportService.createReport(any(), any(), any(boolean.class))).thenReturn(new ReleaseAnalysisReport(
-				new ArrayList<>(), new ReleaseDifference(), release, release));
+		new ArrayList<>(), new ReleaseDifference(), release, release));
 		Mockito.when(upgradeStrategy.checkStatus(any()))
-				.thenReturn(true);
+		.thenReturn(true);
 		Mockito.when(upgradeStrategyFactory.getUpgradeStrategy(any())).thenReturn(upgradeStrategy);
 
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE)
-				.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE)
+		.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testSimpleUpgradeShouldNotError");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(9)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(9)
+		.and()
+		.build();
 		plan.test();
 		Mockito.verify(upgradeCancelAction, never()).execute(any());
 		Mockito.verify(errorAction, never()).execute(any());
@@ -330,46 +330,46 @@ public class StateMachineTests {
 		Release release = new Release();
 		release.setManifest(manifest);
 		Mockito.when(releaseReportService.createReport(any(), any(), any(boolean.class))).thenReturn(new ReleaseAnalysisReport(
-				new ArrayList<>(), new ReleaseDifference(), release, release));
+		new ArrayList<>(), new ReleaseDifference(), release, release));
 		Mockito.when(upgradeStrategy.checkStatus(any()))
-				.thenReturn(false);
+		.thenReturn(false);
 		Mockito.when(upgradeStrategyFactory.getUpgradeStrategy(any())).thenReturn(upgradeStrategy);
 
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 
 		// timeout 0 for things to fail immediately
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE)
-				.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
-				.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, 0L)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE)
+		.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
+		.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, 0L)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testUpgradeFailsNewAppFailToDeploy");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(9)
-						.expectStateEntered(SkipperStates.UPGRADE,
-								SkipperStates.UPGRADE_START,
-								SkipperStates.UPGRADE_DEPLOY_TARGET_APPS,
-								SkipperStates.UPGRADE_WAIT_TARGET_APPS,
-								SkipperStates.UPGRADE_CHECK_TARGET_APPS,
-								SkipperStates.UPGRADE_WAIT_TARGET_APPS,
-								SkipperStates.UPGRADE_DEPLOY_TARGET_APPS_FAILED,
-								SkipperStates.UPGRADE_CANCEL,
-								SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(9)
+		.expectStateEntered(SkipperStates.UPGRADE,
+		SkipperStates.UPGRADE_START,
+		SkipperStates.UPGRADE_DEPLOY_TARGET_APPS,
+		SkipperStates.UPGRADE_WAIT_TARGET_APPS,
+		SkipperStates.UPGRADE_CHECK_TARGET_APPS,
+		SkipperStates.UPGRADE_WAIT_TARGET_APPS,
+		SkipperStates.UPGRADE_DEPLOY_TARGET_APPS_FAILED,
+		SkipperStates.UPGRADE_CANCEL,
+		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(upgradeCancelAction).execute(any());
@@ -383,51 +383,51 @@ public class StateMachineTests {
 		Release release = new Release();
 		release.setManifest(manifest);
 		Mockito.when(releaseReportService.createReport(any(), any(), any(boolean.class))).thenReturn(new ReleaseAnalysisReport(
-				new ArrayList<>(), new ReleaseDifference(), release, release));
+		new ArrayList<>(), new ReleaseDifference(), release, release));
 		Mockito.when(upgradeStrategy.checkStatus(any()))
-				.thenReturn(false);
+		.thenReturn(false);
 		Mockito.when(upgradeStrategyFactory.getUpgradeStrategy(any())).thenReturn(upgradeStrategy);
 
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 
 		// timeout 60s giving time to try cancel
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE)
-				.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
-				.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, 60000L)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE)
+		.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
+		.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, 60000L)
+		.build();
 
 		Message<SkipperEvents> message2 = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE_CANCEL)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE_CANCEL)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testUpgradeCancelWhileCheckingApps");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStateChanged(4)
-						.expectStateEntered(SkipperStates.UPGRADE,
-								SkipperStates.UPGRADE_START,
-								SkipperStates.UPGRADE_DEPLOY_TARGET_APPS,
-								SkipperStates.UPGRADE_WAIT_TARGET_APPS)
-						.and()
-					.step()
-						.sendEvent(message2)
-						.expectStateChanged(2)
-						// for now need to do a trick to wait this later
-						//.expectStateEntered(SkipperStates.UPGRADE_CANCEL,
-						//		SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStateChanged(4)
+		.expectStateEntered(SkipperStates.UPGRADE,
+		SkipperStates.UPGRADE_START,
+		SkipperStates.UPGRADE_DEPLOY_TARGET_APPS,
+		SkipperStates.UPGRADE_WAIT_TARGET_APPS)
+		.and()
+		.step()
+		.sendEvent(message2)
+		.expectStateChanged(2)
+		// for now need to do a trick to wait this later
+		//.expectStateEntered(SkipperStates.UPGRADE_CANCEL,
+		//		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		SkipperStates result = null;
@@ -461,33 +461,33 @@ public class StateMachineTests {
 
 
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.ROLLBACK)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, "testRollbackInstall")
-				.setHeader(SkipperEventHeaders.ROLLBACK_VERSION, 0)
-				.build();
+		.withPayload(SkipperEvents.ROLLBACK)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, "testRollbackInstall")
+		.setHeader(SkipperEventHeaders.ROLLBACK_VERSION, 0)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testRollbackInstall");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(5)
-						.expectStateEntered(SkipperStates.ROLLBACK,
-								SkipperStates.ROLLBACK_START,
-								SkipperStates.INSTALL,
-								SkipperStates.INSTALL_INSTALL,
-								SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(5)
+		.expectStateEntered(SkipperStates.ROLLBACK,
+		SkipperStates.ROLLBACK_START,
+		SkipperStates.INSTALL,
+		SkipperStates.INSTALL_INSTALL,
+		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(errorAction, never()).execute(any());
@@ -498,31 +498,31 @@ public class StateMachineTests {
 		Mockito.when(releaseService.delete(any(String.class), any(boolean.class))).thenReturn(new Release());
 		DeleteProperties deleteProperties = new DeleteProperties();
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.DELETE)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, "testDeleteSucceed")
-				.setHeader(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, deleteProperties)
-				.build();
+		.withPayload(SkipperEvents.DELETE)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, "testDeleteSucceed")
+		.setHeader(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, deleteProperties)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testDeleteSucceed");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(3)
-						.expectStateEntered(SkipperStates.DELETE,
-								SkipperStates.DELETE_DELETE,
-								SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(3)
+		.expectStateEntered(SkipperStates.DELETE,
+		SkipperStates.DELETE_DELETE,
+		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(errorAction, never()).execute(any());
@@ -533,31 +533,31 @@ public class StateMachineTests {
 		Mockito.when(releaseService.scale(any(String.class), any(ScaleRequest.class))).thenReturn(new Release());
 		ScaleRequest scaleRequest = new ScaleRequest();
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.SCALE)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, "testScaleSucceed")
-				.setHeader(SkipperEventHeaders.SCALE_REQUEST, scaleRequest)
-				.build();
+		.withPayload(SkipperEvents.SCALE)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, "testScaleSucceed")
+		.setHeader(SkipperEventHeaders.SCALE_REQUEST, scaleRequest)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testScaleSucceed");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(3)
-						.expectStateEntered(SkipperStates.SCALE,
-								SkipperStates.SCALE_SCALE,
-								SkipperStates.INITIAL)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(3)
+		.expectStateEntered(SkipperStates.SCALE,
+		SkipperStates.SCALE_SCALE,
+		SkipperStates.INITIAL)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(errorAction, never()).execute(any());
@@ -572,22 +572,22 @@ public class StateMachineTests {
 		extendedState.getVariables().put(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, deleteProperties);
 
 		StateMachineContext<SkipperStates, SkipperEvents> stateMachineContext = new DefaultStateMachineContext<>(
-				SkipperStates.DELETE, SkipperEvents.DELETE, null, extendedState);
+		SkipperStates.DELETE, SkipperEvents.DELETE, null, extendedState);
 		Mockito.when(stateMachineRuntimePersister.read(any())).thenReturn(stateMachineContext);
 
 		StateMachineService<SkipperStates, SkipperEvents> stateMachineService = context.getBean(StateMachineService.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = stateMachineService
-				.acquireStateMachine("testRestoreFromDeleteUsingDeleteProperties", false);
+		.acquireStateMachine("testRestoreFromDeleteUsingDeleteProperties", false);
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStates(SkipperStates.INITIAL)
-						.expectStateChanged(2)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStates(SkipperStates.INITIAL)
+		.expectStateChanged(2)
+		.and()
+		.build();
 		plan.test();
 
 		Mockito.verify(upgradeCancelAction, never()).execute(any());
@@ -629,41 +629,41 @@ public class StateMachineTests {
 		Release release = new Release();
 		release.setManifest(manifest);
 		Mockito.when(releaseReportService.createReport(any(), any(), any(boolean.class))).thenReturn(new ReleaseAnalysisReport(
-				new ArrayList<>(), new ReleaseDifference(), release, release));
+		new ArrayList<>(), new ReleaseDifference(), release, release));
 		Mockito.when(upgradeStrategy.checkStatus(any()))
-				.thenReturn(false);
+		.thenReturn(false);
 		Mockito.when(upgradeStrategyFactory.getUpgradeStrategy(any())).thenReturn(upgradeStrategy);
 
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 
 		Message<SkipperEvents> message1 = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE)
-				.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE)
+		.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
+		.build();
 
 		Message<SkipperEvents> message2 = MessageBuilder
-				.withPayload(SkipperEvents.INSTALL)
-				.setHeader(SkipperEventHeaders.PACKAGE_METADATA, new PackageMetadata())
-				.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, new InstallProperties())
-				.setHeader(SkipperEventHeaders.VERSION, 1)
-				.build();
+		.withPayload(SkipperEvents.INSTALL)
+		.setHeader(SkipperEventHeaders.PACKAGE_METADATA, new PackageMetadata())
+		.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, new InstallProperties())
+		.setHeader(SkipperEventHeaders.VERSION, 1)
+		.build();
 
 		StateMachineFactory<SkipperStates, SkipperEvents> factory = context.getBean(StateMachineFactory.class);
 		StateMachine<SkipperStates, SkipperEvents> stateMachine = factory.getStateMachine("testInstallDeniedWhileUpgrading");
 
 		StateMachineTestPlan<SkipperStates, SkipperEvents> plan =
-				StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
-					.defaultAwaitTime(10)
-					.stateMachine(stateMachine)
-					.step()
-						.expectStateMachineStarted(1)
-						.expectStates(SkipperStates.INITIAL)
-						.and()
-					.step()
-						.sendEvent(message1)
-						.expectStateChanged(6)
-						.and()
-					.build();
+		StateMachineTestPlanBuilder.<SkipperStates, SkipperEvents>builder()
+		.defaultAwaitTime(10)
+		.stateMachine(stateMachine)
+		.step()
+		.expectStateMachineStarted(1)
+		.expectStates(SkipperStates.INITIAL)
+		.and()
+		.step()
+		.sendEvent(message1)
+		.expectStateChanged(6)
+		.and()
+		.build();
 		plan.test();
 
 		// install event is not accepted

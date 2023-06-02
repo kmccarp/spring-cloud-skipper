@@ -71,7 +71,7 @@ public class PackageTemplateTests {
 		Yaml yaml = new Yaml(new SafeConstructor());
 		Map model = (Map) yaml.load(valuesResource.getInputStream());
 		String templateAsString = StreamUtils.copyToString(nestedMapResource.getInputStream(),
-				Charset.defaultCharset());
+		Charset.defaultCharset());
 		Template mustacheTemplate = Mustache.compiler().compile(templateAsString);
 		String resolvedYml = mustacheTemplate.execute(model);
 		Map map = (Map) yaml.load(resolvedYml);
@@ -80,18 +80,18 @@ public class PackageTemplateTests {
 		assertThat(map).containsKeys("apiVersion", "deployment");
 		Map deploymentMap = (Map) map.get("deployment");
 		assertThat(deploymentMap).contains(entry("name", "time"))
-				.contains(entry("count", 10));
+		.contains(entry("count", 10));
 		Map applicationProperties = (Map) deploymentMap.get("applicationProperties");
 		assertThat(applicationProperties).contains(entry("log.level", "DEBUG"), entry("server.port", 8089));
 		Map deploymentProperties = (Map) deploymentMap.get("deploymentProperties");
 		assertThat(deploymentProperties).contains(entry("app.time.producer.partitionKeyExpression", "payload"),
-				entry("app.log.spring.cloud.stream.bindings.input.consumer.maxAttempts", 5));
+		entry("app.log.spring.cloud.stream.bindings.input.consumer.maxAttempts", 5));
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-			HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-			ResourceLoadingAutoConfiguration.class })
+	@ImportAutoConfiguration(classes = {JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+	HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+	ResourceLoadingAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	static class TestConfig {
 	}

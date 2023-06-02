@@ -33,12 +33,12 @@ public class AboutDocumentation extends BaseDocumentation {
 	@Test
 	public void getMetaInformation() throws Exception {
 		this.mockMvc.perform(get("/api/about").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseFields(
-								fieldWithPath("versionInfo.server.name").description("Spring Cloud Skipper Server dependency."),
-								fieldWithPath("versionInfo.server.version").description("Spring Cloud Skipper Server dependency version."),
-								fieldWithPath("versionInfo.shell.name").description("Spring Cloud Skipper Shell dependency."),
-								fieldWithPath("versionInfo.shell.version").description("Spring Cloud Skipper Shell dependency version."),
-								fieldWithPath("links").description("Links."))));
+		.andDo(this.documentationHandler.document(
+		responseFields(
+		fieldWithPath("versionInfo.server.name").description("Spring Cloud Skipper Server dependency."),
+		fieldWithPath("versionInfo.server.version").description("Spring Cloud Skipper Server dependency version."),
+		fieldWithPath("versionInfo.shell.name").description("Spring Cloud Skipper Shell dependency."),
+		fieldWithPath("versionInfo.shell.version").description("Spring Cloud Skipper Shell dependency version."),
+		fieldWithPath("links").description("Links."))));
 	}
 }

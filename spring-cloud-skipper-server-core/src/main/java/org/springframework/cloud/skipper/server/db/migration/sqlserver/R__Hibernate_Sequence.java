@@ -46,15 +46,15 @@ public class R__Hibernate_Sequence extends AbstractMigration {
 	// nested exception is com.microsoft.sqlserver.jdbc.SQLServerException:
 	// There is already an object named 'hibernate_sequence' in the database.
 	private final static List<SqlCommand> commands = Arrays.asList(
-			SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", 2714));
+	SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", 2714));
 
 	// sequence of tsql commands to change table to sequence
 	private final static List<SqlCommand> fixcommands = Arrays.asList(
-			SqlCommand.from("exec sp_rename 'hibernate_sequence', 'hibernate_sequence_old';  \n" +
-					"declare @max int;\n" +
-					"select @max = max(next_val) from hibernate_sequence_old;\n" +
-					"exec('create sequence hibernate_sequence start with ' + @max + ' increment by 1;');\n" +
-					"drop table hibernate_sequence_old;"));
+	SqlCommand.from("exec sp_rename 'hibernate_sequence', 'hibernate_sequence_old';  \n" +
+	"declare @max int;\n" +
+	"select @max = max(next_val) from hibernate_sequence_old;\n" +
+	"exec('create sequence hibernate_sequence start with ' + @max + ' increment by 1;');\n" +
+	"drop table hibernate_sequence_old;"));
 
 	private boolean fixHibernateSequence;
 

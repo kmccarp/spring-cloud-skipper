@@ -28,7 +28,7 @@ import org.springframework.data.rest.core.config.Projection;
  * model entity.
  * @author Mark Pollack
  */
-@Projection(name = "summary", types = { PackageMetadata.class })
+@Projection(name = "summary", types = {PackageMetadata.class})
 public interface PackageSummary {
 
 	String getId();

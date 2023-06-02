@@ -79,9 +79,9 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		packageMetadata.setVersion("noversion");
 		assertThat(packageService).isNotNull();
 		assertThatThrownBy(() -> packageService.downloadPackage(packageMetadata))
-				.isInstanceOf(SkipperException.class)
-				.withFailMessage(
-						"Resource for Package name 'noname', version 'noversion' was not found in any repository.");
+		.isInstanceOf(SkipperException.class)
+		.withFailMessage(
+		"Resource for Package name 'noname', version 'noversion' was not found in any repository.");
 		assertThatThrownBy(() -> packageService.downloadPackage(packageMetadata)).isInstanceOf(SkipperException.class);
 	}
 
@@ -134,7 +134,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		byte[] originalPackageBytes = StreamUtils.copyToByteArray(resource.getInputStream());
 		assertThat(originalPackageBytes).isNotEmpty();
 		Assert.isTrue(originalPackageBytes.length != 0,
-				"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
+		"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
 		uploadProperties.setPackageFileAsBytes(originalPackageBytes);
 
 		// Upload new package
@@ -146,7 +146,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 
 		// Retrieve new package
 		PackageMetadata retrievedPackageMetadata = packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("log",
-				"9.9.9");
+		"9.9.9");
 		assertThat(retrievedPackageMetadata.getName().equals("log")).isTrue();
 		assertThat(retrievedPackageMetadata.getVersion().equals("9.9.9")).isTrue();
 		assertThat(retrievedPackageMetadata).isNotNull();
@@ -176,16 +176,16 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 
 		assertThat(originalPackageBytes).isNotEmpty();
 		Assert.isTrue(originalPackageBytes.length != 0,
-				"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
+		"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
 
 		try {
 			this.packageService.upload(uploadRequest);
 			fail("Expected exception to be thrown when upload request package name is different from " +
-					"this inside the package.zip");
+			"this inside the package.zip");
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage()).isEqualTo("Package definition in the request [buggy:6.6.6] differs from " +
-					"one inside the package.yml [log:9.9.9]");
+			"one inside the package.yml [log:9.9.9]");
 		}
 	}
 
@@ -201,7 +201,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		byte[] originalPackageBytes = StreamUtils.copyToByteArray(resource.getInputStream());
 		assertThat(originalPackageBytes).isNotEmpty();
 		Assert.isTrue(originalPackageBytes.length != 0,
-				"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
+		"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
 		assertInvalidPackageVersion(uploadRequest);
 		uploadRequest.setVersion("1abc");
 		assertInvalidPackageVersion(uploadRequest);
@@ -217,7 +217,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 		try {
 			PackageMetadata uploadedPackageMetadata = this.packageService.upload(uploadRequest);
 			fail("Expected exception to be thrown when parsing invalid version = "
-					+ uploadRequest.getVersion().trim());
+			+ uploadRequest.getVersion().trim());
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage()).contains("UploadRequest doesn't have a valid semantic version.  Version =");
@@ -227,7 +227,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 	@Test
 	public void deserializePackage() {
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("log",
-				"1.0.0");
+		"1.0.0");
 		assertThat(packageService).isNotNull();
 		Package pkg = packageService.downloadPackage(packageMetadata);
 		assertThat(pkg).isNotNull();
@@ -242,7 +242,7 @@ public class PackageServiceTests extends AbstractIntegrationTest {
 	@Test
 	public void deserializeNestedPackage() {
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("ticktock",
-				"1.0.0");
+		"1.0.0");
 		assertThat(packageService).isNotNull();
 		Package pkg = packageService.downloadPackage(packageMetadata);
 		assertThat(pkg).isNotNull();

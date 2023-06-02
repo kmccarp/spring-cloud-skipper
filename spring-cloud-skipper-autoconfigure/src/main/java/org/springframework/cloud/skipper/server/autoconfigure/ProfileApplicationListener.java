@@ -72,8 +72,8 @@ public class ProfileApplicationListener implements ApplicationListener<Applicati
 		Iterable<CloudProfileProvider> cloudProfileProviders = ServiceLoader.load(CloudProfileProvider.class);
 
 		if (ignoreFromSystemProperty()
-				|| ignoreFromEnvironmentVariable()
-				|| cloudProfilesAlreadySet(cloudProfileProviders)) {
+		|| ignoreFromEnvironmentVariable()
+		|| cloudProfilesAlreadySet(cloudProfileProviders)) {
 			return;
 		}
 
@@ -98,14 +98,14 @@ public class ProfileApplicationListener implements ApplicationListener<Applicati
 			MutablePropertySources propertySources = environment.getPropertySources();
 			if (propertySources != null) {
 				if (propertySources.contains(
-						CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME)) {
+				CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME)) {
 					propertySources.addAfter(
-							CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME,
-							new MapPropertySource("skipperProfileApplicationListener", properties));
+					CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME,
+					new MapPropertySource("skipperProfileApplicationListener", properties));
 				}
 				else {
 					propertySources
-							.addFirst(new MapPropertySource("skipperProfileApplicationListener", properties));
+					.addFirst(new MapPropertySource("skipperProfileApplicationListener", properties));
 				}
 			}
 		}

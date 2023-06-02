@@ -48,8 +48,8 @@ public class ManifestCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "manifest get", value = "Get the manifest for a release")
 	public Object getManifest(
-			@ShellOption(help = "release name") @NotNull String releaseName,
-			@ShellOption(help = "specific release version.", defaultValue = ShellOption.NULL) Integer releaseVersion) {
+	@ShellOption(help = "release name") @NotNull String releaseName,
+	@ShellOption(help = "specific release version.", defaultValue = ShellOption.NULL) Integer releaseVersion) {
 		String manifest;
 		try {
 			if (releaseVersion == null) {

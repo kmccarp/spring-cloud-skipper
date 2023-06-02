@@ -72,38 +72,38 @@ public class AboutController {
 		final VersionInfo versionInfo = new VersionInfo();
 
 		updateDependency(versionInfo.getServer(),
-				versionInfoProperties.getDependencies().getSpringCloudSkipperServer());
+		versionInfoProperties.getDependencies().getSpringCloudSkipperServer());
 		updateDependency(versionInfo.getShell(),
-				versionInfoProperties.getDependencies().getSpringCloudSkipperShell());
+		versionInfoProperties.getDependencies().getSpringCloudSkipperShell());
 
 		if (versionInfoProperties.getDependencyFetch().isEnabled()) {
 			versionInfo.getShell().setChecksumSha1(getChecksum(
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha1(),
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha1Url(),
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getVersion()));
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha1(),
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha1Url(),
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getVersion()));
 			versionInfo.getShell().setChecksumSha256(getChecksum(
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha256(),
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha256Url(),
-					versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getVersion()));
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha256(),
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getChecksumSha256Url(),
+			versionInfoProperties.getDependencies().getSpringCloudSkipperShell().getVersion()));
 		}
 		return versionInfo;
 	}
 
 	private String getChecksum(String defaultValue, String url,
-			String version) {
+	String version) {
 		String result = defaultValue;
 		if (result == null && StringUtils.hasText(url)) {
 			CloseableHttpClient httpClient = HttpClients.custom()
-					.setSSLHostnameVerifier(new NoopHostnameVerifier())
-					.build();
+			.setSSLHostnameVerifier(new NoopHostnameVerifier())
+			.build();
 			HttpComponentsClientHttpRequestFactory requestFactory
-					= new HttpComponentsClientHttpRequestFactory();
+			= new HttpComponentsClientHttpRequestFactory();
 			requestFactory.setHttpClient(httpClient);
 			url = constructUrl(url, version);
 			try {
 				ResponseEntity<String> response
-						= new RestTemplate(requestFactory).exchange(
-						url, HttpMethod.GET, null, String.class);
+				= new RestTemplate(requestFactory).exchange(
+				url, HttpMethod.GET, null, String.class);
 				if (response.getStatusCode().equals(HttpStatus.OK)) {
 					result = response.getBody();
 				}
@@ -120,7 +120,7 @@ public class AboutController {
 		dependency.setName(dependencyAboutInfo.getName());
 		if (dependencyAboutInfo.getUrl() != null) {
 			dependency.setUrl(constructUrl(dependencyAboutInfo.getUrl(),
-					dependencyAboutInfo.getVersion()));
+			dependencyAboutInfo.getVersion()));
 		}
 		dependency.setVersion(dependencyAboutInfo.getVersion());
 	}

@@ -87,19 +87,19 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 	@Test
 	public void testBadArguments() {
 		assertThatThrownBy(() -> releaseService.install(123L, new InstallProperties()))
-				.isInstanceOf(SkipperException.class)
-				.hasMessageContaining("can not be found");
+		.isInstanceOf(SkipperException.class)
+		.hasMessageContaining("can not be found");
 
 		assertThatThrownBy(() -> releaseService.install(123L, null))
-				.isInstanceOf(IllegalArgumentException.class)
-				.hasMessageContaining("Deploy properties can not be null");
+		.isInstanceOf(IllegalArgumentException.class)
+		.hasMessageContaining("Deploy properties can not be null");
 
 		assertThatThrownBy(() -> releaseService.install((Long) null, new InstallProperties()))
-				.isInstanceOf(IllegalArgumentException.class)
-				.hasMessageContaining("Package id can not be null");
+		.isInstanceOf(IllegalArgumentException.class)
+		.hasMessageContaining("Package id can not be null");
 
 		assertThatThrownBy(() -> releaseService.delete(null))
-				.isInstanceOf(IllegalArgumentException.class);
+		.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage()).isEqualTo(String.format("Can not find package '%s', version '%s'",
-					packageName, packageVersion));
+			packageName, packageVersion));
 		}
 
 		delete(release.getName());
@@ -265,7 +265,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		String packageName = "log";
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findFirstByNameOrderByVersionDesc(packageName);
 		PackageMetadata latestPackageMetadata = this.packageMetadataRepository
-				.findByNameAndOptionalVersionRequired(packageName, null);
+		.findByNameAndOptionalVersionRequired(packageName, null);
 		assertThat(packageMetadata).isEqualTo(latestPackageMetadata);
 	}
 
@@ -288,7 +288,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage()).isEqualTo("Release with the name [" + releaseName + "] already exists "
-					+ "and it is not deleted.");
+			+ "and it is not deleted.");
 		}
 	}
 
@@ -327,7 +327,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		installRequest.setPackageIdentifier(packageIdentifier);
 
 		List<PackageMetadata> releasePackage = this.packageMetadataRepository.findByNameAndVersionOrderByApiVersionDesc(
-				packageIdentifier.getPackageName(), packageIdentifier.getPackageVersion());
+		packageIdentifier.getPackageName(), packageIdentifier.getPackageVersion());
 
 		assertThat(releasePackage).isNotNull();
 		assertThat(releasePackage.size()).isEqualTo(1);
@@ -394,7 +394,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		logPackageIdentifier.setPackageVersion("1.0.0");
 
 		List<PackageMetadata> releasePackage = this.packageMetadataRepository.findByNameAndVersionOrderByApiVersionDesc(
-				logPackageIdentifier.getPackageName(), logPackageIdentifier.getPackageVersion());
+		logPackageIdentifier.getPackageName(), logPackageIdentifier.getPackageVersion());
 		assertThat(releasePackage).isNotNull();
 		assertThat(releasePackage.size()).isEqualTo(1);
 		assertThat(this.packageMetadataRepository.findByName(logPackageIdentifier.getPackageName()).size()).isEqualTo(3);
@@ -413,7 +413,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 		catch (PackageDeleteException se) {
 			assertThat(se.getMessage()).isEqualTo("Can not delete Package Metadata [log:1.0.0] in Repository [test]. " +
-					"Not all releases of this package have the status DELETED. Active Releases [RELEASE_TWO]");
+			"Not all releases of this package have the status DELETED. Active Releases [RELEASE_TWO]");
 		}
 
 		// Verify that neither the releases nor the package have been deleted
@@ -432,7 +432,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		}
 		catch (PackageDeleteException se) {
 			assertThat(se.getMessage()).isEqualTo("Can not delete Package Metadata [log:1.0.0] in Repository [test]. " +
-					"Not all releases of this package have the status DELETED. Active Releases [RELEASE_THREE,RELEASE_TWO]");
+			"Not all releases of this package have the status DELETED. Active Releases [RELEASE_THREE,RELEASE_TWO]");
 		}
 
 		// Verify that nothing has been deleted
@@ -475,7 +475,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 	private void assertReleaseStatus(String releaseName, StatusCode expectedStatusCode) {
 		assertThat(this.releaseRepository.findByNameIgnoreCaseContaining(releaseName).size()).isEqualTo(1);
 		assertThat(this.releaseRepository.findByNameIgnoreCaseContaining(releaseName).iterator().next()
-				.getInfo().getStatus().getStatusCode()).isEqualTo(expectedStatusCode);
+		.getInfo().getStatus().getStatusCode()).isEqualTo(expectedStatusCode);
 	}
 
 	@Test
@@ -563,7 +563,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		assertThat(release1.getPkg().getMetadata().getVersion()).isEqualTo("1.0.0");
 
 		await().atMost(Duration.ofSeconds(30)).until(() ->
-			this.releaseService.status(releaseName, release1.getVersion()).getStatus().getStatusCode() == StatusCode.DEPLOYED);
+		this.releaseService.status(releaseName, release1.getVersion()).getStatus().getStatusCode() == StatusCode.DEPLOYED);
 
 		ConfigValues upgradeConfig = new ConfigValues();
 		upgradeConfig.setRaw("spec:\n  applicationProperties:\n    server.port: 8082\n  deploymentProperties:\n    spring.cloud.deployer.local.startup-probe.path: /actuator/fake\n");
@@ -586,7 +586,7 @@ public class ReleaseServiceTests extends AbstractIntegrationTest {
 		assertThat(release2).isNotNull();
 
 		await().atMost(Duration.ofSeconds(60)).pollInterval(Duration.ofSeconds(1)).until(() ->
-			this.releaseService.status(releaseName, release2.getVersion()).getStatus().getStatusCode() == StatusCode.FAILED);
+		this.releaseService.status(releaseName, release2.getVersion()).getStatus().getStatusCode() == StatusCode.FAILED);
 
 		delete(release1.getName());
 	}

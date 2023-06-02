@@ -109,7 +109,7 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Undeploy
 		mockMvc.perform(delete("/api/release/" + releaseName)).andDo(print())
-				.andExpect(status().isOk()).andReturn();
+		.andExpect(status().isOk()).andReturn();
 		Release deletedRelease = this.releaseRepository.findByNameAndVersion(releaseName, 1);
 		assertThat(deletedRelease.getInfo().getStatus().getStatusCode()).isEqualTo(StatusCode.DELETED);
 	}
@@ -120,7 +120,7 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 		String releaseName = "testLogs";
 		install("log", "1.0.0", releaseName);
 		MvcResult result = mockMvc.perform(get("/api/release/logs/" + releaseName)).andDo(print())
-				.andExpect(status().isOk()).andReturn();
+		.andExpect(status().isOk()).andReturn();
 		assertThat(result.getResponse().getContentAsString()).isNotEmpty();
 	}
 
@@ -144,22 +144,22 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Undeploy
 		MvcResult result = mockMvc.perform(delete("/api/release/" + releaseNameOne + "/package"))
-				.andDo(print()).andExpect(status().isConflict()).andReturn();
+		.andDo(print()).andExpect(status().isConflict()).andReturn();
 
 		assertThat(result.getResolvedException().getMessage())
-				.contains("Can not delete Package Metadata [log:1.0.0] in Repository [test]. Not all releases of " +
-						"this package have the status DELETED. Active Releases [test2]");
+		.contains("Can not delete Package Metadata [log:1.0.0] in Repository [test]. Not all releases of " +
+		"this package have the status DELETED. Active Releases [test2]");
 
 		assertThat(this.packageMetadataRepository.findByName("log").size()).isEqualTo(3);
 
 		// Delete the 'release2' only not the package.
 		mockMvc.perform(delete("/api/release/" + releaseNameTwo))
-				.andDo(print()).andExpect(status().isOk()).andReturn();
+		.andDo(print()).andExpect(status().isOk()).andReturn();
 		assertThat(this.packageMetadataRepository.findByName("log").size()).isEqualTo(3);
 
 		// Second attempt to delete 'release1' along with its package 'log'.
 		mockMvc.perform(delete("/api/release/" + releaseNameOne + "/package"))
-				.andDo(print()).andExpect(status().isOk()).andReturn();
+		.andDo(print()).andExpect(status().isOk()).andReturn();
 		assertThat(this.packageMetadataRepository.findByName("log").size()).isEqualTo(0);
 
 	}
@@ -174,7 +174,7 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Check manifest
 		MvcResult result = mockMvc.perform(get("/api/release/manifest/" + releaseName)).andDo(print())
-				.andExpect(status().isOk()).andReturn();
+		.andExpect(status().isOk()).andReturn();
 		assertThat(result.getResponse().getContentAsString()).isNotEmpty();
 
 		// Upgrade
@@ -184,7 +184,7 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Check manifest
 		result = mockMvc.perform(get("/api/release/manifest/" + releaseName + "/2")).andDo(print())
-				.andExpect(status().isOk()).andReturn();
+		.andExpect(status().isOk()).andReturn();
 		assertThat(result.getResponse().getContentAsString()).isNotEmpty();
 
 		// Rollback to release version 1, creating a third release version equivalent to
@@ -201,10 +201,10 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Undeploy
 		mockMvc.perform(delete("/api/release/" + releaseName))
-				.andDo(print())
-				.andExpect(status().isOk()).andReturn();
+		.andDo(print())
+		.andExpect(status().isOk()).andReturn();
 		Release deletedRelease = this.releaseRepository.findByNameAndVersion(releaseName,
-				Integer.valueOf(releaseVersion));
+		Integer.valueOf(releaseVersion));
 		assertThat(deletedRelease.getInfo().getStatus().getStatusCode()).isEqualTo(StatusCode.DELETED);
 	}
 
@@ -245,9 +245,9 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 		// in the mock a new one is created so we have to assert the status at this
 		// intermediate point
 		MvcResult result = mockMvc.perform(get("/api/release/status/myLog")).andDo(print())
-				.andExpect(status().is4xxClientError()).andReturn();
+		.andExpect(status().is4xxClientError()).andReturn();
 		MvcResult response = this.mockMvc.perform(new ErrorDispatcher(result, "/error"))
-				.andReturn();
+		.andReturn();
 		assertThat(response.getResponse().getContentAsString()).contains("ReleaseNotFoundException");
 	}
 
@@ -268,12 +268,12 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 		upgradeRequest.setPackageIdentifier(packageIdentifier);
 		upgradeRequest.setUpgradeProperties(upgradeProperties);
 		PackageMetadata updatePackageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder(
-				packageName,
-				packageVersion);
+		packageName,
+		packageVersion);
 		assertThat(updatePackageMetadata).isNotNull();
 		MvcResult result = mockMvc.perform(post("/api/release/upgrade")
-				.content(convertObjectToJson(upgradeRequest))).andDo(print())
-				.andExpect(status().is4xxClientError()).andReturn();
+		.content(convertObjectToJson(upgradeRequest))).andDo(print())
+		.andExpect(status().is4xxClientError()).andReturn();
 		assertThat(result.getResolvedException().getMessage()).isEqualTo("Package to upgrade has no difference than existing deployed/deleted package. Not upgrading.");
 	}
 
@@ -291,22 +291,22 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 
 		// Test AppStatus with instances
 		AppStatus appStatusWithInstances = AppStatus.of("id666").generalState(null)
-				.with(new AppInstanceStatus() {
-					@Override
-					public String getId() {
-						return "instance666";
-					}
+		.with(new AppInstanceStatus() {
+			@Override
+			public String getId() {
+				return "instance666";
+			}
 
-					@Override
-					public DeploymentState getState() {
-						return DeploymentState.deployed;
-					}
+			@Override
+			public DeploymentState getState() {
+				return DeploymentState.deployed;
+			}
 
-					@Override
-					public Map<String, String> getAttributes() {
-						return Collections.singletonMap("key1", "value1");
-					}
-				}).build();
+			@Override
+			public Map<String, String> getAttributes() {
+				return Collections.singletonMap("key1", "value1");
+			}
+		}).build();
 
 		appStatusCopy = DefaultReleaseManager.copyStatus(appStatusWithInstances);
 		appStatusCopy.getInstances().get("instance666").getAttributes().put("key2", "value2");
@@ -323,26 +323,26 @@ public class ReleaseControllerTests extends AbstractControllerTests {
 		assertReleaseIsDeployedSuccessfully("myTicker", 1);
 
 		mockMvc
-				.perform(get("/api/release/actuator/myTicker/myTicker.log-v1/myTicker.log-v1-0?endpoint=info"))
-				.andExpect(status().isOk()).andReturn();
+		.perform(get("/api/release/actuator/myTicker/myTicker.log-v1/myTicker.log-v1-0?endpoint=info"))
+		.andExpect(status().isOk()).andReturn();
 
 		verify(actuatorService, times(1))
-			.getFromActuator("myTicker", "myTicker.log-v1", "myTicker.log-v1-0","info",
-					Optional.empty());
+		.getFromActuator("myTicker", "myTicker.log-v1", "myTicker.log-v1-0", "info",
+		Optional.empty());
 
 
 		reset(actuatorService);
 		ActuatorPostRequest actuatorPostRequest = ActuatorPostRequest.of("bindings/input",
-				Collections.singletonMap("state", "STOPPED"));
+		Collections.singletonMap("state", "STOPPED"));
 
 		mockMvc
-				.perform(post("/api/release/actuator/myTicker/myTicker.log-v1/myTicker.log-v1-0")
-						.content(convertObjectToJson(actuatorPostRequest)))
-				.andExpect(status().isOk()).andReturn();
+		.perform(post("/api/release/actuator/myTicker/myTicker.log-v1/myTicker.log-v1-0")
+		.content(convertObjectToJson(actuatorPostRequest)))
+		.andExpect(status().isOk()).andReturn();
 
 		verify(actuatorService, times(1))
-				.postToActuator("myTicker", "myTicker.log-v1", "myTicker.log-v1-0",
-						actuatorPostRequest, Optional.empty());
+		.postToActuator("myTicker", "myTicker.log-v1", "myTicker.log-v1-0",
+		actuatorPostRequest, Optional.empty());
 	}
 
 	private class ErrorDispatcher implements RequestBuilder {

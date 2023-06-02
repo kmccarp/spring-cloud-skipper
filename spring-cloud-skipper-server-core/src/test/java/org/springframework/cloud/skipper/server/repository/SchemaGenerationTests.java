@@ -69,8 +69,8 @@ public class SchemaGenerationTests extends AbstractIntegrationTest {
 		supportedHibernateDialects.add("SQLServer2012");
 
 		logger.info(
-				"\n\nGenerating DDL scripts for the following dialects:\n\n"
-						+ supportedHibernateDialects.stream().map((db) -> db + "Dialect").collect(Collectors.joining("\n")) + "\n");
+		"\n\nGenerating DDL scripts for the following dialects:\n\n"
+		+ supportedHibernateDialects.stream().map((db) -> db + "Dialect").collect(Collectors.joining("\n")) + "\n");
 
 		for (String supportedHibernateDialect : supportedHibernateDialects) {
 			generateDdlFiles(supportedHibernateDialect, tempDir, persistenceUnitInfo);
@@ -84,11 +84,11 @@ public class SchemaGenerationTests extends AbstractIntegrationTest {
 		logger.info("Generating DDL script for " + dialect);
 
 		final MetadataSources metadata = new MetadataSources(
-				new StandardServiceRegistryBuilder()
-						.applySetting("hibernate.dialect", "org.hibernate.dialect." + dialect + "Dialect")
-						.applySetting("hibernate.physical_naming_strategy", SpringPhysicalNamingStrategy.class.getName())
-						.applySetting("hibernate.implicit_naming_strategy", SpringImplicitNamingStrategy.class.getName())
-						.build());
+		new StandardServiceRegistryBuilder()
+		.applySetting("hibernate.dialect", "org.hibernate.dialect." + dialect + "Dialect")
+		.applySetting("hibernate.physical_naming_strategy", SpringPhysicalNamingStrategy.class.getName())
+		.applySetting("hibernate.implicit_naming_strategy", SpringImplicitNamingStrategy.class.getName())
+		.build());
 
 		for (String clazz : persistenceUnitInfo.getManagedClassNames()) {
 			logger.info(clazz);

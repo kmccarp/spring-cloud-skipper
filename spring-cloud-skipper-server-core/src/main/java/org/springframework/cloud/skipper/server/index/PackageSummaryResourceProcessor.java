@@ -34,9 +34,9 @@ public class PackageSummaryResourceProcessor implements RepresentationModelProce
 	@Override
 	public EntityModel<PackageSummary> process(EntityModel<PackageSummary> packageSummaryResource) {
 		Link link = linkTo(
-				methodOn(PackageController.class).install(Long.valueOf(packageSummaryResource.getContent().getId()),
-						null))
-				.withRel("install");
+		methodOn(PackageController.class).install(Long.valueOf(packageSummaryResource.getContent().getId()),
+		null))
+		.withRel("install");
 		packageSummaryResource.add(link);
 		return packageSummaryResource;
 	}

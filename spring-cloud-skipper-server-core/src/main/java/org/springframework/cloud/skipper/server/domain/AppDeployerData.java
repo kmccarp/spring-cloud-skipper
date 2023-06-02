@@ -88,7 +88,7 @@ public class AppDeployerData extends AbstractEntity {
 			TypeReference<Map<String, String>> typeRef = new TypeReference<Map<String, String>>() {
 			};
 			return (this.deploymentData != null) ? mapper.readValue(this.deploymentData, typeRef) :
-					Collections.EMPTY_MAP;
+			Collections.EMPTY_MAP;
 		}
 		catch (Exception e) {
 			throw new SkipperException("Could not parse appNameDeploymentIdMap JSON:" + this.deploymentData, e);
@@ -122,9 +122,9 @@ public class AppDeployerData extends AbstractEntity {
 	@Override
 	public String toString() {
 		return "AppDeployerData{" +
-				"releaseName='" + releaseName + '\'' +
-				", releaseVersion=" + releaseVersion +
-				", deploymentData='" + deploymentData + '\'' +
-				'}';
+		"releaseName='" + releaseName + '\'' +
+		", releaseVersion=" + releaseVersion +
+		", deploymentData='" + deploymentData + '\'' +
+		'}';
 	}
 }

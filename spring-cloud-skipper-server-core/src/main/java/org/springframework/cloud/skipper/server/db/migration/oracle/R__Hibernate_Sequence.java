@@ -36,7 +36,7 @@ public class R__Hibernate_Sequence extends AbstractMigration {
 	// nested exception is java.sql.SQLSyntaxErrorException:
 	// ORA-00955: name is already used by an existing object
 	private final static List<SqlCommand> commands = Arrays.asList(
-			SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", 955));
+	SqlCommand.from("create sequence hibernate_sequence start with 1 increment by 1", 955));
 
 	public R__Hibernate_Sequence() {
 		super(commands);

@@ -67,15 +67,15 @@ public class PackageMetadataService implements ResourceLoaderAware {
 	private ResourceLoader resourceLoader;
 
 	public PackageMetadataService(RepositoryRepository repositoryRepository,
-			PackageMetadataRepository packageMetadataRepository,
-			ReleaseRepository releaseRepository) {
+	PackageMetadataRepository packageMetadataRepository,
+	ReleaseRepository releaseRepository) {
 		this.repositoryRepository = repositoryRepository;
 		this.packageMetadataRepository = packageMetadataRepository;
 		this.releaseRepository = releaseRepository;
 	}
 
 	public final static Predicate<Release> DEFAULT_RELEASE_ACTIVITY_CHECK =
-			release -> !release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED);
+	release -> !release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED);
 
 
 	/**
@@ -89,8 +89,8 @@ public class PackageMetadataService implements ResourceLoaderAware {
 		List<String> errorMessages = new ArrayList<>();
 		for (PackageMetadata packageMetadata : packageMetadataList) {
 			List<Release> releases = this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(
-					packageMetadata.getRepositoryId(),
-					packageMetadata.getId());
+			packageMetadata.getRepositoryId(),
+			packageMetadata.getId());
 			boolean canDelete = true;
 
 			// Is the package from a local repository?
@@ -123,15 +123,15 @@ public class PackageMetadataService implements ResourceLoaderAware {
 			if (!canDelete) {
 				Repository repository = this.repositoryRepository.findById(packageMetadata.getRepositoryId()).get();
 				errorMessages.add(String.format("Can not delete Package Metadata [%s:%s] in Repository [%s]. " +
-								"Not all releases of this package have the status DELETED. Active Releases [%s]",
-						packageMetadata.getName(), packageMetadata.getVersion(), repository.getName(),
-						StringUtils.collectionToCommaDelimitedString(activeReleaseNames)));
+				"Not all releases of this package have the status DELETED. Active Releases [%s]",
+				packageMetadata.getName(), packageMetadata.getVersion(), repository.getName(),
+				StringUtils.collectionToCommaDelimitedString(activeReleaseNames)));
 			}
 		}
 		if (errorMessages.isEmpty()) {
 			for (PackageMetadata packageMetadata : packageMetadataList) {
 				packageMetadataRepository.deleteByRepositoryIdAndName(packageMetadata.getRepositoryId(),
-						packageMetadata.getName());
+				packageMetadata.getName());
 			}
 		}
 		else {
@@ -144,15 +144,15 @@ public class PackageMetadataService implements ResourceLoaderAware {
 		if (repository != null) {
 			if (!repository.isLocal()) {
 				errorMessages.add(String.format("Can not delete package [%s], associated repository [%s] is remote.",
-						packageMetadata.getName(),
-						repository.getName()));
+				packageMetadata.getName(),
+				repository.getName()));
 				return true;
 			}
 		}
 		else {
 			errorMessages.add(String.format("Can not delete package {}, repositoryId {} does not exist.",
-					packageMetadata.getName(),
-					packageMetadata.getRepositoryId()));
+			packageMetadata.getName(),
+			packageMetadata.getRepositoryId()));
 		}
 		return false;
 	}
@@ -169,7 +169,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 			Repository repository = this.repositoryRepository.findById(release.getRepositoryId()).orElse(null);
 			if (repository == null) {
 				throw new SkipperException("Can not delete Package Metadata [" + packageMetadataName + "]. " +
-						"Associated repository not found.");
+				"Associated repository not found.");
 			}
 			if (repository.isLocal()) {
 				releasesFromLocalRepositories.add(release);
@@ -192,7 +192,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 				try {
 					if (!packageRepository.isLocal()) {
 						Resource resource = resourceLoader.getResource(packageRepository.getUrl()
-								+ "/index.yml");
+						+ "/index.yml");
 						if (resource.exists()) {
 							logger.info("Downloading package metadata from " + resource);
 							File downloadedFile = new File(targetPath.toFile(), computeFilename(resource));
@@ -200,7 +200,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 							List<File> downloadedFileAsList = new ArrayList<>();
 							downloadedFileAsList.add(downloadedFile);
 							List<PackageMetadata> downloadedPackageMetadata = deserializeFromIndexFiles(
-									downloadedFileAsList);
+							downloadedFileAsList);
 							for (PackageMetadata packageMetadata : downloadedPackageMetadata) {
 								packageMetadata.setRepositoryId(packageRepository.getId());
 								packageMetadata.setRepositoryName(packageRepository.getName());
@@ -209,7 +209,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 						}
 						else {
 							logger.info("Package metadata index resource does not exist: "
-									+ resource.getDescription());
+							+ resource.getDescription());
 						}
 					}
 				}
@@ -265,7 +265,7 @@ public class PackageMetadataService implements ResourceLoaderAware {
 		}
 		else {
 			logger.warn("Package repository with scheme " + scheme
-					+ " is not supported.  Skipping processing this repository.");
+			+ " is not supported.  Skipping processing this repository.");
 		}
 		return stringBuilder.toString();
 	}

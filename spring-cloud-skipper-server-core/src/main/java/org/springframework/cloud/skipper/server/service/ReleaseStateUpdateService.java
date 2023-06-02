@@ -58,7 +58,7 @@ public class ReleaseStateUpdateService {
 	 * @param releaseRepository the release repository
 	 */
 	public ReleaseStateUpdateService(ReleaseManagerFactory releaseManagerFactory,
-			ReleaseRepository releaseRepository) {
+	ReleaseRepository releaseRepository) {
 		Assert.notNull(releaseManagerFactory, "'releaseManagerFactory' must be set");
 		Assert.notNull(releaseRepository, "'releaseRepository' must be set");
 		this.releaseManagerFactory = releaseManagerFactory;
@@ -87,42 +87,42 @@ public class ReleaseStateUpdateService {
 		}
 
 		Flux.fromIterable(this.releaseRepository.findLatestDeployedOrFailed())
-			.flatMap(release -> {
-				Info info = release.getInfo();
-				if (info == null) {
-					log.error("Info can not be null for release {}", release);
-					return Mono.empty();
-				}
-				else if (info.getLastDeployed() == null) {
-					log.error("Info.LastDeployed can not be null for release {}", release);
-					return Mono.empty();
-				}
-				boolean isNewApp = (info.getLastDeployed().getTime() > (now - 120000));
-				log.debug("Considering updating state for {}-v{}", release.getName(), release.getVersion());
-				log.debug("fullPoll = {}, isNewApp = {}, doInitialPoll = {}", fullPoll, isNewApp, doInitialPoll);
-				boolean poll = fullPoll || (isNewApp) || doInitialPoll;
-				if (poll) {
-					String kind = ManifestUtils.resolveKind(release.getManifest().getData());
-					ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
-					return releaseManager.statusReactive(release);
-				}
-				else {
-					log.debug("Not updating state for {}-v{}", release.getName(), release.getVersion());
-					return Mono.empty();
-				}
-			})
-			.doOnNext(release -> {
-				log.debug("New Release state {} {}", release.getName(), release.getInfo().getStatus(),
-				release.getInfo().getStatus() != null
-						? release.getInfo().getStatus().getPlatformStatusPrettyPrint()
-						: "");
-				// TODO: should not block in a side effect but we don't have reactive db access
-				this.releaseRepository.save(release);
-			})
-			// framework don't yet know how to handle reactive types, meaning we can't just
-			// fire and forget with subscribe() as it would mess up times between invocations.
-			// block was kinda recommended by framework guys.
-			.blockLast();
+		.flatMap(release -> {
+			Info info = release.getInfo();
+			if (info == null) {
+				log.error("Info can not be null for release {}", release);
+				return Mono.empty();
+			}
+			else if (info.getLastDeployed() == null) {
+				log.error("Info.LastDeployed can not be null for release {}", release);
+				return Mono.empty();
+			}
+			boolean isNewApp = (info.getLastDeployed().getTime() > (now - 120000));
+			log.debug("Considering updating state for {}-v{}", release.getName(), release.getVersion());
+			log.debug("fullPoll = {}, isNewApp = {}, doInitialPoll = {}", fullPoll, isNewApp, doInitialPoll);
+			boolean poll = fullPoll || (isNewApp) || doInitialPoll;
+			if (poll) {
+				String kind = ManifestUtils.resolveKind(release.getManifest().getData());
+				ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
+				return releaseManager.statusReactive(release);
+			}
+			else {
+				log.debug("Not updating state for {}-v{}", release.getName(), release.getVersion());
+				return Mono.empty();
+			}
+		})
+		.doOnNext(release -> {
+			log.debug("New Release state {} {}", release.getName(), release.getInfo().getStatus(),
+			release.getInfo().getStatus() != null
+			? release.getInfo().getStatus().getPlatformStatusPrettyPrint()
+			: "");
+			// TODO: should not block in a side effect but we don't have reactive db access
+			this.releaseRepository.save(release);
+		})
+		// framework don't yet know how to handle reactive types, meaning we can't just
+		// fire and forget with subscribe() as it would mess up times between invocations.
+		// block was kinda recommended by framework guys.
+		.blockLast();
 	}
 
 	/**

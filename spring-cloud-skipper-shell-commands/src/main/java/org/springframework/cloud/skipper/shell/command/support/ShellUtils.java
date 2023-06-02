@@ -56,7 +56,7 @@ public abstract class ShellUtils {
 			return Collections.singletonList("help");
 		}
 		return Arrays.stream(args.getSourceArgs())
-				.filter(arg -> !arg.contains("spring.cloud.skipper.client"))
-						.collect(Collectors.toList());
+		.filter(arg -> !arg.contains("spring.cloud.skipper.client"))
+		.collect(Collectors.toList());
 	}
 }

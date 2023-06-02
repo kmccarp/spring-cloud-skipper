@@ -57,8 +57,8 @@ public class DeployAppStep {
 	private final SpringCloudDeployerApplicationManifestReader applicationManifestReader;
 
 	public DeployAppStep(DeployerRepository deployerRepository, AppDeploymentRequestFactory appDeploymentRequestFactory,
-			AppDeployerDataRepository appDeployerDataRepository, ReleaseRepository releaseRepository,
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
+	AppDeployerDataRepository appDeployerDataRepository, ReleaseRepository releaseRepository,
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
 		this.deployerRepository = deployerRepository;
 		this.appDeploymentRequestFactory = appDeploymentRequestFactory;
 		this.appDeployerDataRepository = appDeployerDataRepository;
@@ -68,16 +68,16 @@ public class DeployAppStep {
 
 	@Transactional
 	public List<String> deployApps(Release existingRelease, Release replacingRelease,
-			ReleaseAnalysisReport releaseAnalysisReport) {
+	ReleaseAnalysisReport releaseAnalysisReport) {
 		List<String> applicationNamesToUpgrade = new ArrayList<>();
 		try {
 			applicationNamesToUpgrade = releaseAnalysisReport.getApplicationNamesToUpgrade();
 			AppDeployer appDeployer = this.deployerRepository.findByNameRequired(replacingRelease.getPlatformName())
-					.getAppDeployer();
+			.getAppDeployer();
 
 			// Deploy the application
 			Map<String, String> appNameDeploymentIdMap = deploy(replacingRelease, applicationNamesToUpgrade,
-					appDeployer);
+			appDeployer);
 
 			// Carry over the applicationDeployment information for apps that were not updated.
 			carryOverAppDeploymentIds(existingRelease, appNameDeploymentIdMap);
@@ -104,10 +104,10 @@ public class DeployAppStep {
 
 	private void carryOverAppDeploymentIds(Release existingRelease, Map<String, String> appNameDeploymentIdMap) {
 		AppDeployerData existingAppDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersionRequired(
-						existingRelease.getName(), existingRelease.getVersion());
+		.findByReleaseNameAndReleaseVersionRequired(
+		existingRelease.getName(), existingRelease.getVersion());
 		Map<String, String> existingAppNamesAndDeploymentIds = (existingAppDeployerData != null) ?
-				existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
+		existingAppDeployerData.getDeploymentDataAsMap() : Collections.EMPTY_MAP;
 
 		for (Map.Entry<String, String> existingEntry : existingAppNamesAndDeploymentIds.entrySet()) {
 			String existingName = existingEntry.getKey();
@@ -118,17 +118,17 @@ public class DeployAppStep {
 	}
 
 	private Map<String, String> deploy(Release replacingRelease, List<String> applicationNamesToUpgrade,
-			AppDeployer appDeployer) {
+	AppDeployer appDeployer) {
 		List<? extends SpringCloudDeployerApplicationManifest> applicationSpecList = this.applicationManifestReader
-				.read(replacingRelease
-						.getManifest().getData());
+		.read(replacingRelease
+		.getManifest().getData());
 
 		Map<String, String> appNameDeploymentIdMap = new HashMap<>();
 		for (SpringCloudDeployerApplicationManifest applicationManifest : applicationSpecList) {
 			if (applicationNamesToUpgrade.contains(applicationManifest.getApplicationName())) {
 				AppDeploymentRequest appDeploymentRequest = appDeploymentRequestFactory.createAppDeploymentRequest(
-						applicationManifest, replacingRelease.getName(),
-						String.valueOf(replacingRelease.getVersion()));
+				applicationManifest, replacingRelease.getName(),
+				String.valueOf(replacingRelease.getVersion()));
 				// =============
 				// DEPLOY DEPLOY
 				// =============

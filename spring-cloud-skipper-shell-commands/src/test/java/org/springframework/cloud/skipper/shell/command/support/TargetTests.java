@@ -28,8 +28,8 @@ public class TargetTests {
 	public void constructorTests() {
 		Target target = new Target("http://localhost:7577", "username", "password", true);
 		assertThat(target.getTargetUri()).hasPort(7577)
-				.hasPath("")
-				.hasHost("localhost");
+		.hasPath("")
+		.hasHost("localhost");
 		assertThat(target.isSkipSslValidation()).isEqualTo(true);
 		assertThat(target.getTargetCredentials()).isEqualTo(new TargetCredentials("username", "password"));
 		target = new Target("http://localhost:7577");

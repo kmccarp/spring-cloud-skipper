@@ -219,7 +219,7 @@ public class Target {
 	@Override
 	public String toString() {
 		return "Target [targetUri=" + targetUri + ", targetException=" + targetException + ", targetResultMessage="
-				+ targetResultMessage + ", status=" + status + "]";
+		+ targetResultMessage + ", status=" + status + "]";
 	}
 
 	public enum TargetStatus {

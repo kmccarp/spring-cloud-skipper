@@ -52,10 +52,10 @@ public class PackageMetadataServiceTests {
 		String filename = packageMetadataService.computeFilename(urlResource);
 		assertThat(filename).isEqualTo("file_dot_spring-cloud-skipper-server_src_test_resources_index.yml");
 		urlResource = new UrlResource(
-				"file:/home/mpollack/projects/spring-cloud-skipper/spring-cloud-skipper-server/src/test/resources/index.yml");
+		"file:/home/mpollack/projects/spring-cloud-skipper/spring-cloud-skipper-server/src/test/resources/index.yml");
 		filename = packageMetadataService.computeFilename(urlResource);
 		assertThat(filename).isEqualTo(
-				"file_home_mpollack_projects_spring-cloud-skipper_spring-cloud-skipper-server_src_test_resources_index.yml");
+		"file_home_mpollack_projects_spring-cloud-skipper_spring-cloud-skipper-server_src_test_resources_index.yml");
 		urlResource = new UrlResource("http://localhost:8081/index.yml");
 		filename = packageMetadataService.computeFilename(urlResource);
 		assertThat(filename).isEqualTo("localhost_index.yml");
@@ -66,9 +66,9 @@ public class PackageMetadataServiceTests {
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-			HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-			ResourceLoadingAutoConfiguration.class })
+	@ImportAutoConfiguration(classes = {JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+	HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+	ResourceLoadingAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	static class TestConfig {
 	}

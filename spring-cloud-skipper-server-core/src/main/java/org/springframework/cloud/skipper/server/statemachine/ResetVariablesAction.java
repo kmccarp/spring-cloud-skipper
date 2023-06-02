@@ -45,13 +45,13 @@ public class ResetVariablesAction implements Action<SkipperStates, SkipperEvents
 
 		// for install
 		InstallRequest installRequest = context.getMessageHeaders().get(SkipperEventHeaders.INSTALL_REQUEST,
-				InstallRequest.class);
+		InstallRequest.class);
 		if (installRequest != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.INSTALL_REQUEST, installRequest);
 		}
 
 		InstallProperties installProperties = context.getMessageHeaders().get(SkipperEventHeaders.INSTALL_PROPERTIES,
-				InstallProperties.class);
+		InstallProperties.class);
 		if (installProperties != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.INSTALL_PROPERTIES, installProperties);
 		}
@@ -68,14 +68,14 @@ public class ResetVariablesAction implements Action<SkipperStates, SkipperEvents
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.ROLLBACK_VERSION, rollbackVersion);
 		}
 		RollbackRequest rollbackRequest = context.getMessageHeaders().get(SkipperEventHeaders.ROLLBACK_REQUEST,
-				RollbackRequest.class);
+		RollbackRequest.class);
 		if (rollbackRequest != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.ROLLBACK_REQUEST, rollbackRequest);
 		}
 
 		// for upgrade
 		UpgradeRequest upgradeRequest = context.getMessageHeaders().get(SkipperEventHeaders.UPGRADE_REQUEST,
-				UpgradeRequest.class);
+		UpgradeRequest.class);
 		if (upgradeRequest != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest);
 		}
@@ -87,15 +87,15 @@ public class ResetVariablesAction implements Action<SkipperStates, SkipperEvents
 
 		// for delete
 		DeleteProperties deleteProperties = context.getMessageHeaders()
-				.get(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, DeleteProperties.class);
+		.get(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, DeleteProperties.class);
 		if (deleteProperties != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES,
-					deleteProperties);
+			deleteProperties);
 		}
 
 		// for scale
 		ScaleRequest scaleRequest = context.getMessageHeaders().get(SkipperEventHeaders.SCALE_REQUEST,
-				ScaleRequest.class);
+		ScaleRequest.class);
 		if (scaleRequest != null) {
 			context.getExtendedState().getVariables().put(SkipperEventHeaders.SCALE_REQUEST, scaleRequest);
 		}

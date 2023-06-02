@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ShellUtilsTests {
 
 	@ParameterizedTest
-	@ValueSource(strings = { "-h", "--h", "-help", "--help", "help", "h" })
+	@ValueSource(strings = {"-h", "--h", "-help", "--help", "help", "h"})
 	void hasHelpOptionReturnsTrueWhenHelpOptionSpecified(String helpArg) {
 		ApplicationArguments appArgs = new DefaultApplicationArguments("foo", helpArg);
 		assertThat(ShellUtils.hasHelpOption(appArgs)).isTrue();
@@ -43,7 +43,7 @@ class ShellUtilsTests {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "-h", "--h", "-help", "--help", "help", "h" })
+	@ValueSource(strings = {"-h", "--h", "-help", "--help", "help", "h"})
 	void filteredArgsToShellCommandsReturnsSingleHelpCommandWhenHelpOptionSpecified(String helpArg) {
 		ApplicationArguments appArgs = new DefaultApplicationArguments("foo", helpArg);
 		assertThat(ShellUtils.filteredArgsToShellCommands(appArgs)).containsExactly("help");
@@ -58,7 +58,7 @@ class ShellUtilsTests {
 	@Test
 	void filteredArgsToShellCommandsFiltersOutSkipperClientArgs() {
 		ApplicationArguments appArgs = new DefaultApplicationArguments("foo",
-				"--spring.cloud.skipper.client.url=http://localhost", "--spring.cloud.skipper.client.foo=bar");
+		"--spring.cloud.skipper.client.url=http://localhost", "--spring.cloud.skipper.client.foo=bar");
 		assertThat(ShellUtils.filteredArgsToShellCommands(appArgs)).containsExactly("foo");
 	}
 }

@@ -72,7 +72,7 @@ public class RollbackStartAction extends AbstractAction {
 
 		Assert.notNull(releaseName, "Release name must not be null");
 		Assert.isTrue(rollbackVersion >= 0,
-				"Rollback version can not be less than zero.  Value = " + rollbackVersion);
+		"Rollback version can not be less than zero.  Value = " + rollbackVersion);
 
 		Release currentRelease = this.releaseRepository.findLatestReleaseForUpdate(releaseName);
 		Assert.notNull(currentRelease, "Could not find release = [" + releaseName + "]");
@@ -91,10 +91,10 @@ public class RollbackStartAction extends AbstractAction {
 			}
 		}
 		Assert.notNull(releaseToRollback, "Could not find Release to rollback to [releaseName,releaseVersion] = ["
-				+ releaseName + "," + rollbackVersionToUse + "]");
+		+ releaseName + "," + rollbackVersionToUse + "]");
 
 		log.info("Rolling back releaseName={}.  Current version={}, Target version={}", releaseName,
-				currentRelease.getVersion(), rollbackVersionToUse);
+		currentRelease.getVersion(), rollbackVersionToUse);
 
 		// rollback a release will dispatch to either install or upgrade,
 		// thus create install or update request conditionally. we have
@@ -123,7 +123,7 @@ public class RollbackStartAction extends AbstractAction {
 			upgradeRequest.setUpgradeProperties(upgradeProperties);
 			upgradeRequest.setPackageIdentifier(packageIdentifier);
 			RollbackRequest rollbackRequest = context.getExtendedState().get(SkipperEventHeaders.ROLLBACK_REQUEST,
-					RollbackRequest.class);
+			RollbackRequest.class);
 			if (rollbackRequest != null) {
 				upgradeRequest.setTimeout(rollbackRequest.getTimeout());
 			}

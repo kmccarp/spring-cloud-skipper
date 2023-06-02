@@ -37,11 +37,11 @@ public class ApplicationManifestDifferenceSummaryGenerator {
 
 		if (applicationManifestDifference.areEqual()) {
 			stringBuffer.append("Existing and Replacing Applications are equal for Application Name=["
-					+ applicationManifestDifference.getApplicationName() + "]\n\n");
+			+ applicationManifestDifference.getApplicationName() + "]\n\n");
 		}
 		else {
 			stringBuffer.append("Existing and Replacing Applications are different for Application Name=["
-					+ applicationManifestDifference.getApplicationName() + "]\n\n");
+			+ applicationManifestDifference.getApplicationName() + "]\n\n");
 
 			if (!applicationManifestDifference.getApiAndKindDifference().areEqual()) {
 				stringBuffer.append("API and Kind\n");
@@ -83,8 +83,8 @@ public class ApplicationManifestDifferenceSummaryGenerator {
 			stringBuffer.append("-----------------\n");
 
 			stringBuffer.append(mapDifference.getChanged().entrySet().stream()
-					.map(e -> e.getKey() + "=(" + e.getValue().getOriginal() + ", " + e.getValue().getReplaced() + ")")
-					.collect(Collectors.joining(",")));
+			.map(e -> e.getKey() + "=(" + e.getValue().getOriginal() + ", " + e.getValue().getReplaced() + ")")
+			.collect(Collectors.joining(",")));
 			stringBuffer.append("\n\n");
 		}
 		if (!mapDifference.getRemoved().isEmpty()) {
@@ -92,8 +92,8 @@ public class ApplicationManifestDifferenceSummaryGenerator {
 			stringBuffer.append("----------------------------\n");
 
 			stringBuffer.append(mapDifference.getRemoved().entrySet().stream()
-					.map(e -> e.getKey() + "=(" + e.getValue() + ")")
-					.collect(Collectors.joining(",")));
+			.map(e -> e.getKey() + "=(" + e.getValue() + ")")
+			.collect(Collectors.joining(",")));
 
 			stringBuffer.append("\n\n");
 		}
@@ -102,8 +102,8 @@ public class ApplicationManifestDifferenceSummaryGenerator {
 			stringBuffer.append("-----------------------------\n");
 
 			stringBuffer.append(mapDifference.getAdded().entrySet().stream()
-					.map(e -> e.getKey() + "=(" + e.getValue() + ")")
-					.collect(Collectors.joining(",")));
+			.map(e -> e.getKey() + "=(" + e.getValue() + ")")
+			.collect(Collectors.joining(",")));
 
 			stringBuffer.append("\n\n");
 		}
@@ -112,8 +112,8 @@ public class ApplicationManifestDifferenceSummaryGenerator {
 			stringBuffer.append("-----------------\n");
 
 			stringBuffer.append(mapDifference.getCommon().entrySet().stream()
-					.map(e -> e.getKey() + "=(" + e.getValue() + ")")
-					.collect(Collectors.joining(",")));
+			.map(e -> e.getKey() + "=(" + e.getValue() + ")")
+			.collect(Collectors.joining(",")));
 
 			stringBuffer.append("\n\n");
 		}

@@ -36,7 +36,7 @@ public class RepositoryCreator {
 	}
 
 	public static void createRepository(RepositoryRepository repositoryRepository, String repoName,
-			Integer repoOrder) {
+	Integer repoOrder) {
 		Repository repository = new Repository();
 		repository.setName(repoName);
 		repository.setUrl("https://www.example.com/skipper/repository/" + repoName);

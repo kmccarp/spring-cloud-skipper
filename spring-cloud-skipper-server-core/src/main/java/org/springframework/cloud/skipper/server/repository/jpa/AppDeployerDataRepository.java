@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RepositoryRestResource(exported = false)
 @Transactional
 public interface AppDeployerDataRepository
-		extends KeyValueRepository<AppDeployerData, Long>, AppDeployerDataRepositoryCustom {
+extends KeyValueRepository<AppDeployerData, Long>, AppDeployerDataRepositoryCustom {
 
 	@Transactional(readOnly = true)
 	AppDeployerData findByReleaseNameAndReleaseVersion(String releaseName, Integer releaseVersion);

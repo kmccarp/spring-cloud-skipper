@@ -73,8 +73,8 @@ public class PackageService implements ResourceLoaderAware {
 	private ResourceLoader resourceLoader;
 
 	public PackageService(RepositoryRepository repositoryRepository,
-			PackageMetadataRepository packageMetadataRepository,
-			PackageReader packageReader) {
+	PackageMetadataRepository packageMetadataRepository,
+	PackageReader packageReader) {
 		this.repositoryRepository = repositoryRepository;
 		this.packageMetadataRepository = packageMetadataRepository;
 		this.packageReader = packageReader;
@@ -104,24 +104,24 @@ public class PackageService implements ResourceLoaderAware {
 				return throwDescriptiveException(packageMetadata);
 			}
 			Resource sourceResource = getResourceForRepository(packageRepository, packageMetadata.getName(),
-					packageMetadata.getVersion());
+			packageMetadata.getVersion());
 
 			logger.debug("Downloading package file for {}-{} from {} to target file {}",
-					packageMetadata.getName(), packageMetadata.getVersion(), sourceResource.getDescription(),
-					targetFile);
+			packageMetadata.getName(), packageMetadata.getVersion(), sourceResource.getDescription(),
+			targetFile);
 			try {
 				StreamUtils.copy(sourceResource.getInputStream(), new FileOutputStream(targetFile));
 			}
 			catch (IOException e) {
 				throw new SkipperException("Could not copy package file for " + packageMetadata.getName() + "-"
-						+ packageMetadata.getVersion() +
-						" from " + sourceResource.getDescription() + " to target file " + targetFile + ". "
-						+ e.getMessage(), e);
+				+ packageMetadata.getVersion() +
+				" from " + sourceResource.getDescription() + " to target file " + targetFile + ". "
+				+ e.getMessage(), e);
 			}
 			ZipUtil.unpack(targetFile, targetPath.toFile());
 			Package pkgToReturn = this.packageReader
-					.read(new File(targetPath.toFile(), packageMetadata.getName() + "-" +
-							packageMetadata.getVersion()));
+			.read(new File(targetPath.toFile(), packageMetadata.getName() + "-" +
+			packageMetadata.getVersion()));
 			packageMetadata.setPackageFile(new PackageFile(Files.readAllBytes(targetFile.toPath())));
 			// Only save once package is successfully deserialized and package file read.
 			pkgToReturn.setMetadata(this.packageMetadataRepository.save(packageMetadata));
@@ -129,14 +129,14 @@ public class PackageService implements ResourceLoaderAware {
 		}
 		catch (IOException ex) {
 			throw new SkipperException("Exception while downloading package zip file for "
-					+ packageMetadata.getName() + "-" + packageMetadata.getVersion() +
-					". PackageMetadata repositoryId = " + packageMetadata.getRepositoryId(), ex);
+			+ packageMetadata.getName() + "-" + packageMetadata.getVersion() +
+			". PackageMetadata repositoryId = " + packageMetadata.getRepositoryId(), ex);
 		}
 		catch (InvalidDataAccessApiUsageException ex) {
 			throw new SkipperException("Exception while downloading package zip file for "
-					+ packageMetadata.getName() + "-" + packageMetadata.getVersion() +
-					". PackageMetadata repositoryId = " + packageMetadata.getRepositoryId() +
-					"No repository found.", ex);
+			+ packageMetadata.getName() + "-" + packageMetadata.getVersion() +
+			". PackageMetadata repositoryId = " + packageMetadata.getRepositoryId() +
+			"No repository found.", ex);
 		}
 		catch (Exception ex) {
 			throw new SkipperException("Could not download an deserialize package.", ex);
@@ -150,10 +150,10 @@ public class PackageService implements ResourceLoaderAware {
 
 	private Package throwDescriptiveException(PackageMetadata packageMetadata) {
 		List<Repository> list = StreamSupport
-				.stream(repositoryRepository.findAll().spliterator(), false)
-				.collect(Collectors.toList());
+		.stream(repositoryRepository.findAll().spliterator(), false)
+		.collect(Collectors.toList());
 		throw new SkipperException("Can not find packageRepository with Id = "
-				+ packageMetadata.getRepositoryId() + ". Known repositories are " + Arrays.toString(list.toArray()));
+		+ packageMetadata.getRepositoryId() + ". Known repositories are " + Arrays.toString(list.toArray()));
 	}
 
 	private Package deserializePackageFromDatabase(PackageMetadata packageMetadata) {
@@ -169,14 +169,14 @@ public class PackageService implements ResourceLoaderAware {
 			}
 			catch (IOException e) {
 				throw new SkipperException(
-						"Could not copy package file for " + packageMetadata.getName() + "-"
-								+ packageMetadata.getVersion() +
-								" from database to target file " + targetFile,
-						e);
+				"Could not copy package file for " + packageMetadata.getName() + "-"
+				+ packageMetadata.getVersion() +
+				" from database to target file " + targetFile,
+				e);
 			}
 			ZipUtil.unpack(targetFile, targetPath);
 			Package pkgToReturn = this.packageReader.read(new File(targetPath, packageMetadata.getName() + "-" +
-					packageMetadata.getVersion()));
+			packageMetadata.getVersion()));
 			pkgToReturn.setMetadata(packageMetadata);
 			return pkgToReturn;
 		}
@@ -190,15 +190,15 @@ public class PackageService implements ResourceLoaderAware {
 	private Resource getResourceForRepository(Repository packageRepository, String name, String version) {
 		// TODO local respository will not have url, add assertion
 		String sourceUrl = packageRepository.getUrl() + "/" + name + "/" +
-				name + "-" + version + ".zip";
+		name + "-" + version + ".zip";
 		logger.debug("PackageRepository.getUrl={}, Attempting to get resource at URL {} ", packageRepository.getUrl(),
-				sourceUrl);
+		sourceUrl);
 		Resource resource = resourceLoader.getResource(sourceUrl);
 		if (resource.exists()) {
 			return resource;
 		}
 		throw new SkipperException("Resource " + name + "-" + version + " in package repository "
-				+ packageRepository.getName() + " does not exist.");
+		+ packageRepository.getName() + " does not exist.");
 	}
 
 	@Transactional
@@ -221,23 +221,23 @@ public class PackageService implements ResourceLoaderAware {
 			File packageDir = new File(packageDirPath + File.separator + uploadRequest.getName());
 			packageDir.mkdir();
 			Path packageFile = Paths
-					.get(packageDir.getPath() + File.separator + uploadRequest.getName() + "-"
-							+ uploadRequest.getVersion() + "." + uploadRequest.getExtension());
+			.get(packageDir.getPath() + File.separator + uploadRequest.getName() + "-"
+			+ uploadRequest.getVersion() + "." + uploadRequest.getExtension());
 			Assert.isTrue(packageDir.exists(), "Package directory doesn't exist.");
 			Files.write(packageFile, uploadRequest.getPackageFileAsBytes());
 			ZipUtil.unpack(packageFile.toFile(), packageDir);
 			String unzippedPath = packageDir.getAbsolutePath() + File.separator + uploadRequest.getName()
-					+ "-" + uploadRequest.getVersion();
+			+ "-" + uploadRequest.getVersion();
 			File unpackagedFile = new File(unzippedPath);
 			Assert.isTrue(unpackagedFile.exists(), "Package is expected to be unpacked, but it doesn't exist");
 			Package packageToUpload = this.packageReader.read(unpackagedFile);
 			PackageMetadata packageMetadata = packageToUpload.getMetadata();
 			if (!packageMetadata.getName().equals(uploadRequest.getName())
-					|| !packageMetadata.getVersion().equals(uploadRequest.getVersion())) {
+			|| !packageMetadata.getVersion().equals(uploadRequest.getVersion())) {
 				throw new SkipperException(String.format("Package definition in the request [%s:%s] " +
-								"differs from one inside the package.yml [%s:%s]",
-						uploadRequest.getName(), uploadRequest.getVersion(),
-						packageMetadata.getName(), packageMetadata.getVersion()));
+				"differs from one inside the package.yml [%s:%s]",
+				uploadRequest.getName(), uploadRequest.getVersion(),
+				packageMetadata.getName(), packageMetadata.getVersion()));
 			}
 			if (localRepositoryToUpload != null) {
 				packageMetadata.setRepositoryId(localRepositoryToUpload.getId());
@@ -276,19 +276,19 @@ public class PackageService implements ResourceLoaderAware {
 		}
 		catch (ParseException e) {
 			throw new SkipperException("UploadRequest doesn't have a valid semantic version.  Version = " +
-					uploadRequest.getVersion().trim());
+			uploadRequest.getVersion().trim());
 		}
 		Assert.notNull(uploadRequest.getExtension(), "Extension can not be null");
 		Assert.isTrue(uploadRequest.getExtension().equals("zip"), "Extension must be 'zip', not "
-				+ uploadRequest.getExtension());
+		+ uploadRequest.getExtension());
 		Assert.notNull(uploadRequest.getPackageFileAsBytes(), "Package file as bytes must not be null");
 		Assert.isTrue(uploadRequest.getPackageFileAsBytes().length != 0, "Package file as bytes must not be empty");
 		PackageMetadata existingPackageMetadata = this.packageMetadataRepository.findByRepositoryNameAndNameAndVersion(
-				uploadRequest.getRepoName().trim(), uploadRequest.getName().trim(), uploadRequest.getVersion().trim());
+		uploadRequest.getRepoName().trim(), uploadRequest.getName().trim(), uploadRequest.getVersion().trim());
 		if (existingPackageMetadata != null) {
 			throw new SkipperException(String.format("Failed to upload the package. " + "" +
-							"Package [%s:%s] in Repository [%s] already exists.",
-					uploadRequest.getName(), uploadRequest.getVersion(), uploadRequest.getRepoName().trim()));
+			"Package [%s:%s] in Repository [%s] already exists.",
+			uploadRequest.getName(), uploadRequest.getVersion(), uploadRequest.getRepoName().trim()));
 		}
 	}
 

@@ -36,15 +36,15 @@ public class AppDeployerDataRepositoryImpl implements AppDeployerDataRepositoryC
 	@Override
 	public AppDeployerData findByReleaseNameAndReleaseVersionRequired(String releaseName, Integer releaseVersion) {
 		AppDeployerData appDeployerData = appDeployerDataRepository.getIfAvailable().findByReleaseNameAndReleaseVersion(releaseName,
-				releaseVersion);
+		releaseVersion);
 		if (appDeployerData == null) {
 			List<AppDeployerData> appDeployerDataList = StreamSupport
-					.stream(appDeployerDataRepository.getIfAvailable().findAll().spliterator(), false)
-					.collect(Collectors.toList());
+			.stream(appDeployerDataRepository.getIfAvailable().findAll().spliterator(), false)
+			.collect(Collectors.toList());
 			String existingDeployerData = StringUtils.collectionToCommaDelimitedString(appDeployerDataList);
 			throw new SkipperException(String.format("No AppDeployerData found for release '%s' version '%s'." +
-					"AppDeployerData = %s",
-					releaseName, releaseVersion, existingDeployerData));
+			"AppDeployerData = %s",
+			releaseName, releaseVersion, existingDeployerData));
 		}
 		return appDeployerData;
 	}

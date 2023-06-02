@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @ActiveProfiles({"repo-test", "local"})
 @TestPropertySource(properties = {
-		"maven.remote-repositories.repo1.url=https://repo.spring.io/libs-snapshot"
+"maven.remote-repositories.repo1.url=https://repo.spring.io/libs-snapshot"
 })
 public class ReleaseAnalyzerTests extends AbstractIntegrationTest {
 
@@ -91,7 +91,7 @@ public class ReleaseAnalyzerTests extends AbstractIntegrationTest {
 		// Upgrade Release
 		Release upgradedRelease = upgrade(upgradeRequest);
 		ReleaseAnalysisReport releaseAnalysisReport = this.releaseAnalyzer.analyze(installedRelease,
-				upgradedRelease, false, null);
+		upgradedRelease, false, null);
 		String releaseDifferenceSummary = releaseAnalysisReport.getReleaseDifferenceSummary();
 		String manifest = upgradedRelease.getManifest().getData();
 

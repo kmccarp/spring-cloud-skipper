@@ -53,9 +53,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		SkipperServerPlatformConfigurationTests.AllPlatformsConfigurationTest.class,
-		SkipperServerPlatformConfigurationTests.ExternalPlatformsOnlyConfigurationTest.class,
-		SkipperServerPlatformConfigurationTests.SinglePlatformConfigurationTest.class
+SkipperServerPlatformConfigurationTests.AllPlatformsConfigurationTest.class,
+SkipperServerPlatformConfigurationTests.ExternalPlatformsOnlyConfigurationTest.class,
+SkipperServerPlatformConfigurationTests.SinglePlatformConfigurationTest.class
 })
 public class SkipperServerPlatformConfigurationTests {
 
@@ -75,7 +75,7 @@ public class SkipperServerPlatformConfigurationTests {
 
 	@RunWith(SpringRunner.class)
 	@SpringBootTest(classes = TestConfig.class,
-			properties = {"spring.main.allow-bean-definition-overriding=true" })
+	properties = {"spring.main.allow-bean-definition-overriding=true"})
 	public static class SinglePlatformConfigurationTest {
 
 		@Autowired
@@ -89,7 +89,7 @@ public class SkipperServerPlatformConfigurationTests {
 
 	@RunWith(SpringRunner.class)
 	@SpringBootTest(classes = TestConfig.class,
-			properties = {"spring.main.allow-bean-definition-overriding=true" })
+	properties = {"spring.main.allow-bean-definition-overriding=true"})
 	@ActiveProfiles("platform-configuration")
 	public static class ExternalPlatformsOnlyConfigurationTest {
 
@@ -103,9 +103,9 @@ public class SkipperServerPlatformConfigurationTests {
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { EmbeddedDataSourceConfiguration.class, HibernateJpaAutoConfiguration.class,
-			StateMachineJpaRepositoriesAutoConfiguration.class, SkipperServerPlatformConfiguration.class,
-			TestPlatformAutoConfiguration.class, ResourceLoadingAutoConfiguration.class })
+	@ImportAutoConfiguration(classes = {EmbeddedDataSourceConfiguration.class, HibernateJpaAutoConfiguration.class,
+	StateMachineJpaRepositoriesAutoConfiguration.class, SkipperServerPlatformConfiguration.class,
+	TestPlatformAutoConfiguration.class, ResourceLoadingAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	static class TestConfig {
 	}
@@ -116,47 +116,47 @@ public class SkipperServerPlatformConfigurationTests {
 		@Bean
 		public Platform testPlatform() {
 			return new Platform("Test", Collections.singletonList(
-					new Deployer("test", "test", new AppDeployer() {
+			new Deployer("test", "test", new AppDeployer() {
 
-						@Override
-						public String deploy(AppDeploymentRequest request) {
-							return null;
-						}
+				@Override
+				public String deploy(AppDeploymentRequest request) {
+					return null;
+				}
 
-						@Override
-						public void undeploy(String id) {
-						}
+				@Override
+				public void undeploy(String id) {
+				}
 
-						@Override
-						public AppStatus status(String id) {
-							return null;
-						}
+				@Override
+				public AppStatus status(String id) {
+					return null;
+				}
 
-						@Override
-						public RuntimeEnvironmentInfo environmentInfo() {
-							return null;
-						}
+				@Override
+				public RuntimeEnvironmentInfo environmentInfo() {
+					return null;
+				}
 
-						@Override
-						public String getLog(String id) {
-							return null;
-						}
-					}, new ActuatorOperations() {
+				@Override
+				public String getLog(String id) {
+					return null;
+				}
+			}, new ActuatorOperations() {
 
-						@Override
-						public <T> T getFromActuator(String deploymentId,
-								String guid, String endpoint, Class<T> responseType,
-								Optional<HttpHeaders> requestHeaders) {
-							return null;
-						}
+				@Override
+				public <T> T getFromActuator(String deploymentId,
+				String guid, String endpoint, Class<T> responseType,
+				Optional<HttpHeaders> requestHeaders) {
+					return null;
+				}
 
-						@Override
-						public <T, R> R postToActuator(String deploymentId, String guid,
-								String endpoint, T body, Class<R> responseType,
-								Optional<HttpHeaders> requestHeaders) {
-							return null;
-						}
-					})));
+				@Override
+				public <T, R> R postToActuator(String deploymentId, String guid,
+				String endpoint, T body, Class<R> responseType,
+				Optional<HttpHeaders> requestHeaders) {
+					return null;
+				}
+			})));
 		}
 	}
 }

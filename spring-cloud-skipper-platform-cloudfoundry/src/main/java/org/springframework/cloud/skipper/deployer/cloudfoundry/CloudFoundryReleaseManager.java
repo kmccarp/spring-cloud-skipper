@@ -71,11 +71,11 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 	private final CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer;
 
 	public CloudFoundryReleaseManager(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository,
-			CloudFoundryReleaseAnalyzer cloudFoundryReleaseAnalyzer,
-			PlatformCloudFoundryOperations platformCloudFoundryOperations,
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer
-	) {
+	AppDeployerDataRepository appDeployerDataRepository,
+	CloudFoundryReleaseAnalyzer cloudFoundryReleaseAnalyzer,
+	PlatformCloudFoundryOperations platformCloudFoundryOperations,
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer
+) {
 		this.releaseRepository = releaseRepository;
 		this.appDeployerDataRepository = appDeployerDataRepository;
 		this.cloudFoundryReleaseAnalyzer = cloudFoundryReleaseAnalyzer;
@@ -98,33 +98,33 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 		Map<String, String> appDeploymentData = new HashMap<>();
 		appDeploymentData.put(applicationManifest.getName(), applicationManifest.toString());
 		this.platformCloudFoundryOperations.getCloudFoundryOperations(newRelease.getPlatformName())
-				.applications().pushManifest(
-				PushApplicationManifestRequest.builder()
-						.manifest(applicationManifest)
-						.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
-						.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
-						.build())
-				.doOnSuccess(v -> logger.info("Done uploading bits for {}", applicationName))
-				.doOnError(e -> logger.error(
-						String.format("Error creating app %s.  Exception Message %s", applicationName,
-								e.getMessage())))
-				.timeout(CloudFoundryManifestApplicationDeployer.PUSH_REQUEST_TIMEOUT)
-				.doOnSuccess(item -> {
-					logger.info("Successfully deployed {}", applicationName);
-					saveAppDeployerData(release, appDeploymentData);
+		.applications().pushManifest(
+		PushApplicationManifestRequest.builder()
+		.manifest(applicationManifest)
+		.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
+		.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
+		.build())
+		.doOnSuccess(v -> logger.info("Done uploading bits for {}", applicationName))
+		.doOnError(e -> logger.error(
+		String.format("Error creating app %s.  Exception Message %s", applicationName,
+		e.getMessage())))
+		.timeout(CloudFoundryManifestApplicationDeployer.PUSH_REQUEST_TIMEOUT)
+		.doOnSuccess(item -> {
+			logger.info("Successfully deployed {}", applicationName);
+			saveAppDeployerData(release, appDeploymentData);
 
-					// Update Status in DB
-					updateInstallComplete(release);
-				})
-				.doOnError(error -> {
-					if (CloudFoundryManifestApplicationDeployer.isNotFoundError().test(error)) {
-						logger.warn("Unable to deploy application. It may have been destroyed before start completed: " + error.getMessage());
-					}
-					else {
-						logger.error("Failed to deploy {}", applicationName);
-					}
-				})
-				.block();
+			// Update Status in DB
+			updateInstallComplete(release);
+		})
+		.doOnError(error -> {
+			if (CloudFoundryManifestApplicationDeployer.isNotFoundError().test(error)) {
+				logger.warn("Unable to deploy application. It may have been destroyed before start completed: " + error.getMessage());
+			}
+			else {
+				logger.error("Failed to deploy {}", applicationName);
+			}
+		})
+		.block();
 		// Store updated state in in DB and compute status
 		return status(this.releaseRepository.save(release));
 	}
@@ -146,9 +146,9 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 
 	@Override
 	public ReleaseAnalysisReport createReport(Release existingRelease, Release replacingRelease, boolean initial,
-			boolean isForceUpdate, List<String> appNamesToUpgrade) {
+	boolean isForceUpdate, List<String> appNamesToUpgrade) {
 		ReleaseAnalysisReport releaseAnalysisReport = this.cloudFoundryReleaseAnalyzer
-				.analyze(existingRelease, replacingRelease, isForceUpdate);
+		.analyze(existingRelease, replacingRelease, isForceUpdate);
 		if (initial) {
 			this.releaseRepository.save(replacingRelease);
 		}
@@ -157,7 +157,7 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 
 	public Release status(Release release) {
 		release.getInfo().getStatus().setPlatformStatusAsAppStatusList(
-				Collections.singletonList(this.cfManifestApplicationDeployer.status(release)));
+		Collections.singletonList(this.cfManifestApplicationDeployer.status(release)));
 		return release;
 	}
 
@@ -189,11 +189,11 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 		String applicationName = applicationManifest.getName();
 		if (StringUtils.hasText(appName)) {
 			Assert.isTrue(applicationName.equalsIgnoreCase(appName),
-					String.format("Application name % is different from the CF manifest: %", appName, applicationName));
+			String.format("Application name % is different from the CF manifest: %", appName, applicationName));
 		}
 		String logMessage = this.platformCloudFoundryOperations.getCloudFoundryOperations(release.getPlatformName()).applications()
-				.logs(LogsRequest.builder().name(applicationName).build())
-				.blockFirst(Duration.ofMillis(API_TIMEOUT.toMillis())).getMessage();
+		.logs(LogsRequest.builder().name(applicationName).build())
+		.blockFirst(Duration.ofMillis(API_TIMEOUT.toMillis())).getMessage();
 		Map<String, String> logMap = new HashMap<>();
 		logMap.put(appName, logMessage);
 		return new LogInfo(logMap);
@@ -202,21 +202,21 @@ public class CloudFoundryReleaseManager implements ReleaseManager {
 	@Override
 	public Release scale(Release release, ScaleRequest scaleRequest) {
 		logger.info("Scaling the application instance using ", scaleRequest.toString());
-		for (ScaleRequest.ScaleRequestItem scaleRequestItem: scaleRequest.getScale()) {
+		for (ScaleRequest.ScaleRequestItem scaleRequestItem : scaleRequest.getScale()) {
 			ScaleApplicationRequest scaleApplicationRequest = ScaleApplicationRequest.builder()
-					.name(scaleRequestItem.getName())
-					.instances(scaleRequestItem.getCount())
-					.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
-					.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
-					.build();
+			.name(scaleRequestItem.getName())
+			.instances(scaleRequestItem.getCount())
+			.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
+			.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
+			.build();
 			this.platformCloudFoundryOperations.getCloudFoundryOperations(release.getPlatformName()).applications()
-					.scale(scaleApplicationRequest)
-					.timeout(Duration.ofSeconds(API_TIMEOUT.toMillis()))
-					.doOnSuccess(v -> logger.info("Scaled the application with deploymentId = {}",
-							scaleRequestItem.getName()))
-					.doOnError(e -> logger.error("Error: {} scaling the app instance {}", e.getMessage(),
-							scaleRequestItem.getName()))
-					.subscribe();
+			.scale(scaleApplicationRequest)
+			.timeout(Duration.ofSeconds(API_TIMEOUT.toMillis()))
+			.doOnSuccess(v -> logger.info("Scaled the application with deploymentId = {}",
+			scaleRequestItem.getName()))
+			.doOnError(e -> logger.error("Error: {} scaling the app instance {}", e.getMessage(),
+			scaleRequestItem.getName()))
+			.subscribe();
 		}
 		return release;
 	}

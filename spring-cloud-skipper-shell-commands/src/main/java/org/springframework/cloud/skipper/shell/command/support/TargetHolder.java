@@ -74,18 +74,18 @@ public class TargetHolder implements ApplicationEventPublisherAware {
 
 		try {
 			final HttpClientConfigurer httpClientConfigurer = HttpClientConfigurer.create()
-					.targetHost(this.getTarget().getTargetUri())
-					.skipTlsCertificateVerification(this.getTarget().isSkipSslValidation());
+			.targetHost(this.getTarget().getTargetUri())
+			.skipTlsCertificateVerification(this.getTarget().isSkipSslValidation());
 			if (this.getTarget().getTargetCredentials() != null
-					&& StringUtils.hasText(this.getTarget().getTargetCredentials().getUsername())
-					&& StringUtils.hasText(this.getTarget().getTargetCredentials().getPassword())) {
+			&& StringUtils.hasText(this.getTarget().getTargetCredentials().getUsername())
+			&& StringUtils.hasText(this.getTarget().getTargetCredentials().getPassword())) {
 				httpClientConfigurer.basicAuthCredentials(this.getTarget().getTargetCredentials().getUsername(),
-						this.getTarget().getTargetCredentials().getPassword());
+				this.getTarget().getTargetCredentials().getPassword());
 			}
 			if (StringUtils.hasText(credentialsProviderCommand)) {
 				this.getTarget().setTargetCredentials(new TargetCredentials(true));
 				final Resource credentialsResource = new ProcessOutputResource(
-						credentialsProviderCommand.split("\\s+"));
+				credentialsProviderCommand.split("\\s+"));
 				httpClientConfigurer.addInterceptor(new ResourceBasedAuthorizationInterceptor(credentialsResource));
 			}
 			this.restTemplate.setRequestFactory(httpClientConfigurer.buildClientHttpRequestFactory());
@@ -96,7 +96,7 @@ public class TargetHolder implements ApplicationEventPublisherAware {
 			skipperClient.info();
 
 			this.getTarget()
-					.setTargetResultMessage(String.format("Successfully targeted %s", uri));
+			.setTargetResultMessage(String.format("Successfully targeted %s", uri));
 
 		}
 		catch (Exception e) {

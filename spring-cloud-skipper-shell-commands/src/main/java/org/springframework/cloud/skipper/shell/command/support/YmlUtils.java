@@ -59,12 +59,12 @@ public abstract class YmlUtils {
 
 	private static String convertToYaml(String properties) {
 		return YamlConverter.builder()
-				.mode(Mode.FLATTEN)
-				.flat("spec.applicationProperties")
-				.flat("spec.deploymentProperties")
-				.flat("\\w+\\.spec\\.applicationProperties")
-				.flat("\\w+\\.spec\\.deploymentProperties")
-				.map(DeploymentPropertiesUtils.parse(properties)).build()
-				.convert().getYaml();
+		.mode(Mode.FLATTEN)
+		.flat("spec.applicationProperties")
+		.flat("spec.deploymentProperties")
+		.flat("\\w+\\.spec\\.applicationProperties")
+		.flat("\\w+\\.spec\\.deploymentProperties")
+		.map(DeploymentPropertiesUtils.parse(properties)).build()
+		.convert().getYaml();
 	}
 }

@@ -41,21 +41,21 @@ public class StatusDocumentation extends BaseDocumentation {
 		Release release = createTestRelease();
 		when(this.releaseService.status(release.getName())).thenReturn(release.getInfo());
 		this.mockMvc.perform(
-				get("/api/release/status/{releaseName}", release.getName())).andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseFields(
-								subsectionWithPath("_links").ignored(),
-								fieldWithPath("status.statusCode").description(
-										String.format("StatusCode of the release's status (%s)",
-												StringUtils.arrayToCommaDelimitedString(StatusCode.values()))),
-								fieldWithPath("status.platformStatus")
-										.description("Status from the underlying platform"),
-								fieldWithPath("firstDeployed").description("Date/Time of first deployment"),
-								fieldWithPath("lastDeployed").description("Date/Time of last deployment"),
-								fieldWithPath("deleted").description("Date/Time of when the release was deleted"),
-								fieldWithPath("description")
-										.description("Human-friendly 'log entry' about this release"))));
+		get("/api/release/status/{releaseName}", release.getName())).andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseFields(
+		subsectionWithPath("_links").ignored(),
+		fieldWithPath("status.statusCode").description(
+	String.format("StatusCode of the release's status (%s)",
+	StringUtils.arrayToCommaDelimitedString(StatusCode.values()))),
+		fieldWithPath("status.platformStatus")
+	.description("Status from the underlying platform"),
+		fieldWithPath("firstDeployed").description("Date/Time of first deployment"),
+		fieldWithPath("lastDeployed").description("Date/Time of last deployment"),
+		fieldWithPath("deleted").description("Date/Time of when the release was deleted"),
+		fieldWithPath("description")
+	.description("Human-friendly 'log entry' about this release"))));
 	}
 
 	@Test
@@ -63,22 +63,22 @@ public class StatusDocumentation extends BaseDocumentation {
 		Release release = createTestRelease();
 		when(this.releaseService.status(release.getName(), release.getVersion())).thenReturn(release.getInfo());
 		this.mockMvc.perform(
-				get("/api/release/status/{releaseName}/{releaseVersion}",
-						release.getName(), release.getVersion()))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseFields(
-								subsectionWithPath("_links").ignored(),
-								fieldWithPath("status.statusCode").description(
-										String.format("StatusCode of the release's status (%s)",
-												StringUtils.arrayToCommaDelimitedString(StatusCode.values()))),
-								fieldWithPath("status.platformStatus")
-										.description("Status from the underlying platform"),
-								fieldWithPath("firstDeployed").description("Date/Time of first deployment"),
-								fieldWithPath("lastDeployed").description("Date/Time of last deployment"),
-								fieldWithPath("deleted").description("Date/Time of when the release was deleted"),
-								fieldWithPath("description")
-										.description("Human-friendly 'log entry' about this release"))));
+		get("/api/release/status/{releaseName}/{releaseVersion}",
+		release.getName(), release.getVersion()))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseFields(
+		subsectionWithPath("_links").ignored(),
+		fieldWithPath("status.statusCode").description(
+	String.format("StatusCode of the release's status (%s)",
+	StringUtils.arrayToCommaDelimitedString(StatusCode.values()))),
+		fieldWithPath("status.platformStatus")
+	.description("Status from the underlying platform"),
+		fieldWithPath("firstDeployed").description("Date/Time of first deployment"),
+		fieldWithPath("lastDeployed").description("Date/Time of last deployment"),
+		fieldWithPath("deleted").description("Date/Time of when the release was deleted"),
+		fieldWithPath("description")
+	.description("Human-friendly 'log entry' about this release"))));
 	}
 }

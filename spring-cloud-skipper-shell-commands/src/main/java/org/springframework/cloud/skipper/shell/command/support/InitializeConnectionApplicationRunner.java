@@ -47,8 +47,8 @@ public class InitializeConnectionApplicationRunner implements ApplicationRunner 
 	 * @param skipperClientProperties
 	 */
 	public InitializeConnectionApplicationRunner(TargetHolder targetHolder,
-			ThrowableResultHandler resultHandler,
-			SkipperClientProperties skipperClientProperties) {
+	ThrowableResultHandler resultHandler,
+	SkipperClientProperties skipperClientProperties) {
 		this.targetHolder = targetHolder;
 		this.resultHandler = resultHandler;
 		this.skipperClientProperties = skipperClientProperties;
@@ -64,7 +64,7 @@ public class InitializeConnectionApplicationRunner implements ApplicationRunner 
 		}
 
 		Target target = new Target(skipperClientProperties.getServerUri(), skipperClientProperties.getUsername(),
-				skipperClientProperties.getPassword(), skipperClientProperties.isSkipSslValidation());
+		skipperClientProperties.getPassword(), skipperClientProperties.isSkipSslValidation());
 
 		// Attempt connection (including against default values) but do not crash the shell on
 		// error

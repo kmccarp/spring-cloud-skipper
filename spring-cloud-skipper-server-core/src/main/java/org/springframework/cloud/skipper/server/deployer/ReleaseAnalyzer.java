@@ -52,7 +52,7 @@ public class ReleaseAnalyzer {
 	private ApplicationManifestDifferenceFactory applicationManifestDifferenceFactory = new ApplicationManifestDifferenceFactory();
 
 	public ReleaseAnalyzer(SpringCloudDeployerApplicationManifestReader applicationManifestReader,
-			DelegatingResourceLoader delegatingResourceLoader) {
+	DelegatingResourceLoader delegatingResourceLoader) {
 		this.applicationManifestReader = applicationManifestReader;
 		this.delegatingResourceLoader = delegatingResourceLoader;
 	}
@@ -68,44 +68,44 @@ public class ReleaseAnalyzer {
 	 * @return an analysis report describing the changes to make, if any.
 	 */
 	public ReleaseAnalysisReport analyze(Release existingRelease, Release replacingRelease, boolean isForceUpdate,
-			List<String> appNamesToUpdate) {
+	List<String> appNamesToUpdate) {
 		// For now, assume single package with no deps or package with same number of deps
 		List<? extends SpringCloudDeployerApplicationManifest> existingApplicationSpecList = this.applicationManifestReader
-				.read(existingRelease.getManifest().getData());
+		.read(existingRelease.getManifest().getData());
 		List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList = this.applicationManifestReader
-				.read(replacingRelease.getManifest().getData());
+		.read(replacingRelease.getManifest().getData());
 		if (existingRelease.getPkg().getDependencies().size() == replacingRelease.getPkg().getDependencies()
-				.size()) {
+		.size()) {
 			if (existingRelease.getPkg().getDependencies().size() == 0) {
 				logger.info("Existing Package and Upgrade Package both have no dependent packages.");
 				return analyzeTopLevelPackagesOnly(existingApplicationSpecList,
-						replacingApplicationSpecList,
-						existingRelease, replacingRelease, isForceUpdate, appNamesToUpdate);
+				replacingApplicationSpecList,
+				existingRelease, replacingRelease, isForceUpdate, appNamesToUpdate);
 			}
 			else {
 				if (existingRelease.getPkg().getTemplates().size() == 0 &&
-						replacingRelease.getPkg().getTemplates().size() == 0) {
+				replacingRelease.getPkg().getTemplates().size() == 0) {
 					logger.info("Existing Package and Upgrade package both have no top level templates");
 					return analyzeDependentPackagesOnly(existingApplicationSpecList,
-							replacingApplicationSpecList,
-							existingRelease, replacingRelease, isForceUpdate, appNamesToUpdate);
+					replacingApplicationSpecList,
+					existingRelease, replacingRelease, isForceUpdate, appNamesToUpdate);
 				}
 				else {
 					throw new SkipperException(
-							"Can not yet compare package with top level templates and dependencies");
+					"Can not yet compare package with top level templates and dependencies");
 				}
 			}
 		}
 		else {
 			throw new SkipperException(
-					"Can not yet compare existing package and to be released packages with different sizes.");
+			"Can not yet compare existing package and to be released packages with different sizes.");
 		}
 	}
 
 	public List<String> getAllApplicationNames(Release release) {
 		List<String> appNames = new ArrayList<>();
 		List<? extends SpringCloudDeployerApplicationManifest> applicationSpecList = this.applicationManifestReader
-				.read(release.getManifest().getData());
+		.read(release.getManifest().getData());
 		if (release.getPkg().getDependencies().size() == 0) {
 			appNames.add(applicationSpecList.get(0).getApplicationName());
 		}
@@ -118,77 +118,77 @@ public class ReleaseAnalyzer {
 	}
 
 	private ReleaseAnalysisReport analyzeDependentPackagesOnly(
-			List<? extends SpringCloudDeployerApplicationManifest> existingApplicationSpecList,
-			List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList,
-			Release existingRelease, Release replacingRelease, boolean isForceUpdate, List<String> appNamesToUpdate) {
+	List<? extends SpringCloudDeployerApplicationManifest> existingApplicationSpecList,
+	List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList,
+	Release existingRelease, Release replacingRelease, boolean isForceUpdate, List<String> appNamesToUpdate) {
 
 		List<ApplicationManifestDifference> applicationManifestDifferences = new ArrayList<>();
 
 		for (SpringCloudDeployerApplicationManifest existingApplicationManifest : existingApplicationSpecList) {
 			String applicationName = existingApplicationManifest.getApplicationName();
 			SpringCloudDeployerApplicationManifest matchingReplacingApplicationManifest = findMatching(
-					applicationName, replacingApplicationSpecList);
+			applicationName, replacingApplicationSpecList);
 
 			replacingResourceExistsAssertion(matchingReplacingApplicationManifest);
 
 			ApplicationManifestDifference applicationManifestDifference = applicationManifestDifferenceFactory
-					.createApplicationManifestDifference(applicationName,
-							existingApplicationManifest,
-							matchingReplacingApplicationManifest);
+			.createApplicationManifestDifference(applicationName,
+			existingApplicationManifest,
+			matchingReplacingApplicationManifest);
 			applicationManifestDifferences.add(applicationManifestDifference);
 		}
 
 		return createReleaseAnalysisReport(existingRelease, replacingRelease, applicationManifestDifferences,
-				isForceUpdate, appNamesToUpdate);
+		isForceUpdate, appNamesToUpdate);
 
 	}
 
 	private void replacingResourceExistsAssertion(
-			SpringCloudDeployerApplicationManifest matchingReplacingApplicationManifest) {
+	SpringCloudDeployerApplicationManifest matchingReplacingApplicationManifest) {
 		String resourceName = matchingReplacingApplicationManifest.getSpec().getResource();
 		String resourceVersion = matchingReplacingApplicationManifest.getSpec().getVersion();
 		try {
 			Resource resource = delegatingResourceLoader.getResource(
-					AppDeploymentRequestFactory.getResourceLocation(resourceName, resourceVersion));
+			AppDeploymentRequestFactory.getResourceLocation(resourceName, resourceVersion));
 		}
 		catch (Exception e) {
 			throw new SkipperException(
-					"Could not find Resource in replacing release name [" + resourceName
-							+ "], version ["
-							+ resourceVersion + "].",
-					e);
+			"Could not find Resource in replacing release name [" + resourceName
+			+ "], version ["
+			+ resourceVersion + "].",
+			e);
 		}
 	}
 
 	private ReleaseAnalysisReport analyzeTopLevelPackagesOnly(
-			List<? extends SpringCloudDeployerApplicationManifest> existingApplicationSpecList,
-			List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList,
-			Release existingRelease, Release replacingRelease, boolean isForceUpdate,
-			List<String> appNamesToUpdate) {
+	List<? extends SpringCloudDeployerApplicationManifest> existingApplicationSpecList,
+	List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList,
+	Release existingRelease, Release replacingRelease, boolean isForceUpdate,
+	List<String> appNamesToUpdate) {
 
 		List<ApplicationManifestDifference> applicationManifestDifferences = new ArrayList<>();
 
 		ApplicationManifestDifference applicationManifestDifference = applicationManifestDifferenceFactory
-				.createApplicationManifestDifference(
-						existingApplicationSpecList.get(0).getApplicationName(),
-						existingApplicationSpecList.get(0),
-						replacingApplicationSpecList.get(0));
+		.createApplicationManifestDifference(
+		existingApplicationSpecList.get(0).getApplicationName(),
+		existingApplicationSpecList.get(0),
+		replacingApplicationSpecList.get(0));
 		applicationManifestDifferences.add(applicationManifestDifference);
 
 		return createReleaseAnalysisReport(existingRelease, replacingRelease, applicationManifestDifferences,
-				isForceUpdate, appNamesToUpdate);
+		isForceUpdate, appNamesToUpdate);
 	}
 
 	private ReleaseAnalysisReport createReleaseAnalysisReport(Release existingRelease,
-			Release replacingRelease, List<ApplicationManifestDifference> applicationManifestDifferences,
-			boolean isForceUpdate, List<String> appNamesToUpdate) {
+	Release replacingRelease, List<ApplicationManifestDifference> applicationManifestDifferences,
+	boolean isForceUpdate, List<String> appNamesToUpdate) {
 		Set<String> appsToUpgrade = new LinkedHashSet<String>();
 		ReleaseDifference releaseDifference = new ReleaseDifference();
 		releaseDifference.setDifferences(applicationManifestDifferences);
 		if (!releaseDifference.areEqual()) {
 			logger.info("Differences detected between existing and replacing application manifests."
-					+ "Upgrading applications = [" +
-					StringUtils.collectionToCommaDelimitedString(releaseDifference.getChangedApplicationNames()) + "]");
+			+ "Upgrading applications = [" +
+			StringUtils.collectionToCommaDelimitedString(releaseDifference.getChangedApplicationNames()) + "]");
 			appsToUpgrade.addAll(releaseDifference.getChangedApplicationNames());
 		}
 		List<String> allApplicationNames = getAllApplicationNames(existingRelease);
@@ -200,22 +200,22 @@ public class ReleaseAnalyzer {
 			appsToUpgrade.addAll(appNamesToUpdate);
 		}
 		return new ReleaseAnalysisReport(new ArrayList(appsToUpgrade), releaseDifference, existingRelease,
-				replacingRelease);
+		replacingRelease);
 	}
 
 	private SpringCloudDeployerApplicationManifest findMatching(String existingApplicationName,
-			List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList) {
+	List<? extends SpringCloudDeployerApplicationManifest> replacingApplicationSpecList) {
 		for (SpringCloudDeployerApplicationManifest replacingApplicationManifest : replacingApplicationSpecList) {
 			if (replacingApplicationManifest.getApplicationName().equals(existingApplicationName)) {
 				return replacingApplicationManifest;
 			}
 		}
 		List<String> existingApplicationNames = replacingApplicationSpecList.stream()
-				.map(SpringCloudDeployerApplicationManifest::getApplicationName)
-				.collect(Collectors.toList());
+		.map(SpringCloudDeployerApplicationManifest::getApplicationName)
+		.collect(Collectors.toList());
 		String exceptionMessage = String.format(
-				"Did not find existing application name [%s] in list of replacing applications [%s].",
-				existingApplicationName, StringUtils.collectionToCommaDelimitedString(existingApplicationNames));
+		"Did not find existing application name [%s] in list of replacing applications [%s].",
+		existingApplicationName, StringUtils.collectionToCommaDelimitedString(existingApplicationNames));
 		throw new SkipperException(exceptionMessage);
 	}
 }

@@ -45,34 +45,34 @@ public class HealthCheckStep {
 	private final DeployerRepository deployerRepository;
 
 	public HealthCheckStep(AppDeployerDataRepository appDeployerDataRepository, DeployerRepository deployerRepository,
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
 		this.appDeployerDataRepository = appDeployerDataRepository;
 		this.deployerRepository = deployerRepository;
 	}
 
 	public boolean isHealthy(Release replacingRelease) {
 		AppDeployerData replacingAppDeployerData = this.appDeployerDataRepository
-				.findByReleaseNameAndReleaseVersionRequired(
-						replacingRelease.getName(), replacingRelease.getVersion());
-		Map<String, String> appNamesAndDeploymentIds = (replacingAppDeployerData!= null) ?
-				replacingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
+		.findByReleaseNameAndReleaseVersionRequired(
+		replacingRelease.getName(), replacingRelease.getVersion());
+		Map<String, String> appNamesAndDeploymentIds = (replacingAppDeployerData != null) ?
+		replacingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
 		AppDeployer appDeployer = this.deployerRepository
-				.findByNameRequired(replacingRelease.getPlatformName())
-				.getAppDeployer();
+		.findByNameRequired(replacingRelease.getPlatformName())
+		.getAppDeployer();
 		logger.debug("Getting status for apps in replacing release {}-v{}", replacingRelease.getName(),
-				replacingRelease.getVersion());
+		replacingRelease.getVersion());
 		// Check all apps and don't go beyond first failed as that is not needed,
 		// assume healthy otherwise
 		return appNamesAndDeploymentIds.entrySet().stream()
-			.map(e -> {
-				logger.debug("Checking status for appName={}, deploymentId={}", e.getKey(), e.getValue());
-				AppStatus status = appDeployer.status(e.getValue());
-				logger.debug("Got status {} for appName={}, deploymentId={}",
-						status != null ? status.getState() : null, e.getKey(), e.getValue());
-				return status.getState() == DeploymentState.deployed;
-			})
-			.filter(deployed -> !deployed)
-			.findFirst()
-			.orElse(true);
+		.map(e -> {
+			logger.debug("Checking status for appName={}, deploymentId={}", e.getKey(), e.getValue());
+			AppStatus status = appDeployer.status(e.getValue());
+			logger.debug("Got status {} for appName={}, deploymentId={}",
+			status != null ? status.getState() : null, e.getKey(), e.getValue());
+			return status.getState() == DeploymentState.deployed;
+		})
+		.filter(deployed -> !deployed)
+		.findFirst()
+		.orElse(true);
 	}
 }

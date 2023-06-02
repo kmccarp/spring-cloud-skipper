@@ -51,19 +51,19 @@ public abstract class AbstractUpgradeStartAction extends AbstractAction {
 	@Override
 	protected void executeInternal(StateContext<SkipperStates, SkipperEvents> context) {
 		UpgradeRequest upgradeRequest = context.getExtendedState().get(SkipperEventHeaders.UPGRADE_REQUEST,
-				UpgradeRequest.class);
+		UpgradeRequest.class);
 		RollbackRequest rollbackRequest = context.getExtendedState().get(SkipperEventHeaders.ROLLBACK_REQUEST,
-				RollbackRequest.class);
+		RollbackRequest.class);
 		Assert.notNull(upgradeRequest, "'upgradeRequest' not known to the system in extended state");
 		ReleaseAnalysisReport releaseAnalysisReport = this.getReleaseReportService().createReport(upgradeRequest,
-				rollbackRequest, handlesInitialReport());
+		rollbackRequest, handlesInitialReport());
 		context.getExtendedState().getVariables().put(SkipperVariables.RELEASE_ANALYSIS_REPORT, releaseAnalysisReport);
 	}
 
 	protected ReleaseAnalysisReport getReleaseAnalysisReport(
-			StateContext<SkipperStates, SkipperEvents> context) {
+	StateContext<SkipperStates, SkipperEvents> context) {
 		ReleaseAnalysisReport releaseAnalysisReport = context.getExtendedState()
-				.get(SkipperVariables.RELEASE_ANALYSIS_REPORT, ReleaseAnalysisReport.class);
+		.get(SkipperVariables.RELEASE_ANALYSIS_REPORT, ReleaseAnalysisReport.class);
 		Assert.notNull(releaseAnalysisReport, "'releaseAnalysisReport' not known to the system in extended state");
 		return releaseAnalysisReport;
 	}

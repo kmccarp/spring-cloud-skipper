@@ -64,7 +64,7 @@ public interface ReleaseManager {
 	 * @return a report describing the actions to take to update
 	 */
 	ReleaseAnalysisReport createReport(Release existingRelease, Release replacingRelease, boolean initial,
-			boolean isForceUpdate, List<String> appNamesToUpgrade);
+	boolean isForceUpdate, List<String> appNamesToUpgrade);
 
 	/**
 	 * Delete the release

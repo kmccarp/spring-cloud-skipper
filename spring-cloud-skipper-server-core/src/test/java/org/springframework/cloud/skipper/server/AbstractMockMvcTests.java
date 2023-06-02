@@ -65,15 +65,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * @author Mark Pollack
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { AbstractMockMvcTests.TestConfig.class,
-		AbstractMockMvcTests.HypermediaBareJsonConfiguration.class }, properties = "spring.main.allow-bean-definition-overriding=true")
+@SpringBootTest(classes = {AbstractMockMvcTests.TestConfig.class,
+AbstractMockMvcTests.HypermediaBareJsonConfiguration.class}, properties = "spring.main.allow-bean-definition-overriding=true")
 @AutoConfigureMockMvc
 public abstract class AbstractMockMvcTests extends AbstractAssertReleaseDeployedTest {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+	MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	protected MockMvc mockMvc;
 
@@ -90,7 +90,7 @@ public abstract class AbstractMockMvcTests extends AbstractAssertReleaseDeployed
 	@Before
 	public void setupMockMvc() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-				.defaultRequest(get("/").accept(MediaType.APPLICATION_JSON).contentType(contentType)).build();
+		.defaultRequest(get("/").accept(MediaType.APPLICATION_JSON).contentType(contentType)).build();
 	}
 
 	@Override
@@ -98,12 +98,12 @@ public abstract class AbstractMockMvcTests extends AbstractAssertReleaseDeployed
 		try {
 			logger.info("Checking status of release={} version={}", releaseName, releaseVersion);
 			MvcResult result = mockMvc.perform(get(String.format("/api/release/status/%s/%s", releaseName, releaseVersion)))
-					.andReturn();
+			.andReturn();
 			Info info = convertContentToInfo(result.getResponse().getContentAsString());
 
 			logger.info("Status = " + info.getStatus());
 			return info.getStatus().getStatusCode().equals(StatusCode.DEPLOYED) &&
-					allAppsDeployed(info.getStatus().getAppStatusList());
+			allAppsDeployed(info.getStatus().getAppStatusList());
 		}
 		catch (Exception e) {
 			logger.error("Exception getting status", e);
@@ -154,10 +154,10 @@ public abstract class AbstractMockMvcTests extends AbstractAssertReleaseDeployed
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { SecurityAutoConfiguration.class, JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-			HibernateJpaAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class,
-			ErrorMvcAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-			SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class })
+	@ImportAutoConfiguration(classes = {SecurityAutoConfiguration.class, JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+	HibernateJpaAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class,
+	ErrorMvcAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+	SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	@EnableWebMvc
 	static class TestConfig {

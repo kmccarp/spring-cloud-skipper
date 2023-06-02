@@ -71,11 +71,11 @@ public class UpgradeCancelAction extends AbstractUpgradeStartAction {
 
 		// check if we're doing rollback and pass flag to strategy
 		RollbackRequest rollbackRequest = context.getExtendedState().get(SkipperEventHeaders.ROLLBACK_REQUEST,
-				RollbackRequest.class);
+		RollbackRequest.class);
 		// TODO: should check both releases
 		String kind = ManifestUtils.resolveKind(releaseAnalysisReport.getExistingRelease().getManifest().getData());
 		UpgradeStrategy upgradeStrategy = this.upgradeStrategyFactory.getUpgradeStrategy(kind);
 		upgradeStrategy.cancel(releaseAnalysisReport.getExistingRelease(), releaseAnalysisReport.getReplacingRelease(),
-				releaseAnalysisReport, upgradeTimeout, event == SkipperEvents.UPGRADE_CANCEL, rollbackRequest != null);
+		releaseAnalysisReport, upgradeTimeout, event == SkipperEvents.UPGRADE_CANCEL, rollbackRequest != null);
 	}
 }

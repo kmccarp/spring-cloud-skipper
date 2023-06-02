@@ -55,9 +55,9 @@ public class RepositoryInitializationService {
 	private final PackageMetadataRepository packageMetadataRepository;
 
 	public RepositoryInitializationService(RepositoryRepository repositoryRepository,
-			PackageMetadataRepository packageMetadataRepository,
-			PackageMetadataService packageMetadataService,
-			SkipperServerProperties skipperServerProperties) {
+	PackageMetadataRepository packageMetadataRepository,
+	PackageMetadataService packageMetadataService,
+	SkipperServerProperties skipperServerProperties) {
 		this.repositoryRepository = repositoryRepository;
 		this.packageMetadataRepository = packageMetadataRepository;
 		this.packageMetadataService = packageMetadataService;
@@ -82,9 +82,9 @@ public class RepositoryInitializationService {
 			List<PackageMetadata> packageMetadataList = this.packageMetadataService.downloadPackageMetadata();
 			for (PackageMetadata packageMetadata : packageMetadataList) {
 				if (this.packageMetadataRepository.findByRepositoryIdAndNameAndVersion(
-						packageMetadata.getRepositoryId(),
-						packageMetadata.getName(),
-						packageMetadata.getVersion()) == null) {
+				packageMetadata.getRepositoryId(),
+				packageMetadata.getName(),
+				packageMetadata.getVersion()) == null) {
 					this.packageMetadataRepository.save(packageMetadata);
 				}
 			}
@@ -110,7 +110,7 @@ public class RepositoryInitializationService {
 			}
 			else {
 				logger.warn("Ignoring application repository configuration for {} because name {} already exists.",
-						name, entry.getValue());
+				name, entry.getValue());
 			}
 		}
 	}

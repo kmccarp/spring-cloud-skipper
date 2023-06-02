@@ -42,16 +42,16 @@ public class CancelDocumentation extends BaseDocumentation {
 		when(this.skipperStateMachineService.cancelRelease(releaseName)).thenReturn(Boolean.TRUE);
 
 		final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-				MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+		MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 		this.mockMvc.perform(
-				post("/api/release/cancel").accept(MediaType.APPLICATION_JSON).contentType(contentType)
-						.content(convertObjectToJson(new CancelRequest(releaseName))))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseFields(fieldWithPath("accepted").description("If cancel request was accepted"))
-				))
-				.andReturn();
+		post("/api/release/cancel").accept(MediaType.APPLICATION_JSON).contentType(contentType)
+		.content(convertObjectToJson(new CancelRequest(releaseName))))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseFields(fieldWithPath("accepted").description("If cancel request was accepted"))
+		))
+		.andReturn();
 	}
 }

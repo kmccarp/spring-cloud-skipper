@@ -104,15 +104,15 @@ import static org.mockito.Mockito.mock;
  * @author Ilayaperumal Gopinathan
  */
 @Configuration
-@EnableConfigurationProperties({ SkipperServerProperties.class, VersionInfoProperties.class,
-		LocalPlatformProperties.class, HealthCheckProperties.class })
-@EntityScan({ "org.springframework.cloud.skipper.domain",
-		"org.springframework.cloud.skipper.server.domain" })
+@EnableConfigurationProperties({SkipperServerProperties.class, VersionInfoProperties.class,
+LocalPlatformProperties.class, HealthCheckProperties.class})
+@EntityScan({"org.springframework.cloud.skipper.domain",
+"org.springframework.cloud.skipper.server.domain"})
 @EnableAsync
-@ImportAutoConfiguration(classes = { JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-		HibernateJpaAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class,
-		ErrorMvcAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-		SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class })
+@ImportAutoConfiguration(classes = {JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+HibernateJpaAutoConfiguration.class, RepositoryRestMvcAutoConfiguration.class,
+ErrorMvcAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class})
 @Import(RepositoryConfiguration.class)
 @WebAppConfiguration
 public class ServerDependencies implements AsyncConfigurer {
@@ -147,20 +147,20 @@ public class ServerDependencies implements AsyncConfigurer {
 
 	@Bean
 	public ReleaseController releaseController(ReleaseService releaseService,
-			SkipperStateMachineService skipperStateMachineService, ActuatorService actuatorService) {
+	SkipperStateMachineService skipperStateMachineService, ActuatorService actuatorService) {
 		return new ReleaseController(releaseService, skipperStateMachineService, actuatorService);
 	}
 
 	@Bean
 	public PackageController packageController(PackageService packageService,
-			PackageMetadataService packageMetadataService, SkipperStateMachineService skipperStateMachineService) {
+	PackageMetadataService packageMetadataService, SkipperStateMachineService skipperStateMachineService) {
 		return new PackageController(packageService, packageMetadataService, skipperStateMachineService);
 	}
 
 	@Bean
 	ActuatorService actuatorService(ReleaseService releaseService,
-			DeployerRepository deployerRepository,  ReleaseRepository releaseRepository) {
-		return new ActuatorService(releaseService,  deployerRepository, releaseRepository);
+	DeployerRepository deployerRepository, ReleaseRepository releaseRepository) {
+		return new ActuatorService(releaseService, deployerRepository, releaseRepository);
 	}
 
 	@Bean
@@ -177,11 +177,11 @@ public class ServerDependencies implements AsyncConfigurer {
 
 	@Bean
 	public PackageMetadataService packageMetadataService(RepositoryRepository repositoryRepository,
-			PackageMetadataRepository packageMetadataRepository,
-			ReleaseRepository releaseRepository) {
+	PackageMetadataRepository packageMetadataRepository,
+	ReleaseRepository releaseRepository) {
 		return new PackageMetadataService(repositoryRepository,
-				packageMetadataRepository,
-				releaseRepository);
+		packageMetadataRepository,
+		releaseRepository);
 	}
 
 	@Bean
@@ -222,30 +222,30 @@ public class ServerDependencies implements AsyncConfigurer {
 	@Bean
 	@ConditionalOnProperty(prefix = "spring.cloud.skipper.server", name = "enableReleaseStateUpdateService", matchIfMissing = true)
 	public ReleaseStateUpdateService releaseStateUpdateService(ReleaseManagerFactory releaseManagerFactory,
-			ReleaseRepository releaseRepository) {
+	ReleaseRepository releaseRepository) {
 		return new ReleaseStateUpdateService(releaseManagerFactory, releaseRepository);
 	}
 
 	@Bean
 	public RepositoryInitializationService repositoryInitializationService(RepositoryRepository repositoryRepository,
-			PackageMetadataRepository packageMetadataRepository,
-			PackageMetadataService packageMetadataService,
-			SkipperServerProperties skipperServerProperties) {
+	PackageMetadataRepository packageMetadataRepository,
+	PackageMetadataService packageMetadataService,
+	SkipperServerProperties skipperServerProperties) {
 		return new RepositoryInitializationService(repositoryRepository, packageMetadataRepository,
-				packageMetadataService, skipperServerProperties);
+		packageMetadataService, skipperServerProperties);
 	}
 
 	// Deployer Package
 
 	@Bean
 	public DefaultReleaseManager defaultReleaseManager(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository,
-			DeployerRepository deployerRepository,
-			ReleaseAnalyzer releaseAnalyzer,
-			AppDeploymentRequestFactory appDeploymentRequestFactory,
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
+	AppDeployerDataRepository appDeployerDataRepository,
+	DeployerRepository deployerRepository,
+	ReleaseAnalyzer releaseAnalyzer,
+	AppDeploymentRequestFactory appDeploymentRequestFactory,
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
 		return new DefaultReleaseManager(releaseRepository, appDeployerDataRepository, deployerRepository,
-				releaseAnalyzer, appDeploymentRequestFactory, applicationManifestReader);
+		releaseAnalyzer, appDeploymentRequestFactory, applicationManifestReader);
 	}
 
 	@Bean
@@ -260,18 +260,18 @@ public class ServerDependencies implements AsyncConfigurer {
 
 	@Bean
 	public UpgradeStrategy updateStrategy(HealthCheckStep healthCheckStep,
-			HandleHealthCheckStep healthCheckAndDeleteStep,
-			DeployAppStep deployAppStep) {
+	HandleHealthCheckStep healthCheckAndDeleteStep,
+	DeployAppStep deployAppStep) {
 		return new SimpleRedBlackUpgradeStrategy(healthCheckStep, healthCheckAndDeleteStep,
-				deployAppStep);
+		deployAppStep);
 	}
 
 	@Bean
 	public HealthCheckStep healthCheckStep(AppDeployerDataRepository appDeployerDataRepository,
-			DeployerRepository deployerRepository,
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
+	DeployerRepository deployerRepository,
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader) {
 		return new HealthCheckStep(appDeployerDataRepository, deployerRepository,
-				applicationManifestReader/* , cfApplicationManifestReader, cfManifestApplicationDeployer */);
+		applicationManifestReader/* , cfApplicationManifestReader, cfManifestApplicationDeployer */);
 	}
 
 	@Bean
@@ -281,7 +281,7 @@ public class ServerDependencies implements AsyncConfigurer {
 
 	@Bean
 	public HandleHealthCheckStep healthCheckAndDeleteStep(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository, DeleteStep deleteStep) {
+	AppDeployerDataRepository appDeployerDataRepository, DeleteStep deleteStep) {
 		return new HandleHealthCheckStep(releaseRepository, appDeployerDataRepository, deleteStep);
 	}
 
@@ -298,13 +298,13 @@ public class ServerDependencies implements AsyncConfigurer {
 	@Override
 	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
 		return (throwable, method, objects) -> logger.error("Exception thrown in @Async Method " + method.getName(),
-				throwable);
+		throwable);
 	}
 
 	@Bean
 	public ReleaseAnalyzer releaseAnalysisService(
-			SpringCloudDeployerApplicationManifestReader applicationManifestReader,
-			DelegatingResourceLoader delegatingResourceLoader) {
+	SpringCloudDeployerApplicationManifestReader applicationManifestReader,
+	DelegatingResourceLoader delegatingResourceLoader) {
 		return new ReleaseAnalyzer(applicationManifestReader, delegatingResourceLoader);
 	}
 

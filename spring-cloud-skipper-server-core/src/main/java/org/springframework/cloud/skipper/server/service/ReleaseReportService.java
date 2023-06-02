@@ -59,9 +59,9 @@ public class ReleaseReportService {
 	private final ReleaseManagerFactory releaseManagerFactory;
 
 	public ReleaseReportService(PackageMetadataRepository packageMetadataRepository,
-			ReleaseRepository releaseRepository,
-			PackageService packageService,
-			ReleaseManagerFactory releaseManagerFactory) {
+	ReleaseRepository releaseRepository,
+	PackageService packageService,
+	ReleaseManagerFactory releaseManagerFactory) {
 		this.packageMetadataRepository = packageMetadataRepository;
 		this.releaseRepository = releaseRepository;
 		this.packageService = packageService;
@@ -81,7 +81,7 @@ public class ReleaseReportService {
 	 */
 	@Transactional
 	public ReleaseAnalysisReport createReport(UpgradeRequest upgradeRequest, RollbackRequest rollbackRequest,
-			boolean initial) {
+	boolean initial) {
 		Assert.notNull(upgradeRequest.getUpgradeProperties(), "UpgradeProperties can not be null");
 		Assert.notNull(upgradeRequest.getPackageIdentifier(), "PackageIdentifier can not be null");
 		UpgradeProperties upgradeProperties = upgradeRequest.getUpgradeProperties();
@@ -89,26 +89,26 @@ public class ReleaseReportService {
 		Release latestRelease = this.releaseRepository.findLatestRelease(upgradeProperties.getReleaseName());
 		PackageIdentifier packageIdentifier = upgradeRequest.getPackageIdentifier();
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndOptionalVersionRequired(
-				packageIdentifier.getPackageName(),
-				packageIdentifier
-						.getPackageVersion());
+		packageIdentifier.getPackageName(),
+		packageIdentifier
+		.getPackageVersion());
 
 		// if we're about to save new release during this report, create
 		// or restore replacing one.
 		Release tempReplacingRelease = null;
 		if (initial) {
 			tempReplacingRelease = createReleaseForUpgrade(packageMetadata, latestRelease.getVersion() + 1,
-					upgradeProperties, existingRelease.getPlatformName(), rollbackRequest);
+			upgradeProperties, existingRelease.getPlatformName(), rollbackRequest);
 		}
 		else {
 			tempReplacingRelease = this.releaseRepository.findByNameAndVersion(
-					upgradeRequest.getUpgradeProperties().getReleaseName(), latestRelease.getVersion());
+			upgradeRequest.getUpgradeProperties().getReleaseName(), latestRelease.getVersion());
 		}
 		// Carry over customized config values from replacing release so updates are additive with property changes.
 		Release replacingRelease = updateReplacingReleaseConfigValues(latestRelease, tempReplacingRelease);
 
 		Map<String, Object> mergedReplacingReleaseModel = ConfigValueUtils.mergeConfigValues(replacingRelease.getPkg(),
-				replacingRelease.getConfigValues());
+		replacingRelease.getConfigValues());
 
 		String manifestData = ManifestUtils.createManifest(replacingRelease.getPkg(), mergedReplacingReleaseModel);
 		Manifest manifest = new Manifest();
@@ -119,7 +119,7 @@ public class ReleaseReportService {
 		String kind = ManifestUtils.resolveKind(existingRelease.getManifest().getData());
 		ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
 		return releaseManager.createReport(existingRelease, replacingRelease, initial, upgradeRequest.isForce(),
-				upgradeRequest.getAppNames());
+		upgradeRequest.getAppNames());
 	}
 
 	private Release updateReplacingReleaseConfigValues(Release targetRelease, Release replacingRelease) {
@@ -147,14 +147,14 @@ public class ReleaseReportService {
 			}
 			else {
 				throw new SkipperException("Was expecting override values to produce a Map, instead got class = " +
-						data.getClass() + "overrideValues.getRaw() = " + configValues.getRaw());
+				data.getClass() + "overrideValues.getRaw() = " + configValues.getRaw());
 			}
 		}
 		return null;
 	}
 
 	private Release createReleaseForUpgrade(PackageMetadata packageMetadata, Integer newVersion,
-			UpgradeProperties upgradeProperties, String platformName, RollbackRequest rollbackRequest) {
+	UpgradeProperties upgradeProperties, String platformName, RollbackRequest rollbackRequest) {
 		Assert.notNull(upgradeProperties, "Upgrade Properties can not be null");
 		Package packageToInstall = this.packageService.downloadPackage(packageMetadata);
 		Release release = new Release();
@@ -165,7 +165,7 @@ public class ReleaseReportService {
 		release.setVersion(newVersion);
 		// we simply differentiate between upgrade/rollback if we know there is a rollback request
 		Info info = Info
-				.createNewInfo(rollbackRequest == null ? "Upgrade install underway" : "Rollback install underway");
+		.createNewInfo(rollbackRequest == null ? "Upgrade install underway" : "Rollback install underway");
 		release.setInfo(info);
 		return release;
 	}

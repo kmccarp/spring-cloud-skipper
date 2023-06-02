@@ -47,7 +47,7 @@ public class ConfigCommands extends AbstractSkipperCommand {
 
 	@Autowired
 	public ConfigCommands(TargetHolder targetHolder,
-			ConsoleUserInput userInput) {
+	ConsoleUserInput userInput) {
 		this.targetHolder = targetHolder;
 		this.userInput = userInput;
 	}
@@ -55,30 +55,30 @@ public class ConfigCommands extends AbstractSkipperCommand {
 	// @formatter:off
 	@ShellMethod(key = "skipper config", value = "Configure the Spring Cloud Skipper REST server to use.")
 	public String target(
-			@ShellOption(help = "the location of the Spring Cloud Skipper REST endpoint", defaultValue = SkipperClientProperties.DEFAULT_TARGET)
-					String uri,
-			@ShellOption(help = "the username for authenticated access to the Admin REST endpoint", defaultValue = ShellOption.NULL)
-					String username,
-			@ShellOption(help = "the password for authenticated access to the Admin REST endpoint " +
-					"(valid only with a username)", defaultValue = ShellOption.NULL)
-					String password,
-			@ShellOption(help = "a command to run that outputs the HTTP credentials used for authentication", defaultValue = ShellOption.NULL)
-					String credentialsProviderCommand,
-			@ShellOption(help = "accept any SSL certificate (even self-signed)")
-					boolean skipSslValidation) throws Exception {
+	@ShellOption(help = "the location of the Spring Cloud Skipper REST endpoint", defaultValue = SkipperClientProperties.DEFAULT_TARGET)
+	String uri,
+	@ShellOption(help = "the username for authenticated access to the Admin REST endpoint", defaultValue = ShellOption.NULL)
+	String username,
+	@ShellOption(help = "the password for authenticated access to the Admin REST endpoint " +
+	"(valid only with a username)", defaultValue = ShellOption.NULL)
+	String password,
+	@ShellOption(help = "a command to run that outputs the HTTP credentials used for authentication", defaultValue = ShellOption.NULL)
+	String credentialsProviderCommand,
+	@ShellOption(help = "accept any SSL certificate (even self-signed)")
+	boolean skipSslValidation) throws Exception {
 		// @formatter:on
 		if (credentialsProviderCommand == null && password != null && username == null) {
 			return "A password may be specified only together with a username";
 		}
 
 		if (credentialsProviderCommand == null &&
-				password == null && username != null) {
+		password == null && username != null) {
 			// read password from the command line
 			password = userInput.prompt("Password", "", false);
 		}
 
 		this.targetHolder.changeTarget(new Target(uri, username, password, skipSslValidation),
-				credentialsProviderCommand);
+		credentialsProviderCommand);
 
 		return (this.targetHolder.getTarget().getTargetResultMessage());
 	}

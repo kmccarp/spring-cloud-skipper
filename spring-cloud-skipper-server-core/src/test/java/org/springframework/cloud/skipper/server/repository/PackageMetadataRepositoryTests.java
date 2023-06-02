@@ -69,9 +69,9 @@ public class PackageMetadataRepositoryTests extends AbstractIntegrationTest {
 		assertThat(latestPackage2.getVersion()).isEqualTo("1.1.0");
 
 		PackageMetadata aPackage =
-				this.packageMetadataRepository.findByRepositoryNameAndNameAndVersion(
-						PackageMetadataCreator.TEST_REPO_NAME,
-						"package1", "2.0.0");
+		this.packageMetadataRepository.findByRepositoryNameAndNameAndVersion(
+		PackageMetadataCreator.TEST_REPO_NAME,
+		"package1", "2.0.0");
 		assertThat(aPackage.getVersion()).isEqualTo("2.0.0");
 
 	}
@@ -99,20 +99,20 @@ public class PackageMetadataRepositoryTests extends AbstractIntegrationTest {
 		RepositoryCreator.createRepository(this.repositoryRepository, repoName2, 1);
 		RepositoryCreator.createRepository(this.repositoryRepository, repoName3, 2);
 		PackageMetadataCreator.createTwoPackages(this.packageMetadataRepository,
-				this.repositoryRepository.findByName(repoName1).getId(), "1.0.0");
+		this.repositoryRepository.findByName(repoName1).getId(), "1.0.0");
 		PackageMetadataCreator.createTwoPackages(this.packageMetadataRepository,
-				this.repositoryRepository.findByName(repoName2).getId(), "2.0.1");
+		this.repositoryRepository.findByName(repoName2).getId(), "2.0.1");
 		PackageMetadataCreator.createTwoPackages(this.packageMetadataRepository,
-				this.repositoryRepository.findByName(repoName3).getId(), "1.0.1");
+		this.repositoryRepository.findByName(repoName3).getId(), "1.0.1");
 		List<PackageMetadata> packageMetadataList = this.packageMetadataRepository
-				.findByNameAndVersionOrderByApiVersionDesc("package1", "1.0.0");
+		.findByNameAndVersionOrderByApiVersionDesc("package1", "1.0.0");
 		assertThat(packageMetadataList.size()).isEqualTo(3);
 		assertThat(packageMetadataList.get(0).getName()).isEqualTo("package1");
 		assertThat(packageMetadataList.get(0).getVersion()).isEqualTo("1.0.0");
 		assertThat(packageMetadataList.get(0).getRepositoryId()).isEqualTo(this.repositoryRepository.findByName(repoName2)
-				.getId());
+		.getId());
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("package1",
-				"1.0.0");
+		"1.0.0");
 		assertThat(packageMetadata.getApiVersion()).isEqualTo("1.0.1");
 		assertThat(packageMetadata.getRepositoryId()).isEqualTo(this.repositoryRepository.findByName(repoName3).getId());
 	}

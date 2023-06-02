@@ -47,11 +47,11 @@ public class TableUtils {
 	 */
 	public static TableBuilder applyStyle(TableBuilder builder) {
 		builder.addOutlineBorder(BorderStyle.fancy_double)
-				.paintBorder(BorderStyle.air, BorderSpecification.INNER_VERTICAL).fromTopLeft().toBottomRight()
-				.paintBorder(BorderStyle.fancy_light, BorderSpecification.INNER_VERTICAL).fromTopLeft()
-				.toBottomRight()
-				.addHeaderBorder(BorderStyle.fancy_double).on(CellMatchers.row(0))
-				.addAligner(SimpleVerticalAligner.middle).addAligner(SimpleHorizontalAligner.center);
+		.paintBorder(BorderStyle.air, BorderSpecification.INNER_VERTICAL).fromTopLeft().toBottomRight()
+		.paintBorder(BorderStyle.fancy_light, BorderSpecification.INNER_VERTICAL).fromTopLeft()
+		.toBottomRight()
+		.addHeaderBorder(BorderStyle.fancy_double).on(CellMatchers.row(0))
+		.addAligner(SimpleVerticalAligner.middle).addAligner(SimpleHorizontalAligner.center);
 		return Tables.configureKeyValueRendering(builder, " = ");
 	}
 
@@ -64,9 +64,9 @@ public class TableUtils {
 	 */
 	public static TableBuilder applyStyleNoHeader(TableBuilder builder) {
 		builder.addOutlineBorder(BorderStyle.fancy_double)
-				.paintBorder(BorderStyle.air, BorderSpecification.INNER_VERTICAL).fromTopLeft().toBottomRight()
-				.paintBorder(BorderStyle.fancy_light, BorderSpecification.INNER_VERTICAL).fromTopLeft()
-				.toBottomRight();
+		.paintBorder(BorderStyle.air, BorderSpecification.INNER_VERTICAL).fromTopLeft().toBottomRight()
+		.paintBorder(BorderStyle.fancy_light, BorderSpecification.INNER_VERTICAL).fromTopLeft()
+		.toBottomRight();
 		return Tables.configureKeyValueRendering(builder, " = ");
 	}
 }

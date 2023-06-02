@@ -35,9 +35,9 @@ public interface UpgradeStrategy {
 	boolean checkStatus(Release replacingRelease);
 
 	void accept(Release existingRelease, Release replacingRelease, ReleaseAnalysisReport releaseAnalysisReport,
-			boolean rollback);
+	boolean rollback);
 
 	void cancel(Release existingRelease, Release replacingRelease, ReleaseAnalysisReport releaseAnalysisReport,
-			Long timeout, boolean cancel, boolean rollback);
+	Long timeout, boolean cancel, boolean rollback);
 
 }

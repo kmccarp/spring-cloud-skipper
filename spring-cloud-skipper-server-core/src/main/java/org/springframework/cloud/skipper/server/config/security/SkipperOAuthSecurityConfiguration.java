@@ -56,46 +56,46 @@ public class SkipperOAuthSecurityConfiguration extends OAuthSecurityConfiguratio
 
 		if (opaqueTokenIntrospector != null) {
 			BasicAuthenticationFilter basicAuthenticationFilter = new BasicAuthenticationFilter(
-					getProviderManager(),
-					basicAuthenticationEntryPoint
+			getProviderManager(),
+			basicAuthenticationEntryPoint
 			);
 			http.addFilter(basicAuthenticationFilter);
 		}
 
 		getAuthorizationProperties().getAuthenticatedPaths()
-				.add(dashboard(getAuthorizationProperties(), "/**"));
+		.add(dashboard(getAuthorizationProperties(), "/**"));
 		getAuthorizationProperties().getAuthenticatedPaths()
-				.add(dashboard(getAuthorizationProperties(), ""));
+		.add(dashboard(getAuthorizationProperties(), ""));
 
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry security =
-				http.authorizeRequests()
-						.antMatchers(getAuthorizationProperties().getPermitAllPaths()
-								.toArray(new String[0]))
-						.permitAll()
-						.antMatchers(getAuthorizationProperties().getAuthenticatedPaths()
-								.toArray(new String[0]))
-						.authenticated();
+		http.authorizeRequests()
+		.antMatchers(getAuthorizationProperties().getPermitAllPaths()
+		.toArray(new String[0]))
+		.permitAll()
+		.antMatchers(getAuthorizationProperties().getAuthenticatedPaths()
+		.toArray(new String[0]))
+		.authenticated();
 
 		security = SecurityConfigUtils.configureSimpleSecurity(security, getAuthorizationProperties());
 		security.anyRequest().denyAll();
 
 		http.httpBasic().and()
-				.logout()
-				.logoutSuccessUrl(dashboard(getAuthorizationProperties(), "/logout-success-oauth.html"))
-				.and().csrf().disable()
-				.exceptionHandling()
-				.defaultAuthenticationEntryPointFor(basicAuthenticationEntryPoint, new AntPathRequestMatcher("/api/**"))
-				.defaultAuthenticationEntryPointFor(basicAuthenticationEntryPoint, new AntPathRequestMatcher("/actuator/**"));
+		.logout()
+		.logoutSuccessUrl(dashboard(getAuthorizationProperties(), "/logout-success-oauth.html"))
+		.and().csrf().disable()
+		.exceptionHandling()
+		.defaultAuthenticationEntryPointFor(basicAuthenticationEntryPoint, new AntPathRequestMatcher("/api/**"))
+		.defaultAuthenticationEntryPointFor(basicAuthenticationEntryPoint, new AntPathRequestMatcher("/actuator/**"));
 
 		if (getOpaqueTokenIntrospector() != null) {
 			http.oauth2ResourceServer()
-					.opaqueToken()
-					.introspector(getOpaqueTokenIntrospector());
+			.opaqueToken()
+			.introspector(getOpaqueTokenIntrospector());
 		}
 		else if (getoAuth2ResourceServerProperties().getJwt().getJwkSetUri() != null) {
 			http.oauth2ResourceServer()
-					.jwt()
-					.jwtAuthenticationConverter(grantedAuthoritiesExtractor());
+			.jwt()
+			.jwtAuthenticationConverter(grantedAuthoritiesExtractor());
 		}
 
 		getSecurityStateBean().setAuthenticationEnabled(true);

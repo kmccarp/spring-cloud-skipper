@@ -41,8 +41,8 @@ public class PackageMetadataRepositoryImpl implements PackageMetadataRepositoryC
 	@Override
 	public PackageMetadata findByNameAndVersionByMaxRepoOrder(String packageName, String packageVersion) {
 		List<PackageMetadata> packageMetadataList = this.packageMetadataRepositoryObjectProvider.getIfAvailable()
-				.findByNameAndVersionOrderByApiVersionDesc(packageName,
-						packageVersion);
+		.findByNameAndVersionOrderByApiVersionDesc(packageName,
+		packageVersion);
 		if (packageMetadataList.size() == 0) {
 			return null;
 		}
@@ -78,14 +78,14 @@ public class PackageMetadataRepositoryImpl implements PackageMetadataRepositoryC
 		PackageMetadata packageMetadata;
 		if (StringUtils.hasText(packageVersion)) {
 			packageMetadata = this.packageMetadataRepositoryObjectProvider.getIfAvailable()
-					.findByNameAndVersionByMaxRepoOrder(packageName, packageVersion);
+			.findByNameAndVersionByMaxRepoOrder(packageName, packageVersion);
 		}
 		else {
 			packageMetadata = this.packageMetadataRepositoryObjectProvider.getIfAvailable().findFirstByNameOrderByVersionDesc(packageName);
 		}
 		if (packageMetadata == null) {
 			throw new SkipperException(String.format("Can not find package '%s', version '%s'", packageName,
-					packageVersion));
+			packageVersion));
 		}
 		return packageMetadata;
 	}

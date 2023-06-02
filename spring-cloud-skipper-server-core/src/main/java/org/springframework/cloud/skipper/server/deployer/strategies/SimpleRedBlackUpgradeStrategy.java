@@ -38,8 +38,8 @@ public class SimpleRedBlackUpgradeStrategy implements UpgradeStrategy {
 	private final DeployAppStep deployAppStep;
 
 	public SimpleRedBlackUpgradeStrategy(HealthCheckStep healthCheckStep,
-			HandleHealthCheckStep handleHealthCheckStep,
-			DeployAppStep deployAppStep) {
+	HandleHealthCheckStep handleHealthCheckStep,
+	DeployAppStep deployAppStep) {
 		this.healthCheckStep = healthCheckStep;
 		this.handleHealthCheckStep = handleHealthCheckStep;
 		this.deployAppStep = deployAppStep;
@@ -48,7 +48,7 @@ public class SimpleRedBlackUpgradeStrategy implements UpgradeStrategy {
 	@Override
 	public Collection<String> getSupportedKinds() {
 		return Arrays.asList(SkipperManifestKind.SpringBootApp.name(),
-				SkipperManifestKind.SpringCloudDeployerApplication.name());
+		SkipperManifestKind.SpringCloudDeployerApplication.name());
 	}
 
 	@Override
@@ -63,16 +63,16 @@ public class SimpleRedBlackUpgradeStrategy implements UpgradeStrategy {
 
 	@Override
 	public void accept(Release existingRelease, Release replacingRelease,
-			ReleaseAnalysisReport releaseAnalysisReport, boolean rollback) {
+	ReleaseAnalysisReport releaseAnalysisReport, boolean rollback) {
 		this.handleHealthCheckStep.handleHealthCheck(true, existingRelease,
-				releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, null, false, rollback);
+		releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, null, false, rollback);
 	}
 
 	@Override
 	public void cancel(Release existingRelease, Release replacingRelease, ReleaseAnalysisReport releaseAnalysisReport,
-			Long timeout, boolean cancel, boolean rollback) {
+	Long timeout, boolean cancel, boolean rollback) {
 		this.handleHealthCheckStep.handleHealthCheck(false, existingRelease,
-				releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, timeout, cancel, rollback);
+		releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, timeout, cancel, rollback);
 	}
 
 }

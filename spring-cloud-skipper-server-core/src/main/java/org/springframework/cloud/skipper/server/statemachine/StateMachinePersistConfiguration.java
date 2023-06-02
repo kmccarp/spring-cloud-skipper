@@ -44,29 +44,29 @@ public class StateMachinePersistConfiguration {
 
 	@Bean
 	public StateMachineRuntimePersister<SkipperStates, SkipperEvents, String> stateMachineRuntimePersister(
-			JpaStateMachineRepository jpaStateMachineRepository) {
+	JpaStateMachineRepository jpaStateMachineRepository) {
 		// create these manually to be able to add extended state variable filter
 		KryoStateMachineSerialisationService<SkipperStates, SkipperEvents> serialisationService = new KryoStateMachineSerialisationService<SkipperStates, SkipperEvents>();
 		JpaRepositoryStateMachinePersist<SkipperStates, SkipperEvents> persist = new JpaRepositoryStateMachinePersist<SkipperStates, SkipperEvents>(
-				jpaStateMachineRepository, serialisationService);
+		jpaStateMachineRepository, serialisationService);
 
 		JpaPersistingStateMachineInterceptor<SkipperStates, SkipperEvents, String> interceptor = new JpaPersistingStateMachineInterceptor<>(
-				persist);
+		persist);
 		interceptor.setExtendedStateVariablesFunction(new SkipUnwantedVariablesFunction());
 		return interceptor;
 	}
 
 	static class SkipUnwantedVariablesFunction
-			implements Function<StateMachine<SkipperStates, SkipperEvents>, Map<Object, Object>> {
+	implements Function<StateMachine<SkipperStates, SkipperEvents>, Map<Object, Object>> {
 
 		@Override
 		public Map<Object, Object> apply(StateMachine<SkipperStates, SkipperEvents> stateMachine) {
 			return stateMachine.getExtendedState().getVariables().entrySet().stream().filter(e -> {
 				return !(ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.SOURCE_RELEASE)
-						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.TARGET_RELEASE)
-						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE)
-						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE_ANALYSIS_REPORT)
-						|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.ERROR));
+				|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.TARGET_RELEASE)
+				|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE)
+				|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.RELEASE_ANALYSIS_REPORT)
+				|| ObjectUtils.nullSafeEquals(e.getKey(), SkipperVariables.ERROR));
 			}).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 		}
 	}

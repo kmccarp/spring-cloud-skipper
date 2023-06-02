@@ -53,7 +53,7 @@ public class ShellConfiguration {
 
 	@Bean
 	public ApplicationRunner initializeConnectionApplicationRunner(TargetHolder targetHolder, ThrowableResultHandler resultHandler,
-																SkipperClientProperties skipperClientProperties) {
+	SkipperClientProperties skipperClientProperties) {
 		return new InitializeConnectionApplicationRunner(targetHolder, resultHandler, skipperClientProperties);
 	}
 

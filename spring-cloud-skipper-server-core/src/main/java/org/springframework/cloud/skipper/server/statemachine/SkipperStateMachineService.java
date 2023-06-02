@@ -98,10 +98,10 @@ public class SkipperStateMachineService {
 	public Release upgradeRelease(UpgradeRequest upgradeRequest) {
 		String releaseName = upgradeRequest.getUpgradeProperties().getReleaseName();
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE)
-				.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
-				.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, upgradeRequest.getTimeout())
-				.build();
+		.withPayload(SkipperEvents.UPGRADE)
+		.setHeader(SkipperEventHeaders.UPGRADE_REQUEST, upgradeRequest)
+		.setHeader(SkipperEventHeaders.UPGRADE_TIMEOUT, upgradeRequest.getTimeout())
+		.build();
 		return handleMessageAndWait(message, releaseName, SkipperStates.UPGRADE_WAIT_TARGET_APPS);
 	}
 
@@ -114,10 +114,10 @@ public class SkipperStateMachineService {
 	 */
 	public Release scaleRelease(String releaseName, ScaleRequest scaleRequest) {
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.SCALE)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
-				.setHeader(SkipperEventHeaders.SCALE_REQUEST, scaleRequest)
-				.build();
+		.withPayload(SkipperEvents.SCALE)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
+		.setHeader(SkipperEventHeaders.SCALE_REQUEST, scaleRequest)
+		.build();
 		return handleMessageAndWait(message, releaseName);
 	}
 
@@ -129,10 +129,10 @@ public class SkipperStateMachineService {
 	 */
 	public Release deleteRelease(String releaseName, DeleteProperties deleteProperties) {
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.DELETE)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
-				.setHeader(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, deleteProperties)
-				.build();
+		.withPayload(SkipperEvents.DELETE)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
+		.setHeader(SkipperEventHeaders.RELEASE_DELETE_PROPERTIES, deleteProperties)
+		.build();
 		return handleMessageAndWait(message, releaseName);
 	}
 
@@ -144,13 +144,13 @@ public class SkipperStateMachineService {
 	 */
 	public Release rollbackRelease(RollbackRequest rollbackRequest) {
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.ROLLBACK)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, rollbackRequest.getReleaseName())
-				.setHeader(SkipperEventHeaders.ROLLBACK_VERSION, rollbackRequest.getVersion())
-				.setHeader(SkipperEventHeaders.ROLLBACK_REQUEST, rollbackRequest)
-				.build();
+		.withPayload(SkipperEvents.ROLLBACK)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, rollbackRequest.getReleaseName())
+		.setHeader(SkipperEventHeaders.ROLLBACK_VERSION, rollbackRequest.getVersion())
+		.setHeader(SkipperEventHeaders.ROLLBACK_REQUEST, rollbackRequest)
+		.build();
 		return handleMessageAndWait(message, rollbackRequest.getReleaseName(), SkipperStates.UPGRADE_WAIT_TARGET_APPS,
-				SkipperStates.INITIAL);
+		SkipperStates.INITIAL);
 	}
 
 	/**
@@ -161,21 +161,21 @@ public class SkipperStateMachineService {
 	 */
 	public boolean cancelRelease(String releaseName) {
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.UPGRADE_CANCEL)
-				.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
-				.build();
+		.withPayload(SkipperEvents.UPGRADE_CANCEL)
+		.setHeader(SkipperEventHeaders.RELEASE_NAME, releaseName)
+		.build();
 		return handleMessageAndCheckAccept(message, releaseName);
 	}
 
 	private Release installReleaseInternal(InstallRequest installRequest, Long id, InstallProperties installProperties) {
 		String releaseName = installRequest != null ? installRequest.getInstallProperties().getReleaseName()
-				: installProperties.getReleaseName();
+		: installProperties.getReleaseName();
 		Message<SkipperEvents> message = MessageBuilder
-				.withPayload(SkipperEvents.INSTALL)
-				.setHeader(SkipperEventHeaders.INSTALL_REQUEST, installRequest)
-				.setHeader(SkipperEventHeaders.INSTALL_ID, id)
-				.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, installProperties)
-				.build();
+		.withPayload(SkipperEvents.INSTALL)
+		.setHeader(SkipperEventHeaders.INSTALL_REQUEST, installRequest)
+		.setHeader(SkipperEventHeaders.INSTALL_ID, id)
+		.setHeader(SkipperEventHeaders.INSTALL_PROPERTIES, installProperties)
+		.build();
 		return handleMessageAndWait(message, releaseName);
 	}
 
@@ -212,7 +212,7 @@ public class SkipperStateMachineService {
 						}
 					}
 					else if (Arrays.asList(statesToWait).contains(stateContext.getTarget().getId())
-							&& !isInitialTransition(stateContext.getTransition())) {
+					&& !isInitialTransition(stateContext.getTransition())) {
 						Release release = (Release) stateContext.getExtendedState().getVariables().get(SkipperVariables.RELEASE);
 						// at this point we assume machine logic did set release
 						log.info("setting future value {}", release);

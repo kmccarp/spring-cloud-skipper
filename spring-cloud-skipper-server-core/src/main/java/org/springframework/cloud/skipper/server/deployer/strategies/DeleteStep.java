@@ -49,17 +49,17 @@ public class DeleteStep {
 	}
 
 	public Release delete(Release release, AppDeployerData existingAppDeployerData,
-			List<String> applicationNamesToDelete, boolean setStatus) {
+	List<String> applicationNamesToDelete, boolean setStatus) {
 		AppDeployer appDeployer = this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getAppDeployer();
+		.getAppDeployer();
 
-		Map<String, String> appNamesAndDeploymentIds = (existingAppDeployerData!= null) ?
-				existingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
+		Map<String, String> appNamesAndDeploymentIds = (existingAppDeployerData != null) ?
+		existingAppDeployerData.getDeploymentDataAsMap() : Collections.emptyMap();
 
 		for (Map.Entry<String, String> appNameAndDeploymentId : appNamesAndDeploymentIds.entrySet()) {
 			if (applicationNamesToDelete.contains(appNameAndDeploymentId.getKey())) {
 				logger.debug("For Release name {}, undeploying existing app {}", release.getName(),
-						appNameAndDeploymentId.getKey());
+				appNameAndDeploymentId.getKey());
 				// simply attempt to undeploy and let caller stack to handle errors if any
 				appDeployer.undeploy(appNameAndDeploymentId.getValue());
 			}

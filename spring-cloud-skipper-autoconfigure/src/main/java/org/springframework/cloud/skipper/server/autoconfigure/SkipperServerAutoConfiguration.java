@@ -35,9 +35,9 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @ConditionalOnBean(EnableSkipperServerConfiguration.Marker.class)
-@AutoConfigureBefore({ErrorMvcAutoConfiguration.class, CommonSecurityAutoConfiguration.class })
+@AutoConfigureBefore({ErrorMvcAutoConfiguration.class, CommonSecurityAutoConfiguration.class})
 @Import({SkipperServerConfiguration.class, SkipperServerPlatformConfiguration.class,
-		SpringDataRestConfiguration.class, SkipperOAuthSecurityConfiguration.class })
+SpringDataRestConfiguration.class, SkipperOAuthSecurityConfiguration.class})
 @ConditionalOnProperty(prefix = "spring.cloud.skipper.server", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class SkipperServerAutoConfiguration {
 }

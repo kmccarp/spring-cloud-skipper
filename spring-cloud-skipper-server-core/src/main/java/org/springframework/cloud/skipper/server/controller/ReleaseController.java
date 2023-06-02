@@ -98,7 +98,7 @@ public class ReleaseController {
 	private String appVersion;
 
 	public ReleaseController(ReleaseService releaseService,
-			SkipperStateMachineService skipperStateMachineService, ActuatorService actuatorService) {
+	SkipperStateMachineService skipperStateMachineService, ActuatorService actuatorService) {
 		this.releaseService = releaseService;
 		this.skipperStateMachineService = skipperStateMachineService;
 		this.actuatorService = actuatorService;
@@ -108,31 +108,31 @@ public class ReleaseController {
 	public ReleaseControllerLinksResource resourceLinks() {
 		ReleaseControllerLinksResource resource = new ReleaseControllerLinksResource();
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class)
-				.getFromActuator(null, null, null, null, null))
-				.withRel("actuator/name/app/id"));
+		.getFromActuator(null, null, null, null, null))
+		.withRel("actuator/name/app/id"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class)
-						.postToActuator(null, null, null, null, null))
-				.withRel("actuator/name/app/id"));
+		.postToActuator(null, null, null, null, null))
+		.withRel("actuator/name/app/id"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).log(null))
-				.withRel("logs/name"));
+		.withRel("logs/name"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).status(null))
-				.withRel("status/name"));
+		.withRel("status/name"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).status(null, null))
-				.withRel("status/name/version"));
+		.withRel("status/name/version"));
 		resource.add(
-				WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).manifest(null))
-						.withRel("manifest"));
+		WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).manifest(null))
+		.withRel("manifest"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).manifest(null, null))
-				.withRel("manifest/name/version"));
+		.withRel("manifest/name/version"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).upgrade(null))
-				.withRel("upgrade"));
+		.withRel("upgrade"));
 		resource.add(
-				WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).rollbackWithNamedVersion(null, 123))
-						.withRel("rollback"));
+		WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).rollbackWithNamedVersion(null, 123))
+		.withRel("rollback"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).list())
-				.withRel("list"));
+		.withRel("list"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(ReleaseController.class).list(null))
-				.withRel("list/name"));
+		.withRel("list/name"));
 		return resource;
 	}
 
@@ -183,7 +183,7 @@ public class ReleaseController {
 	@RequestMapping(path = "/manifest/{name}/{version}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public EntityModel<Manifest> manifest(@PathVariable("name") String name,
-			@PathVariable("version") Integer version) {
+	@PathVariable("version") Integer version) {
 		return this.manifestResourceAssembler.toModel(this.releaseService.manifest(name, version));
 	}
 
@@ -212,9 +212,9 @@ public class ReleaseController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Deprecated
 	public EntityModel<Release> rollbackWithNamedVersion(@PathVariable("name") String releaseName,
-			@PathVariable("version") int rollbackVersion) {
+	@PathVariable("version") int rollbackVersion) {
 		Release release = this.skipperStateMachineService
-				.rollbackRelease(new RollbackRequest(releaseName, rollbackVersion));
+		.rollbackRelease(new RollbackRequest(releaseName, rollbackVersion));
 		return this.releaseResourceAssembler.toModel(release);
 	}
 
@@ -262,28 +262,28 @@ public class ReleaseController {
 
 	@GetMapping("/actuator/{name}/{app}/{id}")
 	public ResponseEntity<String> getFromActuator(
-			@PathVariable("name") String releaseName,
-			@PathVariable("app") String appName,
-			@PathVariable("id") String appId,
-			@RequestParam("endpoint") String endpoint,
-			@Nullable @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+	@PathVariable("name") String releaseName,
+	@PathVariable("app") String appName,
+	@PathVariable("id") String appId,
+	@RequestParam("endpoint") String endpoint,
+	@Nullable @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
 		return new ResponseEntity<>(this.actuatorService.getFromActuator(
-				releaseName, appName, appId, endpoint,
-				Optional.ofNullable(auth)), HttpStatus.OK);
+		releaseName, appName, appId, endpoint,
+		Optional.ofNullable(auth)), HttpStatus.OK);
 	}
 
 	@PostMapping("/actuator/{name}/{app}/{id}")
 	public ResponseEntity<?> postToActuator(
-			@PathVariable("name") String releaseName,
-			@PathVariable("app") String appName,
-			@PathVariable("id") String appId,
-			@RequestBody ActuatorPostRequest postRequest,
-			@Nullable @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+	@PathVariable("name") String releaseName,
+	@PathVariable("app") String appName,
+	@PathVariable("id") String appId,
+	@RequestBody ActuatorPostRequest postRequest,
+	@Nullable @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
 
 		return new ResponseEntity<>(
-				this.actuatorService.postToActuator(releaseName, appName, appId, postRequest,
-						Optional.ofNullable(auth)),
-				HttpStatus.OK);
+		this.actuatorService.postToActuator(releaseName, appName, appId, postRequest,
+		Optional.ofNullable(auth)),
+		HttpStatus.OK);
 	}
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Release not found")

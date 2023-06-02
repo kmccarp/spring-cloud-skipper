@@ -57,7 +57,7 @@ public class ScaleScaleAction extends AbstractAction {
 		log.debug("Starting action " + context);
 		String releaseName = context.getMessageHeaders().get(SkipperEventHeaders.RELEASE_NAME, String.class);
 		ScaleRequest scaleRequest = context.getExtendedState().get(SkipperEventHeaders.SCALE_REQUEST,
-				ScaleRequest.class);
+		ScaleRequest.class);
 		log.info("About to scale {} with the {} ", releaseName, scaleRequest);
 		Assert.notNull(scaleRequest, "'scaleRequest' not known to the system in extended state");
 		Release release = this.releaseService.scale(releaseName, scaleRequest);

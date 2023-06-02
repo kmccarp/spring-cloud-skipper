@@ -49,14 +49,14 @@ import org.springframework.web.client.RestTemplate;
 public class KubernetesPlatformAutoConfiguration {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(KubernetesPlatformAutoConfiguration.class);
+	.getLogger(KubernetesPlatformAutoConfiguration.class);
 
 	@Bean
 	public Platform kubernetesPlatform(
-			KubernetesPlatformProperties kubernetesPlatformProperties, RestTemplate actuatorRestTemplate) {
+	KubernetesPlatformProperties kubernetesPlatformProperties, RestTemplate actuatorRestTemplate) {
 		List<Deployer> deployers = new ArrayList<>();
 		Map<String, KubernetesDeployerProperties> k8ConnectionProperties = kubernetesPlatformProperties
-				.getAccounts();
+		.getAccounts();
 		k8ConnectionProperties.forEach((key, value) -> {
 			Deployer deployer = createAndSaveKubernetesAppDeployers(key, value, actuatorRestTemplate);
 			deployers.add(deployer);
@@ -72,20 +72,20 @@ public class KubernetesPlatformAutoConfiguration {
 	}
 
 	protected Deployer createAndSaveKubernetesAppDeployers(String account,
-			KubernetesDeployerProperties kubernetesProperties, RestTemplate restTemplate) {
+	KubernetesDeployerProperties kubernetesProperties, RestTemplate restTemplate) {
 		KubernetesClient kubernetesClient = KubernetesClientFactory.getKubernetesClient(kubernetesProperties);
 		ContainerFactory containerFactory = new DefaultContainerFactory(
-				kubernetesProperties);
+		kubernetesProperties);
 		KubernetesAppDeployer kubernetesAppDeployer = new KubernetesAppDeployer(
-				kubernetesProperties, kubernetesClient, containerFactory);
+		kubernetesProperties, kubernetesClient, containerFactory);
 		ActuatorOperations actuatorOperations =
-				new KubernetesActuatorTemplate(restTemplate, kubernetesAppDeployer,
-						kubernetesProperties.getAppAdmin());
+		new KubernetesActuatorTemplate(restTemplate, kubernetesAppDeployer,
+		kubernetesProperties.getAppAdmin());
 		Deployer deployer = new Deployer(account, "kubernetes", kubernetesAppDeployer, actuatorOperations);
 		deployer.setDescription(
-				String.format("master url = [%s], namespace = [%s], api version = [%s]",
-						kubernetesClient.getMasterUrl(), kubernetesClient.getNamespace(),
-						kubernetesClient.getApiVersion()));
+		String.format("master url = [%s], namespace = [%s], api version = [%s]",
+		kubernetesClient.getMasterUrl(), kubernetesClient.getNamespace(),
+		kubernetesClient.getApiVersion()));
 		return deployer;
 	}
 }

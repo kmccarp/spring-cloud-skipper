@@ -50,7 +50,7 @@ public class ReleaseAnalysisReport {
 	 * @param replacingRelease the release to be deployed
 	 */
 	public ReleaseAnalysisReport(List<String> applicationNamesToUpgrade, ReleaseDifference releaseDifference,
-			Release existingRelease, Release replacingRelease) {
+	Release existingRelease, Release replacingRelease) {
 		Assert.notNull(applicationNamesToUpgrade, "ApplicationNamesToUpgrade can not be null.");
 		Assert.notNull(releaseDifference, "ReleaseDifference can not be null.");
 		Assert.notNull(existingRelease, "ExistingRelease can not be null.");
@@ -78,10 +78,10 @@ public class ReleaseAnalysisReport {
 	public String getReleaseDifferenceSummary() {
 		ReleaseDifferenceSummaryGenerator releaseDifferenceSummaryGenerator = new ReleaseDifferenceSummaryGenerator();
 		return releaseDifferenceSummaryGenerator.generateSummary(existingRelease.getName(),
-				existingRelease.getVersion(),
-				replacingRelease.getName(),
-				replacingRelease.getVersion(),
-				this.releaseDifference);
+		existingRelease.getVersion(),
+		replacingRelease.getName(),
+		replacingRelease.getVersion(),
+		this.releaseDifference);
 	}
 
 	public Release getExistingRelease() {

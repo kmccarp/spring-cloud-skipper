@@ -58,7 +58,7 @@ public class ReleaseRepositoryImpl implements ReleaseRepositoryCustom {
 		List<Release> releases = this.releaseRepository.getIfAvailable().findByNameOrderByVersionDesc(releaseName);
 		for (Release release : releases) {
 			if (release.getInfo().getStatus().getStatusCode().equals(StatusCode.DEPLOYED) ||
-					release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
+			release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
 				return release;
 			}
 		}
@@ -71,8 +71,8 @@ public class ReleaseRepositoryImpl implements ReleaseRepositoryCustom {
 		List<Release> releases = this.releaseRepository.getIfAvailable().findByNameOrderByVersionDesc(releaseName);
 		for (Release release : releases) {
 			if ((release.getInfo().getStatus().getStatusCode().equals(StatusCode.DEPLOYED) ||
-					release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) &&
-					release.getVersion() != latestRelease.getVersion()) {
+			release.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) &&
+			release.getVersion() != latestRelease.getVersion()) {
 				return release;
 			}
 		}
@@ -101,7 +101,7 @@ public class ReleaseRepositoryImpl implements ReleaseRepositoryCustom {
 		int latestVersion = findLatestRelease(releaseName).getVersion();
 		int lowerVersion = latestVersion - Integer.valueOf(revisions);
 		return this.releaseRepository.getIfAvailable().findByNameAndVersionBetweenOrderByNameAscVersionDesc(releaseName,
-				lowerVersion + 1, latestVersion);
+		lowerVersion + 1, latestVersion);
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class ReleaseRepositoryImpl implements ReleaseRepositoryCustom {
 	public Release findLatestReleaseIfDeleted(String releaseName) {
 		Release latestRelease = this.releaseRepository.getIfAvailable().findTopByNameOrderByVersionDesc(releaseName);
 		return (latestRelease != null &&
-				latestRelease.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) ? latestRelease : null;
+		latestRelease.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) ? latestRelease : null;
 	}
 
 }

@@ -45,7 +45,7 @@ public class DeployerRepositoryTests extends AbstractIntegrationTest {
 		LocalDeployerProperties properties = new LocalDeployerProperties();
 		LocalAppDeployer localAppDeployer = new LocalAppDeployer(properties);
 		ActuatorOperations actuatorOperations = new LocalActuatorTemplate(new RestTemplate(), localAppDeployer,
-				properties.getAppAdmin());
+		properties.getAppAdmin());
 		Deployer deployer = new Deployer("localDeployer", "local", localAppDeployer, actuatorOperations);
 		deployer.setDescription("This is a test local Deployer.");
 		this.deployerRepository.save(deployer);

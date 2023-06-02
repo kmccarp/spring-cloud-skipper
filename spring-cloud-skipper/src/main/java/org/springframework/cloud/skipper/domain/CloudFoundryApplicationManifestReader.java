@@ -58,8 +58,8 @@ public class CloudFoundryApplicationManifestReader implements SkipperManifestRea
 			mapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
 			try {
 				MappingIterator<CloudFoundryApplicationSkipperManifest> it = mapper
-																	.readerFor(CloudFoundryApplicationSkipperManifest.class)
-																	.readValues(manifest);
+				.readerFor(CloudFoundryApplicationSkipperManifest.class)
+				.readValues(manifest);
 				while (it.hasNextValue()) {
 					CloudFoundryApplicationSkipperManifest appKind = it.next();
 					applicationSpecs.add(appKind);
@@ -68,7 +68,7 @@ public class CloudFoundryApplicationManifestReader implements SkipperManifestRea
 			catch (JsonMappingException e) {
 				logger.error("Can't parse Package's manifest YAML = " + manifest);
 				throw new SkipperException("JsonMappingException - Can't parse Package's manifest YAML = " + manifest,
-						e);
+				e);
 			}
 			catch (IOException e) {
 				logger.error("Can't parse Package's manifest YAML = " + manifest);
@@ -93,7 +93,7 @@ public class CloudFoundryApplicationManifestReader implements SkipperManifestRea
 
 	@Override
 	public String[] getSupportedKinds() {
-		return new String[] {SkipperManifestKind.CloudFoundryApplication.name()};
+		return new String[]{SkipperManifestKind.CloudFoundryApplication.name()};
 	}
 
 	private boolean assertSupportedKind(Object object) {

@@ -92,9 +92,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 @ActiveProfiles("repo-test")
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs("target/generated-snippets")
-@SpringBootTest(properties = { "spring.cloud.skipper.server.synchonizeIndexOnContextRefresh=false",
-		"spring.cloud.skipper.server.enableReleaseStateUpdateService=false",
-		"spring.main.allow-bean-definition-overriding=true"
+@SpringBootTest(properties = {"spring.cloud.skipper.server.synchonizeIndexOnContextRefresh=false",
+"spring.cloud.skipper.server.enableReleaseStateUpdateService=false",
+"spring.main.allow-bean-definition-overriding=true"
 }, classes = ServerDependencies.class)
 @RunWith(SpringRunner.class)
 public abstract class BaseDocumentation {
@@ -134,29 +134,29 @@ public abstract class BaseDocumentation {
 	 * Snippet, documenting common pagination properties.
 	 */
 	protected final ResponseFieldsSnippet paginationProperties = responseFields(
-			fieldWithPath("page").description("Pagination properties"),
-			fieldWithPath("page.size").description("The size of the page being returned"),
-			fieldWithPath("page.totalElements").description("Total elements available for pagination"),
-			fieldWithPath("page.totalPages").description("Total amount of pages"),
-			fieldWithPath("page.number").description("Page number of the page returned (zero-based)"));
+	fieldWithPath("page").description("Pagination properties"),
+	fieldWithPath("page.size").description("The size of the page being returned"),
+	fieldWithPath("page.totalElements").description("Total elements available for pagination"),
+	fieldWithPath("page.totalPages").description("Total amount of pages"),
+	fieldWithPath("page.number").description("Page number of the page returned (zero-based)"));
 	/**
 	 * Snippet for link properties. Set to ignore common links.
 	 */
 	protected final List<FieldDescriptor> defaultLinkProperties = Arrays.asList(
-			fieldWithPath("_links.first.href").ignored().optional(),
-			fieldWithPath("_links.self.href").ignored().optional(),
-			fieldWithPath("_links.next.href").ignored().optional(),
-			fieldWithPath("_links.last.href").ignored().optional(),
-			fieldWithPath("_links.self.templated").ignored().optional(),
-			fieldWithPath("_links.profile.href").ignored().optional(),
-			fieldWithPath("_links.repository.href").ignored().optional(),
-			fieldWithPath("_links.search.href").ignored().optional());
+	fieldWithPath("_links.first.href").ignored().optional(),
+	fieldWithPath("_links.self.href").ignored().optional(),
+	fieldWithPath("_links.next.href").ignored().optional(),
+	fieldWithPath("_links.last.href").ignored().optional(),
+	fieldWithPath("_links.self.templated").ignored().optional(),
+	fieldWithPath("_links.profile.href").ignored().optional(),
+	fieldWithPath("_links.repository.href").ignored().optional(),
+	fieldWithPath("_links.search.href").ignored().optional());
 	/**
 	 * Snippet for common pagination-related request parameters.
 	 */
 	protected final RequestParametersSnippet paginationRequestParameterProperties = requestParameters(
-			parameterWithName("page").description("The zero-based page number (optional)"),
-			parameterWithName("size").description("The requested page size (optional)"));
+	parameterWithName("page").description("The zero-based page number (optional)"),
+	parameterWithName("size").description("The requested page size (optional)"));
 	protected RestDocumentationResultHandler documentationHandler;
 
 	/**
@@ -167,14 +167,14 @@ public abstract class BaseDocumentation {
 	 */
 	public static LinksSnippet linksForSkipper(LinkDescriptor... descriptors) {
 		return HypermediaDocumentation.links(
-				linkWithRel("self").ignored(),
-				linkWithRel("first").ignored().optional(),
-				linkWithRel("next").ignored().optional(),
-				linkWithRel("last").ignored().optional(),
-				linkWithRel("profile").ignored(),
-				linkWithRel("search").ignored(),
-				linkWithRel("deployer").ignored().optional(),
-				linkWithRel("curies").ignored().optional()).and(descriptors);
+		linkWithRel("self").ignored(),
+		linkWithRel("first").ignored().optional(),
+		linkWithRel("next").ignored().optional(),
+		linkWithRel("last").ignored().optional(),
+		linkWithRel("profile").ignored(),
+		linkWithRel("search").ignored(),
+		linkWithRel("deployer").ignored().optional(),
+		linkWithRel("curies").ignored().optional()).and(descriptors);
 	}
 
 	@Before
@@ -184,16 +184,16 @@ public abstract class BaseDocumentation {
 
 	private void prepareDocumentationTests(WebApplicationContext context) {
 		this.documentationHandler = document("{class-name}/{method-name}",
-				preprocessRequest(prettyPrint()),
-				preprocessResponse(prettyPrint()));
+		preprocessRequest(prettyPrint()),
+		preprocessResponse(prettyPrint()));
 
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-				.apply(this.restDocumentationConfigurer.uris()
-						.withScheme("http")
-						.withHost("localhost")
-						.withPort(7577))
-				.alwaysDo(this.documentationHandler)
-				.build();
+		.apply(this.restDocumentationConfigurer.uris()
+		.withScheme("http")
+		.withHost("localhost")
+		.withPort(7577))
+		.alwaysDo(this.documentationHandler)
+		.build();
 	}
 
 	protected InstallProperties createInstallProperties(String releaseName) {

@@ -128,16 +128,16 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release upgrade", value = "Upgrade a release.")
 	public Object upgrade(
-			@ShellOption(help = "the name of the release to upgrade") String releaseName,
-			@ShellOption(help = "the name of the package to use for the upgrade") String packageName,
-			@ShellOption(help = "the version of the package to use for the upgrade, if not specified latest version will be used", defaultValue = ShellOption.NULL) String packageVersion,
-			@ShellOption(help = "specify values in a YAML file", defaultValue = ShellOption.NULL) File file,
-			@ShellOption(help = "the expression for upgrade timeout", defaultValue = ShellOption.NULL) String timeoutExpression,
-			@ShellOption(help = "the comma separated set of properties to override during upgrade", defaultValue = ShellOption.NULL) String properties,
-			@ShellOption(help = "force upgrade") boolean force,
-			@ShellOption(help = "application names to force upgrade. If no specific list is provided, all the apps in the packages are force upgraded",
-					defaultValue = ShellOption.NULL) String appNames)
-			throws IOException {
+	@ShellOption(help = "the name of the release to upgrade") String releaseName,
+	@ShellOption(help = "the name of the package to use for the upgrade") String packageName,
+	@ShellOption(help = "the version of the package to use for the upgrade, if not specified latest version will be used", defaultValue = ShellOption.NULL) String packageVersion,
+	@ShellOption(help = "specify values in a YAML file", defaultValue = ShellOption.NULL) File file,
+	@ShellOption(help = "the expression for upgrade timeout", defaultValue = ShellOption.NULL) String timeoutExpression,
+	@ShellOption(help = "the comma separated set of properties to override during upgrade", defaultValue = ShellOption.NULL) String properties,
+	@ShellOption(help = "force upgrade") boolean force,
+	@ShellOption(help = "application names to force upgrade. If no specific list is provided, all the apps in the packages are force upgraded",
+	defaultValue = ShellOption.NULL) String appNames)
+	throws IOException {
 		// Commented out until https://github.com/spring-cloud/spring-cloud-skipper/issues/263 is
 		// addressed
 		// assertMutuallyExclusiveFileAndProperties(file, properties);
@@ -145,7 +145,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 			Assert.isTrue(force, "App names can be used only when the stream update is forced.");
 		}
 		Release release = skipperClient
-				.upgrade(getUpgradeRequest(releaseName, packageName, packageVersion, file, properties, timeoutExpression, force, appNames));
+		.upgrade(getUpgradeRequest(releaseName, packageName, packageVersion, file, properties, timeoutExpression, force, appNames));
 		StringBuilder sb = new StringBuilder();
 		sb.append(release.getName() + " has been upgraded.  Now at version v" + release.getVersion() + ".");
 		return sb.toString();
@@ -163,16 +163,16 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	private void assertMutuallyExclusiveFileAndProperties(File yamlFile, String properties) {
 		Assert.isTrue(!(yamlFile != null && properties != null), "The options 'file' and 'properties' options "
-				+ "are mutually exclusive.");
+		+ "are mutually exclusive.");
 		if (yamlFile != null) {
 			String extension = FilenameUtils.getExtension(yamlFile.getName());
 			Assert.isTrue((extension.equalsIgnoreCase("yml") || extension.equalsIgnoreCase("yaml")),
-					"The file should be YAML file");
+			"The file should be YAML file");
 		}
 	}
 
 	private UpgradeRequest getUpgradeRequest(String releaseName, String packageName, String packageVersion,
-			File propertiesFile, String propertiesToOverride, String timeoutExpression, boolean forceUpgrade, String appNames) throws IOException {
+	File propertiesFile, String propertiesToOverride, String timeoutExpression, boolean forceUpgrade, String appNames) throws IOException {
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 		upgradeRequest.setForce(forceUpgrade);
 		upgradeRequest.setAppNames(new ArrayList<>(StringUtils.commaDelimitedListToSet(appNames)));
@@ -199,10 +199,10 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release rollback", value = "Rollback the release to a previous or a specific release.")
 	public String rollback(
-			@ShellOption(help = "the name of the release to rollback") String releaseName,
-			@ShellOption(help = "the specific release version to rollback to. " +
-					"Not specifying the value rolls back to the previous release.", defaultValue = "0") int releaseVersion,
-			@ShellOption(help = "the expression for rollback timeout", defaultValue = ShellOption.NULL) String timeoutExpression) {
+	@ShellOption(help = "the name of the release to rollback") String releaseName,
+	@ShellOption(help = "the specific release version to rollback to. " +
+	"Not specifying the value rolls back to the previous release.", defaultValue = "0") int releaseVersion,
+	@ShellOption(help = "the expression for rollback timeout", defaultValue = ShellOption.NULL) String timeoutExpression) {
 
 		RollbackRequest rollbackRequest = new RollbackRequest(releaseName, releaseVersion);
 		Duration duration = DurationUtils.convert(timeoutExpression);
@@ -218,8 +218,8 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release delete", value = "Delete the release.")
 	public String delete(
-			@ShellOption(help = "the name of the release to delete") String releaseName,
-			@ShellOption(help = "delete the release package", defaultValue = "false") boolean deletePackage) {
+	@ShellOption(help = "the name of the release to delete") String releaseName,
+	@ShellOption(help = "delete the release package", defaultValue = "false") boolean deletePackage) {
 		this.skipperClient.delete(releaseName, deletePackage);
 		StringBuilder sb = new StringBuilder();
 		sb.append(releaseName + " has been deleted.");
@@ -228,7 +228,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release cancel", value = "Request a cancellation of current release operation.")
 	public String cancel(
-			@ShellOption(help = "the name of the release to cancel") String releaseName) {
+	@ShellOption(help = "the name of the release to cancel") String releaseName) {
 		CancelResponse cancelResponse = this.skipperClient.cancel(new CancelRequest(releaseName));
 		if (cancelResponse != null && cancelResponse.getAccepted() != null && cancelResponse.getAccepted()) {
 			return "Cancel request for release " + releaseName + " sent";
@@ -238,7 +238,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release list", value = "List the latest version of releases with status of deployed or failed.")
 	public Table list(
-			@ShellOption(help = "wildcard expression to search by release name", defaultValue = ShellOption.NULL) String releaseName) {
+	@ShellOption(help = "wildcard expression to search by release name", defaultValue = ShellOption.NULL) String releaseName) {
 		List<Release> releases = this.skipperClient.list(releaseName);
 		LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
 		headers.put("name", "Name");
@@ -257,7 +257,7 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release history", value = "List the history of versions for a given release.")
 	public Table history(
-			@ShellOption(help = "wildcard expression to search by release name") @NotNull String releaseName) {
+	@ShellOption(help = "wildcard expression to search by release name") @NotNull String releaseName) {
 		Collection<Release> releases;
 		releases = this.skipperClient.history(releaseName);
 		LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
@@ -275,8 +275,8 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "release status", value = "Status for a last known release version.")
 	public Object status(
-			@ShellOption(help = "release name") @NotNull String releaseName,
-			@ShellOption(help = "the specific release version.", defaultValue = ShellOption.NULL) Integer releaseVersion) {
+	@ShellOption(help = "release name") @NotNull String releaseName,
+	@ShellOption(help = "the specific release version.", defaultValue = ShellOption.NULL) Integer releaseVersion) {
 		Info info;
 		try {
 			if (releaseVersion == null) {
@@ -290,14 +290,14 @@ public class ReleaseCommands extends AbstractSkipperCommand {
 			return "Release with name '" + e.getReleaseName() + "' not found";
 		}
 		Object[][] data = new Object[3][];
-		data[0] = new Object[] { "Last Deployed", info.getFirstDeployed() };
-		data[1] = new Object[] { "Status", info.getStatus().getStatusCode().toString() };
+		data[0] = new Object[]{"Last Deployed", info.getFirstDeployed()};
+		data[1] = new Object[]{"Status", info.getStatus().getStatusCode().toString()};
 
 		DeploymentState aggregateState = aggregateState(info.getStatus().getDeploymentStateList());
 		StringBuilder sb = new StringBuilder();
 		sb.append(DeploymentStateDisplay.fromKey(aggregateState.name()).getDescription() + "\n");
 		sb.append(info.getStatus().getPlatformStatusPrettyPrint());
-		data[2] = new Object[] { "Platform Status", sb.toString() };
+		data[2] = new Object[]{"Platform Status", sb.toString()};
 		TableModel model = new ArrayTableModel(data);
 		TableBuilder tableBuilder = new TableBuilder(model);
 		TableUtils.applyStyleNoHeader(tableBuilder);

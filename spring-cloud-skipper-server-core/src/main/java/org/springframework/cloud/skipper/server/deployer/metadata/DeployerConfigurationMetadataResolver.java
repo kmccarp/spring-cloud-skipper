@@ -76,17 +76,17 @@ public class DeployerConfigurationMetadataResolver implements ApplicationContext
 		// 5. same logic for properties for includes and excludes
 		// 6. what's left is white/black listed props
 		groups.values().stream()
-			.filter(g -> g.getId().startsWith(KEY_PREFIX))
-			.filter(groupEmptyOrAnyMatch(deployerProperties.getGroupIncludes()))
-			.filter(groupNoneMatch(deployerProperties.getGroupExcludes()))
-			.forEach(g -> {
-				g.getProperties().values().stream()
-					.filter(propertyEmptyOrAnyMatch(deployerProperties.getPropertyIncludes()))
-					.filter(propertyNoneMatch(deployerProperties.getPropertyExcludes()))
-					.forEach(p -> {
-						metadataProperties.add(p);
-					});
+		.filter(g -> g.getId().startsWith(KEY_PREFIX))
+		.filter(groupEmptyOrAnyMatch(deployerProperties.getGroupIncludes()))
+		.filter(groupNoneMatch(deployerProperties.getGroupExcludes()))
+		.forEach(g -> {
+			g.getProperties().values().stream()
+			.filter(propertyEmptyOrAnyMatch(deployerProperties.getPropertyIncludes()))
+			.filter(propertyNoneMatch(deployerProperties.getPropertyExcludes()))
+			.forEach(p -> {
+				metadataProperties.add(p);
 			});
+		});
 		return metadataProperties;
 	}
 

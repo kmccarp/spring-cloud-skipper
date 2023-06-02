@@ -44,7 +44,7 @@ public class SkipperErrorAttributes extends DefaultErrorAttributes {
 	@Override
 	public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
 		Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest,
-				options.including(Include.EXCEPTION, Include.MESSAGE).excluding(Include.STACK_TRACE));
+		options.including(Include.EXCEPTION, Include.MESSAGE).excluding(Include.STACK_TRACE));
 		Throwable error = getError(webRequest);
 		// if we're in our skipper related exceptions, reset message as available from there
 		// as otherwise super method above will resolve message as one possibly set from exception handler

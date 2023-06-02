@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RepositoryRestResource(path = "packageMetadata", collectionResourceRel = "packageMetadata")
 @Transactional
 public interface PackageMetadataRepository extends KeyValueRepository<PackageMetadata, Long>,
-		PackageMetadataRepositoryCustom {
+PackageMetadataRepositoryCustom {
 
 	List<PackageMetadata> findByName(@Param("name") String name);
 
@@ -42,22 +42,22 @@ public interface PackageMetadataRepository extends KeyValueRepository<PackageMet
 
 	@RestResource(exported = false)
 	List<PackageMetadata> findByNameAndVersionOrderByApiVersionDesc(@Param("name") String name,
-			@Param("version") String version);
+	@Param("version") String version);
 
 	@RestResource(exported = false)
 	PackageMetadata findFirstByNameOrderByVersionDesc(@Param("name") String name);
 
 	@RestResource(exported = false)
 	PackageMetadata findByRepositoryIdAndNameAndVersion(@Param("repositoryId") Long repositoryId,
-			@Param("name") String name,
-			@Param("version") String version);
+	@Param("name") String name,
+	@Param("version") String version);
 
 	@RestResource(exported = false)
 	PackageMetadata findByRepositoryNameAndNameAndVersion(@Param("repositoryName") String repositoryName,
-			@Param("name") String name,
-			@Param("version") String version);
+	@Param("name") String name,
+	@Param("version") String version);
 
 	@RestResource(exported = false)
 	void deleteByRepositoryIdAndName(@Param("repositoryId") Long repositoryId,
-			@Param("name") String name);
+	@Param("name") String name);
 }

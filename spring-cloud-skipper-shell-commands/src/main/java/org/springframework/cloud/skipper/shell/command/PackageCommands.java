@@ -69,9 +69,9 @@ public class PackageCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = {"package search", "package list"}, value = "Search for packages.")
 	public Object search(
-			@ShellOption(help = "wildcard expression to search for the package name", defaultValue = ShellOption.NULL) String name,
-			@ShellOption(help = "boolean to set for more detailed package metadata") boolean details)
-			throws Exception {
+	@ShellOption(help = "wildcard expression to search for the package name", defaultValue = ShellOption.NULL) String name,
+	@ShellOption(help = "boolean to set for more detailed package metadata") boolean details)
+	throws Exception {
 		Collection<PackageMetadata> resources = skipperClient.search(name, details);
 		if (!details) {
 			LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
@@ -107,7 +107,7 @@ public class PackageCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "package upload", value = "Upload a package.")
 	public String upload(@ShellOption(help = "the package to be uploaded") String path,
-			@ShellOption(help = "the local repository name to upload to", defaultValue = ShellOption.NULL) String repoName) {
+	@ShellOption(help = "the local repository name to upload to", defaultValue = ShellOption.NULL) String repoName) {
 		UploadRequest uploadRequest = new UploadRequest();
 		try {
 			File file = ResourceUtils.getFile(path);
@@ -134,18 +134,18 @@ public class PackageCommands extends AbstractSkipperCommand {
 
 	@ShellMethod(key = "package install", value = "Install a package.")
 	public String install(
-			@ShellOption(help = "name of the package to install") String packageName,
-			@ShellOption(help = "version of the package to install, if not specified latest version will be used", defaultValue = ShellOption.NULL) String packageVersion,
-			@ShellOption(help = "specify values in a YAML file", defaultValue = ShellOption.NULL) File file,
-			@ShellOption(help = "the comma separated set of properties to override during install", defaultValue = ShellOption.NULL) String properties,
-			@ShellOption(help = "the release name to use") String releaseName,
-			@ShellOption(help = "the platform name to use", defaultValue = "default") String platformName)
-			throws IOException {
+	@ShellOption(help = "name of the package to install") String packageName,
+	@ShellOption(help = "version of the package to install, if not specified latest version will be used", defaultValue = ShellOption.NULL) String packageVersion,
+	@ShellOption(help = "specify values in a YAML file", defaultValue = ShellOption.NULL) File file,
+	@ShellOption(help = "the comma separated set of properties to override during install", defaultValue = ShellOption.NULL) String properties,
+	@ShellOption(help = "the release name to use") String releaseName,
+	@ShellOption(help = "the platform name to use", defaultValue = "default") String platformName)
+	throws IOException {
 		// Commented out until https://github.com/spring-cloud/spring-cloud-skipper/issues/263 is
 		// addressed
 		// assertMutuallyExclusiveFileAndProperties(file, properties);
 		Release release = skipperClient
-				.install(getInstallRequest(packageName, packageVersion, file, properties, releaseName, platformName));
+		.install(getInstallRequest(packageName, packageVersion, file, properties, releaseName, platformName));
 		return "Released " + release.getName() + ". Now at version v" + release.getVersion() + ".";
 	}
 
@@ -161,9 +161,9 @@ public class PackageCommands extends AbstractSkipperCommand {
 	}
 
 	private InstallRequest getInstallRequest(String packageName, String packageVersion, File yamlFile,
-			String properties, String releaseName, String platformName) throws IOException {
+	String properties, String releaseName, String platformName) throws IOException {
 		InstallProperties installProperties = getInstallProperties(releaseName, platformName, yamlFile,
-				properties);
+		properties);
 		InstallRequest installRequest = new InstallRequest();
 		installRequest.setInstallProperties(installProperties);
 		PackageIdentifier packageIdentifier = new PackageIdentifier();
@@ -174,7 +174,7 @@ public class PackageCommands extends AbstractSkipperCommand {
 	}
 
 	private InstallProperties getInstallProperties(String releaseName, String platformName, File yamlFile,
-			String propertiesToOverride) throws IOException {
+	String propertiesToOverride) throws IOException {
 		InstallProperties installProperties = new InstallProperties();
 		if (StringUtils.hasText(releaseName)) {
 			installProperties.setReleaseName(releaseName);

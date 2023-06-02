@@ -40,15 +40,15 @@ public class ManifestDocumentation extends BaseDocumentation {
 		Release release = createTestRelease();
 		when(this.releaseService.manifest(release.getName())).thenReturn(release.getManifest());
 		final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-				MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+		MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 		this.mockMvc.perform(
-				get("/api/release/manifest/{releaseName}", release.getName()).accept(MediaType.APPLICATION_JSON)
-						.contentType(contentType))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseBody()));
+		get("/api/release/manifest/{releaseName}", release.getName()).accept(MediaType.APPLICATION_JSON)
+		.contentType(contentType))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseBody()));
 	}
 
 	@Test
@@ -58,11 +58,11 @@ public class ManifestDocumentation extends BaseDocumentation {
 		when(this.releaseService.manifest(release.getName(), 1)).thenReturn(release.getManifest());
 
 		this.mockMvc.perform(
-				get("/api/release/manifest/{releaseName}/{releaseVersion}",
-						release.getName(), release.getVersion()))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andDo(this.documentationHandler.document(
-						responseBody()));
+		get("/api/release/manifest/{releaseName}/{releaseVersion}",
+		release.getName(), release.getVersion()))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andDo(this.documentationHandler.document(
+		responseBody()));
 	}
 }

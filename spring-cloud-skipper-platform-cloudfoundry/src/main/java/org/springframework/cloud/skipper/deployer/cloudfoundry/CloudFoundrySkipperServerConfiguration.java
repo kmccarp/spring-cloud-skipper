@@ -34,12 +34,12 @@ public class CloudFoundrySkipperServerConfiguration {
 
 	@Bean
 	public CloudFoundryReleaseManager cloudFoundryReleaseManager(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository,
-			CloudFoundryReleaseAnalyzer cloudFoundryReleaseAnalyzer,
-			PlatformCloudFoundryOperations platformCloudFoundryOperations,
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
+	AppDeployerDataRepository appDeployerDataRepository,
+	CloudFoundryReleaseAnalyzer cloudFoundryReleaseAnalyzer,
+	PlatformCloudFoundryOperations platformCloudFoundryOperations,
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
 		return new CloudFoundryReleaseManager(releaseRepository, appDeployerDataRepository, cloudFoundryReleaseAnalyzer,
-				platformCloudFoundryOperations, cfManifestApplicationDeployer);
+		platformCloudFoundryOperations, cfManifestApplicationDeployer);
 	}
 
 	@Bean
@@ -49,56 +49,56 @@ public class CloudFoundrySkipperServerConfiguration {
 
 	@Bean
 	public CloudFoundryHandleHealthCheckStep cloudFoundryHandleHealthCheckStep(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository, CloudFoundryDeleteStep deleteStep,
-			ReleaseManagerFactory releaseManagerFactory) {
+	AppDeployerDataRepository appDeployerDataRepository, CloudFoundryDeleteStep deleteStep,
+	ReleaseManagerFactory releaseManagerFactory) {
 		return new CloudFoundryHandleHealthCheckStep(releaseRepository, appDeployerDataRepository, deleteStep,
-				releaseManagerFactory);
+		releaseManagerFactory);
 	}
 
 	@Bean
 	public CloudFoundrySimpleRedBlackUpgradeStrategy cloudFoundrySimpleRedBlackUpgradeStrategy(
-			CloudFoundryHealthCheckStep healthCheckStep, CloudFoundryHandleHealthCheckStep handleHealthCheckStep,
-			CloudFoundryDeployAppStep deployAppStep) {
+	CloudFoundryHealthCheckStep healthCheckStep, CloudFoundryHandleHealthCheckStep handleHealthCheckStep,
+	CloudFoundryDeployAppStep deployAppStep) {
 		return new CloudFoundrySimpleRedBlackUpgradeStrategy(healthCheckStep, handleHealthCheckStep, deployAppStep);
 	}
 
 	@Bean
 	public CloudFoundryHealthCheckStep cloudFoundryHealthCheckStep(
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
 		return new CloudFoundryHealthCheckStep(cfManifestApplicationDeployer);
 	}
 
 	@Bean
 	public CloudFoundryDeleteStep cloudFoundryDeleteStep(ReleaseRepository releaseRepository,
-			PlatformCloudFoundryOperations platformCloudFoundryOperations) {
+	PlatformCloudFoundryOperations platformCloudFoundryOperations) {
 		return new CloudFoundryDeleteStep(releaseRepository, platformCloudFoundryOperations);
 	}
 
 	@Bean
 	public CloudFoundryDeployAppStep cloudFoundryDeployAppStep(AppDeployerDataRepository appDeployerDataRepository,
-			ReleaseRepository releaseRepository, PlatformCloudFoundryOperations platformCloudFoundryOperations,
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
+	ReleaseRepository releaseRepository, PlatformCloudFoundryOperations platformCloudFoundryOperations,
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
 		return new CloudFoundryDeployAppStep(appDeployerDataRepository, releaseRepository,
-				platformCloudFoundryOperations, cfManifestApplicationDeployer);
+		platformCloudFoundryOperations, cfManifestApplicationDeployer);
 	}
 
 	@Bean
 	public PlatformCloudFoundryOperations platformCloudFoundryOperations(
-			CloudFoundryPlatformProperties cloudFoundryPlatformProperties) {
+	CloudFoundryPlatformProperties cloudFoundryPlatformProperties) {
 		return new PlatformCloudFoundryOperations(cloudFoundryPlatformProperties);
 	}
 
 	@Bean
 	public CloudFoundryManifestApplicationDeployer cfApplicationDeployer(CloudFoundryApplicationManifestReader cfApplicationManifestReader,
-			PlatformCloudFoundryOperations platformCloudFoundryOperations,
-			DelegatingResourceLoader delegatingResourceLoader) {
+	PlatformCloudFoundryOperations platformCloudFoundryOperations,
+	DelegatingResourceLoader delegatingResourceLoader) {
 		return new CloudFoundryManifestApplicationDeployer(cfApplicationManifestReader, platformCloudFoundryOperations,
-				delegatingResourceLoader);
+		delegatingResourceLoader);
 	}
 
 	@Bean
 	public CloudFoundryReleaseAnalyzer cloudFoundryReleaseAnalyzer(
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
 		return new CloudFoundryReleaseAnalyzer(cfManifestApplicationDeployer);
 	}
 }

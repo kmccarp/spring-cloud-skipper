@@ -38,6 +38,6 @@ public class ErrorAction implements Action<SkipperStates, SkipperEvents> {
 	@Override
 	public void execute(StateContext<SkipperStates, SkipperEvents> context) {
 		log.error("Going through error state {} {}", context,
-				context.getExtendedState().getVariables().get(SkipperVariables.ERROR));
+		context.getExtendedState().getVariables().get(SkipperVariables.ERROR));
 	}
 }

@@ -78,12 +78,12 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 			if (release.getInfo().getStatus().getStatusCode() != StatusCode.DELETED) {
 				try {
 					mockMvc.perform(delete("/api/release/" + release.getName()))
-							.andDo(print())
-							.andExpect(status().isOk()).andReturn();
+					.andDo(print())
+					.andExpect(status().isOk()).andReturn();
 				}
 				catch (Throwable e) {
 					logger.warn("Can not delete release {}-v{}, as it has not yet deployed.", release.getName(),
-							release.getVersion());
+					release.getVersion());
 				}
 			}
 		}
@@ -93,11 +93,11 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 		// Deploy
 		InstallProperties installProperties = createInstallProperties(releaseName);
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder(packageName,
-				packageVersion);
+		packageVersion);
 		assertThat(packageMetadata).isNotNull();
 		MvcResult result = mockMvc.perform(post("/api/package/install/" + packageMetadata.getId())
-				.content(convertObjectToJson(installProperties))).andDo(print())
-				.andExpect(status().isCreated()).andReturn();
+		.content(convertObjectToJson(installProperties))).andDo(print())
+		.andExpect(status().isCreated()).andReturn();
 
 		Release release = convertContentToRelease(result.getResponse().getContentAsString());
 		assertReleaseIsDeployedSuccessfully(releaseName, release.getVersion());
@@ -108,15 +108,15 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 
 	protected Release installPackage(InstallRequest installRequest) throws Exception {
 		MvcResult result = mockMvc.perform(post("/api/package/install")
-				.content(convertObjectToJson(installRequest))).andDo(print())
-				.andExpect(status().isCreated()).andReturn();
+		.content(convertObjectToJson(installRequest))).andDo(print())
+		.andExpect(status().isCreated()).andReturn();
 		Release release = convertContentToRelease(result.getResponse().getContentAsString());
 		assertReleaseIsDeployedSuccessfully(release.getName(), release.getVersion());
 		String releaseName = installRequest.getInstallProperties().getReleaseName();
 		Release deployedRelease = this.releaseRepository.findByNameAndVersion(releaseName, release.getVersion());
 		PackageMetadata packageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder(
-				installRequest.getPackageIdentifier().getPackageName(),
-				installRequest.getPackageIdentifier().getPackageVersion());
+		installRequest.getPackageIdentifier().getPackageName(),
+		installRequest.getPackageIdentifier().getPackageVersion());
 		commonReleaseAssertions(releaseName, packageMetadata, deployedRelease);
 		return deployedRelease;
 	}
@@ -126,7 +126,7 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 	}
 
 	protected Release upgrade(String packageName, String packageVersion, String releaseName, boolean wait)
-			throws Exception {
+	throws Exception {
 		UpgradeRequest upgradeRequest = new UpgradeRequest();
 		UpgradeProperties upgradeProperties = createUpdateProperties(releaseName);
 		PackageIdentifier packageIdentifier = new PackageIdentifier();
@@ -135,12 +135,12 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 		upgradeRequest.setPackageIdentifier(packageIdentifier);
 		upgradeRequest.setUpgradeProperties(upgradeProperties);
 		PackageMetadata updatePackageMetadata = this.packageMetadataRepository.findByNameAndVersionByMaxRepoOrder(
-				packageName,
-				packageVersion);
+		packageName,
+		packageVersion);
 		assertThat(updatePackageMetadata).isNotNull();
 		MvcResult result = mockMvc.perform(post("/api/release/upgrade")
-				.content(convertObjectToJson(upgradeRequest))).andDo(print())
-				.andExpect(status().isCreated()).andReturn();
+		.content(convertObjectToJson(upgradeRequest))).andDo(print())
+		.andExpect(status().isCreated()).andReturn();
 		Release release = convertContentToRelease(result.getResponse().getContentAsString());
 		if (wait) {
 			assertReleaseIsDeployedSuccessfully(releaseName, release.getVersion());
@@ -154,7 +154,7 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 
 	protected Release rollback(String releaseName, int releaseVersion) throws Exception {
 		MvcResult result = mockMvc.perform(post("/api/release/rollback/" + releaseName + "/" + releaseVersion)).andDo(print())
-				.andExpect(status().isCreated()).andReturn();
+		.andExpect(status().isCreated()).andReturn();
 		Release release = convertContentToRelease(result.getResponse().getContentAsString());
 		assertReleaseIsDeployedSuccessfully(releaseName, release.getVersion());
 		Release updatedRelease = this.releaseRepository.findByNameAndVersion(releaseName, release.getVersion());
@@ -163,17 +163,17 @@ public abstract class AbstractControllerTests extends AbstractMockMvcTests {
 
 	protected void cancel(String releaseName, int expectStatus, boolean accepted) throws Exception {
 		MvcResult result = mockMvc.perform(post("/api/release/cancel").content(convertObjectToJson(new CancelRequest(releaseName)))).andDo(print())
-				.andExpect(status().is(expectStatus)).andReturn();
+		.andExpect(status().is(expectStatus)).andReturn();
 		CancelResponse response = convertContentToCancelResponse(result.getResponse().getContentAsString());
 		assertThat(response.getAccepted()).isEqualTo(accepted);
 	}
 
 	protected void commonReleaseAssertions(String releaseName, PackageMetadata packageMetadata,
-			Release deployedRelease) {
+	Release deployedRelease) {
 		assertThat(deployedRelease.getName()).isEqualTo(releaseName);
 		assertThat(deployedRelease.getPlatformName()).isEqualTo("default");
 		assertThat(deployedRelease.getPkg().getMetadata()).isEqualToIgnoringGivenFields(packageMetadata,
-				"id", "origin", "packageFile", "objectVersion");
+		"id", "origin", "packageFile", "objectVersion");
 		assertThat(deployedRelease.getPkg().getMetadata().equals(packageMetadata));
 		assertThat(deployedRelease.getInfo().getStatus().getStatusCode()).isEqualTo(StatusCode.DEPLOYED);
 	}

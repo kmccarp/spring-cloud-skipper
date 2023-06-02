@@ -93,8 +93,8 @@ public class ManifestUtils {
 		Yaml yaml = createYaml();
 		// Lazy evaluation of the generated manifest
 		List<Object> yamlList = StreamSupport
-				.stream(yaml.loadAll(rawManifest).spliterator(), false)
-				.collect(Collectors.toList());
+		.stream(yaml.loadAll(rawManifest).spliterator(), false)
+		.collect(Collectors.toList());
 
 		return yaml.dumpAll(yamlList.iterator());
 	}
@@ -157,7 +157,7 @@ public class ManifestUtils {
 		@Override
 		protected Node representScalar(Tag tag, String value) {
 			if (tag.equals(Tag.INT) || tag.equals(Tag.FLOAT) || tag.equals(Tag.BOOL)
-					|| tag.equals(Tag.TIMESTAMP)) {
+			|| tag.equals(Tag.TIMESTAMP)) {
 				return super.representScalar(Tag.STR, value);
 			}
 			else {

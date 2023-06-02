@@ -60,9 +60,9 @@ public class InstallInstallAction extends AbstractAction {
 		// get from event headers and fall back checking if it's in context
 		// in case machine died and we restored
 		InstallRequest installRequest = context.getExtendedState().get(SkipperEventHeaders.INSTALL_REQUEST,
-				InstallRequest.class);
+		InstallRequest.class);
 		InstallProperties installProperties = context.getExtendedState().get(SkipperEventHeaders.INSTALL_PROPERTIES,
-				InstallProperties.class);
+		InstallProperties.class);
 
 		if (installRequest != null) {
 			// we have an install request
@@ -77,7 +77,7 @@ public class InstallInstallAction extends AbstractAction {
 		}
 		else {
 			throw new IllegalArgumentException(
-					"Neither 'installRequest' or 'installProperties' not known to the system in extended state");
+			"Neither 'installRequest' or 'installProperties' not known to the system in extended state");
 		}
 	}
 }

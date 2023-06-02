@@ -40,13 +40,13 @@ public class SkipperServerPlatformConfiguration {
 
 	@Bean
 	public DeployerConfigurationMetadataResolver deployerConfigurationMetadataResolver(
-			SkipperServerProperties skipperServerProperties) {
+	SkipperServerProperties skipperServerProperties) {
 		return new DeployerConfigurationMetadataResolver(skipperServerProperties.getDeployerProperties());
 	}
 
 	@Bean
 	public DeployerInitializationService deployerInitializationService(DeployerRepository deployerRepository,
-			List<Platform> platforms, DeployerConfigurationMetadataResolver resolver) {
+	List<Platform> platforms, DeployerConfigurationMetadataResolver resolver) {
 		return new DeployerInitializationService(deployerRepository, platforms, resolver);
 	}
 
@@ -55,7 +55,7 @@ public class SkipperServerPlatformConfiguration {
 	static class LocalPlatformConfiguration {
 		@Bean
 		public Platform localDeployers(LocalPlatformProperties localPlatformProperties,
-				RestTemplate actuatorRestTemplate) {
+		RestTemplate actuatorRestTemplate) {
 			List<Deployer> deployers = new ArrayList<>();
 			Map<String, LocalDeployerProperties> localDeployerPropertiesMap = localPlatformProperties.getAccounts();
 			if (localDeployerPropertiesMap.isEmpty()) {
@@ -65,8 +65,8 @@ public class SkipperServerPlatformConfiguration {
 					.entrySet()) {
 				LocalAppDeployer localAppDeployer = new LocalAppDeployer(entry.getValue());
 				ActuatorOperations actuatorOperations =
-						new LocalActuatorTemplate(actuatorRestTemplate, localAppDeployer,
-								entry.getValue().getAppAdmin());
+				new LocalActuatorTemplate(actuatorRestTemplate, localAppDeployer,
+				entry.getValue().getAppAdmin());
 				Deployer deployer = new Deployer(entry.getKey(), "local", localAppDeployer, actuatorOperations);
 				deployer.setDescription(prettyPrintLocalDeployerProperties(entry.getValue()));
 				deployers.add(deployer);
@@ -88,7 +88,7 @@ public class SkipperServerPlatformConfiguration {
 			}
 			builder.append("ShutdownTimeout = [" + localDeployerProperties.getShutdownTimeout() + "], ");
 			builder.append("EnvVarsToInherit = ["
-					+ StringUtils.arrayToCommaDelimitedString(localDeployerProperties.getEnvVarsToInherit()) + "], ");
+			+ StringUtils.arrayToCommaDelimitedString(localDeployerProperties.getEnvVarsToInherit()) + "], ");
 			builder.append("JavaCmd = [" + localDeployerProperties.getJavaCmd() + "], ");
 			builder.append("WorkingDirectoriesRoot = [" + localDeployerProperties.getWorkingDirectoriesRoot() + "], ");
 			builder.append("DeleteFilesOnExit = [" + localDeployerProperties.isDeleteFilesOnExit() + "]");

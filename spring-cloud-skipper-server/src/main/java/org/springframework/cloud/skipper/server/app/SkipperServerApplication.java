@@ -33,14 +33,14 @@ import org.springframework.cloud.skipper.server.EnableSkipperServer;
  *
  */
 @SpringBootApplication(exclude = {
-		CloudFoundryDeployerAutoConfiguration.class,
-		KubernetesAutoConfiguration.class,
-		LocalDeployerAutoConfiguration.class,
-		ManagementWebSecurityAutoConfiguration.class,
-		SecurityAutoConfiguration.class,
-		UserDetailsServiceAutoConfiguration.class,
-		SessionAutoConfiguration.class
-	})
+CloudFoundryDeployerAutoConfiguration.class,
+KubernetesAutoConfiguration.class,
+LocalDeployerAutoConfiguration.class,
+ManagementWebSecurityAutoConfiguration.class,
+SecurityAutoConfiguration.class,
+UserDetailsServiceAutoConfiguration.class,
+SessionAutoConfiguration.class
+})
 @EnableSkipperServer
 public class SkipperServerApplication {
 

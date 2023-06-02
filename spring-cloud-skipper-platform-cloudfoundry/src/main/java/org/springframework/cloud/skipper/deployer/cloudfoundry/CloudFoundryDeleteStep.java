@@ -42,21 +42,21 @@ public class CloudFoundryDeleteStep {
 	private final PlatformCloudFoundryOperations platformCloudFoundryOperations;
 
 	public CloudFoundryDeleteStep(ReleaseRepository releaseRepository,
-			PlatformCloudFoundryOperations platformCloudFoundryOperations) {
+	PlatformCloudFoundryOperations platformCloudFoundryOperations) {
 		this.releaseRepository = releaseRepository;
 		this.platformCloudFoundryOperations = platformCloudFoundryOperations;
 	}
 
 	public Release delete(Release release, AppDeployerData existingAppDeployerData,
-			List<String> applicationNamesToDelete) {
+	List<String> applicationNamesToDelete) {
 		ApplicationManifest applicationManifest = CloudFoundryApplicationManifestUtils.updateApplicationName(release);
 		String applicationName = applicationManifest.getName();
 		DeleteApplicationRequest deleteApplicationRequest = DeleteApplicationRequest.builder().name(applicationName)
-				.build();
+		.build();
 		this.platformCloudFoundryOperations.getCloudFoundryOperations(release.getPlatformName()).applications()
-				.delete(deleteApplicationRequest)
-				.doOnSuccess(v -> logger.info("Successfully undeployed app {}", applicationName))
-				.doOnError(e -> logger.error("Failed to undeploy app %s", applicationName)).block();
+		.delete(deleteApplicationRequest)
+		.doOnSuccess(v -> logger.info("Successfully undeployed app {}", applicationName))
+		.doOnError(e -> logger.error("Failed to undeploy app %s", applicationName)).block();
 
 		Status deletedStatus = new Status();
 		deletedStatus.setStatusCode(StatusCode.DELETED);

@@ -118,9 +118,9 @@ public abstract class AbstractIntegrationTest extends AbstractAssertReleaseDeplo
 					}
 					catch (Exception e) {
 						logger.error(
-								"Error cleaning up resource in integration test for Release {}-v{}. Status = {}.  Message = {}",
-								release.getName(), release.getVersion(), release.getInfo().getStatus().getStatusCode(),
-								e.getMessage());
+						"Error cleaning up resource in integration test for Release {}-v{}. Status = {}.  Message = {}",
+						release.getName(), release.getVersion(), release.getInfo().getStatus().getStatusCode(),
+						e.getMessage());
 					}
 				}
 			}
@@ -137,12 +137,12 @@ public abstract class AbstractIntegrationTest extends AbstractAssertReleaseDeplo
 			logger.info("Checking status of release={} version={}", releaseName, releaseVersion);
 			// retrieve status from underlying AppDeployer
 			Release release = this.releaseManager
-					.status(releaseRepository.findByNameAndVersion(releaseName, releaseVersion));
+			.status(releaseRepository.findByNameAndVersion(releaseName, releaseVersion));
 			Info info = release.getInfo();
 
 			logger.info("Status = " + info.getStatus());
 			return info.getStatus().getStatusCode().equals(StatusCode.DEPLOYED) &&
-					allAppsDeployed(info.getStatus().getAppStatusList());
+			allAppsDeployed(info.getStatus().getAppStatusList());
 		}
 		catch (Exception e) {
 			logger.error("Exception getting status", e);
@@ -186,10 +186,10 @@ public abstract class AbstractIntegrationTest extends AbstractAssertReleaseDeplo
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-			HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-			SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class,
-			LocalDeployerAutoConfiguration.class})
+	@ImportAutoConfiguration(classes = {JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+	HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+	SkipperServerPlatformConfiguration.class, ResourceLoadingAutoConfiguration.class,
+	LocalDeployerAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	@EnableWebMvc
 	static class TestConfig {

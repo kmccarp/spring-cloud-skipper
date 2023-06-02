@@ -35,8 +35,8 @@ public class ArgumentSanitizerTests {
 	@Test
 	public void testNoChange() throws Exception {
 		String initialYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "nopassword.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "nopassword.yaml").getInputStream(),
+		Charset.defaultCharset());
 		String result = ArgumentSanitizer.sanitizeYml(initialYaml);
 		LineUtil.assertEqualRemoveCr(result, initialYaml);
 	}
@@ -44,11 +44,11 @@ public class ArgumentSanitizerTests {
 	@Test
 	public void testPasswordApps() throws Exception {
 		String initialYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "password.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "password.yaml").getInputStream(),
+		Charset.defaultCharset());
 		String redactedYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "passwordredacted.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "passwordredacted.yaml").getInputStream(),
+		Charset.defaultCharset());
 		String result = ArgumentSanitizer.sanitizeYml(initialYaml);
 		LineUtil.assertEqualRemoveCr(result, redactedYaml);
 	}
@@ -56,11 +56,11 @@ public class ArgumentSanitizerTests {
 	@Test
 	public void testPasswordDefaultConfig() throws Exception {
 		String initialYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "configpassword.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "configpassword.yaml").getInputStream(),
+		Charset.defaultCharset());
 		String redactedYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "configpasswordredacted.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "configpasswordredacted.yaml").getInputStream(),
+		Charset.defaultCharset());
 		String result = ArgumentSanitizer.sanitizeYml(initialYaml);
 		LineUtil.assertEqualRemoveCr(result, redactedYaml);
 	}

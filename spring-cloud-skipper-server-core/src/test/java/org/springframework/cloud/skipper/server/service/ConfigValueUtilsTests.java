@@ -84,15 +84,15 @@ public class ConfigValueUtilsTests {
 
 		String mergedYaml = yaml.dump(mergedMap);
 		String expectedYaml = StreamUtils.copyToString(
-				TestResourceUtils.qualifiedResource(getClass(), "merged.yaml").getInputStream(),
-				Charset.defaultCharset());
+		TestResourceUtils.qualifiedResource(getClass(), "merged.yaml").getInputStream(),
+		Charset.defaultCharset());
 		LineUtil.assertEqualRemoveCr(mergedYaml, expectedYaml);
 	}
 
 	@Configuration
-	@ImportAutoConfiguration(classes = { JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
-			HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
-			ResourceLoadingAutoConfiguration.class })
+	@ImportAutoConfiguration(classes = {JacksonAutoConfiguration.class, EmbeddedDataSourceConfiguration.class,
+	HibernateJpaAutoConfiguration.class, StateMachineJpaRepositoriesAutoConfiguration.class,
+	ResourceLoadingAutoConfiguration.class})
 	@Import(SkipperServerConfiguration.class)
 	static class TestConfig {
 	}

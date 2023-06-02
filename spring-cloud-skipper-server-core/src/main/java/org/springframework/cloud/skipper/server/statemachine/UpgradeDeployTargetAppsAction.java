@@ -52,8 +52,8 @@ public class UpgradeDeployTargetAppsAction extends AbstractUpgradeStartAction {
 	 * @param healthCheckProperties the health check properties
 	 */
 	public UpgradeDeployTargetAppsAction(ReleaseReportService releaseReportService,
-			UpgradeStrategyFactory upgradeStrategyFactory,
-			HealthCheckProperties healthCheckProperties) {
+	UpgradeStrategyFactory upgradeStrategyFactory,
+	HealthCheckProperties healthCheckProperties) {
 		super(releaseReportService);
 		this.upgradeStrategyFactory = upgradeStrategyFactory;
 		this.healthCheckProperties = healthCheckProperties;
@@ -70,7 +70,7 @@ public class UpgradeDeployTargetAppsAction extends AbstractUpgradeStartAction {
 		log.info("Using UpgradeStrategy {}", upgradeStrategy);
 		setUpgradeCutOffTime(context);
 		upgradeStrategy.deployApps(releaseAnalysisReport.getExistingRelease(),
-				releaseAnalysisReport.getReplacingRelease(), releaseAnalysisReport);
+		releaseAnalysisReport.getReplacingRelease(), releaseAnalysisReport);
 		context.getExtendedState().getVariables().put(SkipperVariables.RELEASE, releaseAnalysisReport.getReplacingRelease());
 	}
 
@@ -89,7 +89,7 @@ public class UpgradeDeployTargetAppsAction extends AbstractUpgradeStartAction {
 		}
 		long cutOffTime = System.currentTimeMillis() + upgradeTimeout;
 		context.getExtendedState().getVariables().put(SkipperVariables.UPGRADE_CUTOFF_TIME,
-				cutOffTime);
+		cutOffTime);
 		log.debug("Set cutoff time as {}", cutOffTime);
 	}
 }

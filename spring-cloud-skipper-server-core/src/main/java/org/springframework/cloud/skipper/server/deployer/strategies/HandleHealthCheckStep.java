@@ -49,8 +49,8 @@ public class HandleHealthCheckStep {
 
 
 	public HandleHealthCheckStep(ReleaseRepository releaseRepository,
-			AppDeployerDataRepository appDeployerDataRepository,
-			DeleteStep deleteStep) {
+	AppDeployerDataRepository appDeployerDataRepository,
+	DeleteStep deleteStep) {
 		this.releaseRepository = releaseRepository;
 		this.appDeployerDataRepository = appDeployerDataRepository;
 		this.deleteStep = deleteStep;
@@ -58,8 +58,8 @@ public class HandleHealthCheckStep {
 
 	@Transactional
 	public void handleHealthCheck(boolean healthy, Release existingRelease,
-			List<String> applicationNamesToUpgrade,
-			Release replacingRelease, Long timeout, boolean cancel, boolean rollback) {
+	List<String> applicationNamesToUpgrade,
+	Release replacingRelease, Long timeout, boolean cancel, boolean rollback) {
 		if (healthy) {
 			updateReplacingReleaseState(replacingRelease, rollback);
 			deleteExistingRelease(existingRelease, applicationNamesToUpgrade);
@@ -77,34 +77,34 @@ public class HandleHealthCheckStep {
 		replacingRelease.getInfo().setDescription(rollback ? "Rollback complete" : "Upgrade complete");
 		this.releaseRepository.save(replacingRelease);
 		logger.info("Release {}-v{} has been DEPLOYED", replacingRelease.getName(),
-				replacingRelease.getVersion());
+		replacingRelease.getVersion());
 		logger.info("Apps in release {}-v{} are healthy.", replacingRelease.getName(),
-				replacingRelease.getVersion());
+		replacingRelease.getVersion());
 	}
 
 	private void deleteReplacingRelease(Release replacingRelease, Long timeout, boolean cancel, List<String> applicationNamesToUpgrade) {
 		try {
 			if (!cancel) {
 				logger.error("New release " + replacingRelease.getName() + " was not detected as healthy after " + timeout
-						+ " milliseconds.  " + "Keeping existing release, and Deleting apps of replacing release");
+				+ " milliseconds.  " + "Keeping existing release, and Deleting apps of replacing release");
 			}
 
 			// Delete only changed app and do not set status with delete step as it's done here
 			AppDeployerData existingAppDeployerData = this.appDeployerDataRepository
-					.findByReleaseNameAndReleaseVersionRequired(
-						replacingRelease.getName(), replacingRelease.getVersion());
+			.findByReleaseNameAndReleaseVersionRequired(
+			replacingRelease.getName(), replacingRelease.getVersion());
 			logger.info("Deleting changed applications from replacing release {}-v{}",
-				replacingRelease.getName(),
-				replacingRelease.getVersion());
+			replacingRelease.getName(),
+			replacingRelease.getVersion());
 			this.deleteStep.delete(replacingRelease, existingAppDeployerData, applicationNamesToUpgrade, false);
 
 			Status status = new Status();
 			status.setStatusCode(StatusCode.FAILED);
 			replacingRelease.getInfo().setStatus(status);
 			String desc = cancel ? "Cancelled after " + timeout + " ms."
-					: "Did not detect apps in replacing release as healthy after " + timeout + " ms.";
+			: "Did not detect apps in replacing release as healthy after " + timeout + " ms.";
 			replacingRelease.getInfo()
-					.setDescription(desc);
+			.setDescription(desc);
 			this.releaseRepository.save(replacingRelease);
 		}
 		catch (DataAccessException e) {
@@ -118,21 +118,21 @@ public class HandleHealthCheckStep {
 			status.setStatusCode(StatusCode.FAILED);
 			replacingRelease.getInfo().setStatus(status);
 			replacingRelease.getInfo().setDescription("Could not delete replacing release application, " +
-					"Manual intervention needed.  Sorry it didn't work out.");
+			"Manual intervention needed.  Sorry it didn't work out.");
 			this.releaseRepository.save(replacingRelease);
 			logger.info("Release {}-v{} could not be deleted.", replacingRelease.getName(),
-					replacingRelease.getVersion());
+			replacingRelease.getVersion());
 		}
 	}
 
 	private void deleteExistingRelease(Release existingRelease, List<String> applicationNamesToUpgrade) {
 		try {
 			AppDeployerData existingAppDeployerData = this.appDeployerDataRepository
-					.findByReleaseNameAndReleaseVersionRequired(
-							existingRelease.getName(), existingRelease.getVersion());
+			.findByReleaseNameAndReleaseVersionRequired(
+			existingRelease.getName(), existingRelease.getVersion());
 			logger.info("Deleting changed applications from existing release {}-v{}",
-					existingRelease.getName(),
-					existingRelease.getVersion());
+			existingRelease.getName(),
+			existingRelease.getVersion());
 			this.deleteStep.delete(existingRelease, existingAppDeployerData, applicationNamesToUpgrade, true);
 		}
 		catch (DataAccessException e) {
@@ -146,10 +146,10 @@ public class HandleHealthCheckStep {
 			status.setStatusCode(StatusCode.FAILED);
 			existingRelease.getInfo().setStatus(status);
 			existingRelease.getInfo().setDescription("Could not delete existing application, " +
-					"manual intervention needed.  Sorry it didn't work out.");
+			"manual intervention needed.  Sorry it didn't work out.");
 			this.releaseRepository.save(existingRelease);
 			logger.info("Release {}-v{} could not be deleted.", existingRelease.getName(),
-					existingRelease.getVersion());
+			existingRelease.getVersion());
 		}
 	}
 }

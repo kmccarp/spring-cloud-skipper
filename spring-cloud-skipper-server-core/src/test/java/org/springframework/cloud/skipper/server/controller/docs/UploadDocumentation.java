@@ -61,42 +61,42 @@ public class UploadDocumentation extends BaseDocumentation {
 		final byte[] originalPackageBytes = StreamUtils.copyToByteArray(resource.getInputStream());
 		assertThat(originalPackageBytes).isNotEmpty();
 		Assert.isTrue(originalPackageBytes.length != 0,
-				"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
+		"PackageServiceTests.Assert.isTrue: Package file as bytes must not be empty");
 		uploadProperties.setPackageFileAsBytes(originalPackageBytes);
 
 		final MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-				MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+		MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 		when(this.packageService.upload(any(UploadRequest.class))).thenReturn(pkg.getMetadata());
 
 		mockMvc.perform(post("/api/package/upload").accept(MediaType.APPLICATION_JSON).contentType(contentType)
-				.content(convertObjectToJson(uploadProperties))).andDo(print())
-				.andExpect(status().isCreated())
-				.andDo(
-						this.documentationHandler.document(
-								responseFields(
-										subsectionWithPath("links").ignored(),
-										fieldWithPath("apiVersion")
-												.description("The Package Index spec version this file is based on"),
-										fieldWithPath("origin")
-												.description("Indicates the origin of the repository (free form text)"),
-										fieldWithPath("repositoryId")
-												.description("The repository ID this Package belongs to."),
-										fieldWithPath("repositoryName")
-												.description("The repository nane this Package belongs to."),
-										fieldWithPath("kind").description("What type of package system is being used"),
-										fieldWithPath("name").description("The name of the package"),
-										fieldWithPath("displayName").description("The display name of the package"),
-										fieldWithPath("version").description("The version of the package"),
-										fieldWithPath("packageSourceUrl")
-												.description("Location to source code for this package"),
-										fieldWithPath("packageHomeUrl").description("The home page of the package"),
-										fieldWithPath("tags")
-												.description("A comma separated list of tags to use for searching"),
-										fieldWithPath("maintainer").description("Who is maintaining this package"),
-										fieldWithPath("description").description("Brief description of the package"),
-										fieldWithPath("sha256").description(
-												"Hash of package binary that will be downloaded using SHA256 hash algorithm"),
-										fieldWithPath("iconUrl").description("Url location of a icon"))));
+		.content(convertObjectToJson(uploadProperties))).andDo(print())
+		.andExpect(status().isCreated())
+		.andDo(
+		this.documentationHandler.document(
+		responseFields(
+	subsectionWithPath("links").ignored(),
+	fieldWithPath("apiVersion")
+	.description("The Package Index spec version this file is based on"),
+	fieldWithPath("origin")
+	.description("Indicates the origin of the repository (free form text)"),
+	fieldWithPath("repositoryId")
+	.description("The repository ID this Package belongs to."),
+	fieldWithPath("repositoryName")
+	.description("The repository nane this Package belongs to."),
+	fieldWithPath("kind").description("What type of package system is being used"),
+	fieldWithPath("name").description("The name of the package"),
+	fieldWithPath("displayName").description("The display name of the package"),
+	fieldWithPath("version").description("The version of the package"),
+	fieldWithPath("packageSourceUrl")
+	.description("Location to source code for this package"),
+	fieldWithPath("packageHomeUrl").description("The home page of the package"),
+	fieldWithPath("tags")
+	.description("A comma separated list of tags to use for searching"),
+	fieldWithPath("maintainer").description("Who is maintaining this package"),
+	fieldWithPath("description").description("Brief description of the package"),
+	fieldWithPath("sha256").description(
+	"Hash of package binary that will be downloaded using SHA256 hash algorithm"),
+	fieldWithPath("iconUrl").description("Url location of a icon"))));
 	}
 }

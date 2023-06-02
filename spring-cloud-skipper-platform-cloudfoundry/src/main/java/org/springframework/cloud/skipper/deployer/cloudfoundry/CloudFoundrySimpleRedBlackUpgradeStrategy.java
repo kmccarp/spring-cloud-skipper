@@ -43,8 +43,8 @@ public class CloudFoundrySimpleRedBlackUpgradeStrategy implements UpgradeStrateg
 	private final CloudFoundryDeployAppStep deployAppStep;
 
 	public CloudFoundrySimpleRedBlackUpgradeStrategy(CloudFoundryHealthCheckStep healthCheckStep,
-			CloudFoundryHandleHealthCheckStep handleHealthCheckStep,
-			CloudFoundryDeployAppStep deployAppStep) {
+	CloudFoundryHandleHealthCheckStep handleHealthCheckStep,
+	CloudFoundryDeployAppStep deployAppStep) {
 		this.healthCheckStep = healthCheckStep;
 		this.handleHealthCheckStep = handleHealthCheckStep;
 		this.deployAppStep = deployAppStep;
@@ -67,15 +67,15 @@ public class CloudFoundrySimpleRedBlackUpgradeStrategy implements UpgradeStrateg
 
 	@Override
 	public void accept(Release existingRelease, Release replacingRelease,
-			ReleaseAnalysisReport releaseAnalysisReport, boolean rollback) {
+	ReleaseAnalysisReport releaseAnalysisReport, boolean rollback) {
 		this.handleHealthCheckStep.handleHealthCheck(true, existingRelease,
-				releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, null, false, rollback);
+		releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, null, false, rollback);
 	}
 
 	@Override
 	public void cancel(Release existingRelease, Release replacingRelease, ReleaseAnalysisReport releaseAnalysisReport,
-			Long timeout, boolean cancel, boolean rollback) {
+	Long timeout, boolean cancel, boolean rollback) {
 		this.handleHealthCheckStep.handleHealthCheck(false, existingRelease,
-				releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, timeout, cancel, rollback);
+		releaseAnalysisReport.getApplicationNamesToUpgrade(), replacingRelease, timeout, cancel, rollback);
 	}
 }

@@ -61,7 +61,7 @@ public interface ReleaseRepository extends KeyValueRepository<Release, Long>, Re
 	@Transactional(readOnly = true)
 	@RestResource(exported = false)
 	List<Release> findByNameAndVersionBetweenOrderByNameAscVersionDesc(@Param("name") String name,
-			@Param("from") int fromVersion, @Param("to") int toVersion);
+	@Param("from") int fromVersion, @Param("to") int toVersion);
 
 	@Transactional(readOnly = true)
 	@RestResource(exported = false)
@@ -70,7 +70,7 @@ public interface ReleaseRepository extends KeyValueRepository<Release, Long>, Re
 	@Transactional(readOnly = true)
 	@RestResource(exported = false)
 	Release findTopByNameAndInfoStatusStatusCodeNotOrderByVersionDesc(@Param("name") String name,
-		@Param("statusCode") StatusCode statusCode);
+	@Param("statusCode") StatusCode statusCode);
 
 	@Transactional(readOnly = true)
 	@RestResource(exported = false)

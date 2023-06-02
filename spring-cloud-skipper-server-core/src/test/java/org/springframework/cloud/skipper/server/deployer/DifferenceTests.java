@@ -47,10 +47,10 @@ public class DifferenceTests {
 		List<SpringCloudDeployerApplicationManifest> applicationManifestsV2 = getManifest("m1-v2.yml");
 
 		ApplicationManifestDifference applicationManifestDifference = applicationManifestDifferenceFactory
-				.createApplicationManifestDifference(
-						applicationManifestsV1.get(0).getApplicationName(),
-						applicationManifestsV1.get(0),
-						applicationManifestsV2.get(0));
+		.createApplicationManifestDifference(
+		applicationManifestsV1.get(0).getApplicationName(),
+		applicationManifestsV1.get(0),
+		applicationManifestsV2.get(0));
 
 		assertThat(applicationManifestDifference.areEqual()).isFalse();
 		assertThat(applicationManifestDifference.getApiAndKindDifference().areEqual()).isTrue();
@@ -73,10 +73,10 @@ public class DifferenceTests {
 
 		for (int i = 0; i < 2; i++) {
 			ApplicationManifestDifference applicationManifestDifference = applicationManifestDifferenceFactory
-					.createApplicationManifestDifference(
-							applicationManifestsV1.get(i).getApplicationName(),
-							applicationManifestsV1.get(i),
-							applicationManifestsV2.get(i));
+			.createApplicationManifestDifference(
+			applicationManifestsV1.get(i).getApplicationName(),
+			applicationManifestsV1.get(i),
+			applicationManifestsV2.get(i));
 
 			assertThat(applicationManifestDifference.areEqual()).isFalse();
 			assertThat(applicationManifestDifference.getApiAndKindDifference().areEqual()).isTrue();
@@ -103,10 +103,10 @@ public class DifferenceTests {
 
 		for (int i = 0; i < 2; i++) {
 			ApplicationManifestDifference applicationManifestDifference = applicationManifestDifferenceFactory
-					.createApplicationManifestDifference(
-							applicationManifestsV1.get(i).getApplicationName(),
-							applicationManifestsV1.get(i),
-							applicationManifestsV2.get(i));
+			.createApplicationManifestDifference(
+			applicationManifestsV1.get(i).getApplicationName(),
+			applicationManifestsV1.get(i),
+			applicationManifestsV2.get(i));
 
 			assertThat(applicationManifestDifference.areEqual()).isFalse();
 			assertThat(applicationManifestDifference.getApiAndKindDifference().areEqual()).isTrue();
@@ -129,8 +129,8 @@ public class DifferenceTests {
 		String manifest = null;
 		try {
 			manifest = StreamUtils.copyToString(
-					TestResourceUtils.qualifiedResource(getClass(), filename).getInputStream(),
-					Charset.defaultCharset());
+			TestResourceUtils.qualifiedResource(getClass(), filename).getInputStream(),
+			Charset.defaultCharset());
 		}
 		catch (IOException e) {
 			throw new SkipperException("Error copying manifest", e);

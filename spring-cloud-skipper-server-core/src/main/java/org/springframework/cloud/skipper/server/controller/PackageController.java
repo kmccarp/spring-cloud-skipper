@@ -63,7 +63,7 @@ public class PackageController {
 	private ReleaseResourceAssembler releaseResourceAssembler = new ReleaseResourceAssembler();
 
 	public PackageController(PackageService packageService, PackageMetadataService packageMetadataService,
-			SkipperStateMachineService skipperStateMachineService) {
+	SkipperStateMachineService skipperStateMachineService) {
 		this.packageService = packageService;
 		this.packageMetadataService = packageMetadataService;
 		this.skipperStateMachineService = skipperStateMachineService;
@@ -73,12 +73,12 @@ public class PackageController {
 	public PackageControllerLinksResource resourceLinks() {
 		PackageControllerLinksResource resource = new PackageControllerLinksResource();
 		resource.add(
-				WebMvcLinkBuilder.linkTo(methodOn(PackageController.class).upload(null))
-						.withRel("upload"));
+		WebMvcLinkBuilder.linkTo(methodOn(PackageController.class).upload(null))
+		.withRel("upload"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(PackageController.class).install(null))
-				.withRel("install"));
+		.withRel("install"));
 		resource.add(WebMvcLinkBuilder.linkTo(methodOn(PackageController.class).install(null, null))
-				.withRel("install/id"));
+		.withRel("install/id"));
 		return resource;
 	}
 

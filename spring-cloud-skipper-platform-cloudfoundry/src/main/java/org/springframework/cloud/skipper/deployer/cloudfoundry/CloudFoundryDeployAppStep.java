@@ -56,8 +56,8 @@ public class CloudFoundryDeployAppStep {
 	private final CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer;
 
 	public CloudFoundryDeployAppStep(AppDeployerDataRepository appDeployerDataRepository,
-			ReleaseRepository releaseRepository, PlatformCloudFoundryOperations platformCloudFoundryOperations,
-			CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
+	ReleaseRepository releaseRepository, PlatformCloudFoundryOperations platformCloudFoundryOperations,
+	CloudFoundryManifestApplicationDeployer cfManifestApplicationDeployer) {
 		this.appDeployerDataRepository = appDeployerDataRepository;
 		this.releaseRepository = releaseRepository;
 		this.platformCloudFoundryOperations = platformCloudFoundryOperations;
@@ -66,7 +66,7 @@ public class CloudFoundryDeployAppStep {
 
 	@Transactional
 	public List<String> deployApps(Release existingRelease, Release replacingRelease,
-			ReleaseAnalysisReport releaseAnalysisReport) {
+	ReleaseAnalysisReport releaseAnalysisReport) {
 		List<String> applicationNamesToUpgrade = new ArrayList<>();
 		try {
 			applicationNamesToUpgrade = releaseAnalysisReport.getApplicationNamesToUpgrade();
@@ -94,33 +94,33 @@ public class CloudFoundryDeployAppStep {
 		Map<String, String> appDeploymentData = new HashMap<>();
 		appDeploymentData.put(applicationManifest.getName(), applicationManifest.toString());
 		this.platformCloudFoundryOperations.getCloudFoundryOperations(replacingRelease.getPlatformName())
-				.applications().pushManifest(
-				PushApplicationManifestRequest.builder()
-						.manifest(applicationManifest)
-						.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
-						.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
-						.build())
-				.doOnSuccess(v -> logger.info("Done uploading bits for {}", applicationName))
-				.doOnError(e -> logger.error(
-						String.format("Error creating app %s.  Exception Message %s", applicationName,
-								e.getMessage())))
-				.timeout(CloudFoundryManifestApplicationDeployer.PUSH_REQUEST_TIMEOUT)
-				.doOnSuccess(item -> {
-					logger.info("Successfully deployed {}", applicationName);
-					AppDeployerData appDeployerData = new AppDeployerData();
-					appDeployerData.setReleaseName(replacingRelease.getName());
-					appDeployerData.setReleaseVersion(replacingRelease.getVersion());
-					appDeployerData.setDeploymentDataUsingMap(appDeploymentData);
-					this.appDeployerDataRepository.save(appDeployerData);
-				})
-				.doOnError(error -> {
-					if (CloudFoundryManifestApplicationDeployer.isNotFoundError().test(error)) {
-						logger.warn("Unable to deploy application. It may have been destroyed before start completed: " + error.getMessage());
-					}
-					else {
-						logger.error(String.format("Failed to deploy %s", applicationName + ". " + error.getMessage()));
-					}
-				})
-				.block();
+		.applications().pushManifest(
+		PushApplicationManifestRequest.builder()
+		.manifest(applicationManifest)
+		.stagingTimeout(CloudFoundryManifestApplicationDeployer.STAGING_TIMEOUT)
+		.startupTimeout(CloudFoundryManifestApplicationDeployer.STARTUP_TIMEOUT)
+		.build())
+		.doOnSuccess(v -> logger.info("Done uploading bits for {}", applicationName))
+		.doOnError(e -> logger.error(
+		String.format("Error creating app %s.  Exception Message %s", applicationName,
+		e.getMessage())))
+		.timeout(CloudFoundryManifestApplicationDeployer.PUSH_REQUEST_TIMEOUT)
+		.doOnSuccess(item -> {
+			logger.info("Successfully deployed {}", applicationName);
+			AppDeployerData appDeployerData = new AppDeployerData();
+			appDeployerData.setReleaseName(replacingRelease.getName());
+			appDeployerData.setReleaseVersion(replacingRelease.getVersion());
+			appDeployerData.setDeploymentDataUsingMap(appDeploymentData);
+			this.appDeployerDataRepository.save(appDeployerData);
+		})
+		.doOnError(error -> {
+			if (CloudFoundryManifestApplicationDeployer.isNotFoundError().test(error)) {
+				logger.warn("Unable to deploy application. It may have been destroyed before start completed: " + error.getMessage());
+			}
+			else {
+				logger.error(String.format("Failed to deploy %s", applicationName + ". " + error.getMessage()));
+			}
+		})
+		.block();
 	}
 }

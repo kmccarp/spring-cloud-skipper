@@ -64,7 +64,7 @@ public class ConfigValueUtils {
 			}
 			else {
 				throw new SkipperException("Was expecting override values to produce a Map, instead got class = " +
-						data.getClass() + "overrideValues.getRaw() = " + overrideValues.getRaw());
+				data.getClass() + "overrideValues.getRaw() = " + overrideValues.getRaw());
 			}
 		}
 		else {
@@ -85,7 +85,7 @@ public class ConfigValueUtils {
 	public static Map<String, Object> mergeOverrideMap(Package pkg, Map<String, Object> overrideMap) {
 		// if the package does not have any values, return just the override values.
 		if (pkg.getConfigValues() == null || (pkg.getConfigValues() != null &&
-				!StringUtils.hasText(pkg.getConfigValues().getRaw()))) {
+		!StringUtils.hasText(pkg.getConfigValues().getRaw()))) {
 			return overrideMap;
 		}
 		// load the package values
@@ -121,7 +121,7 @@ public class ConfigValueUtils {
 	}
 
 	private static Map<String, Object> mergePackagesIncludingDependencies(Package pkg,
-			Map<String, Object> overrideMap) {
+	Map<String, Object> overrideMap) {
 		List<Package> dependencies = pkg.getDependencies();
 		if (dependencies.size() == 0) {
 			return overrideMap;
@@ -142,7 +142,7 @@ public class ConfigValueUtils {
 		for (Package dependency : dependencies) {
 			String dependencyName = dependency.getMetadata().getName();
 			Map<String, Object> currentPackageValueMapForDependency = (Map<String, Object>) currentPackageValueMap
-					.getOrDefault(dependencyName, new TreeMap<>());
+			.getOrDefault(dependencyName, new TreeMap<>());
 
 			// If the override Map contains configuration for dependencies, unravel the override Map,
 			// otherwise ignore
@@ -156,7 +156,7 @@ public class ConfigValueUtils {
 			merge(currentPackageValueMapForDependency, overrideMapToUse);
 
 			mergedValues.put(dependency.getMetadata().getName(),
-					mergeOverrideMap(dependency, currentPackageValueMapForDependency));
+			mergeOverrideMap(dependency, currentPackageValueMapForDependency));
 		}
 		return mergedValues;
 

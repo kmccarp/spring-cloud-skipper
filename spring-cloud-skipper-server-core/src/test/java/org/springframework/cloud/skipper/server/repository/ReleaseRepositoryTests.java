@@ -254,24 +254,24 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		Long packageMetadataId2 = this.packageMetadataRepository.findByName("package2").get(0).getId();
 
 		List<Release> foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
+		this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(6);
 
 		foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(LOCAL_REPO, packageMetadataId2);
+		this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(LOCAL_REPO, packageMetadataId2);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(11);
 
 		// findByNameAndVersionOrderByApiVersionDesc
 		Release foundByNameAndVersion = this.releaseRepository.findByNameAndVersion(release1.getName(), 2);
 		assertThat(foundByNameAndVersion).isNotNull();
 		assertThat(foundByNameAndVersion.getInfo().getStatus().getStatusCode()).isEqualTo(release2.getInfo().getStatus()
-				.getStatusCode());
+		.getStatusCode());
 		assertThat(foundByNameAndVersion.getInfo().getStatus().getPlatformStatus()).isEqualTo(release2.getInfo()
-				.getStatus().getPlatformStatus());
+		.getStatus().getPlatformStatus());
 		assertThat(foundByNameAndVersion.getPkg().getMetadata().getVersion()).isEqualTo(release2.getPkg().getMetadata()
-				.getVersion());
+		.getVersion());
 		assertThat(foundByNameAndVersion.getPkg().getMetadata().getName()).isEqualTo(release2.getPkg().getMetadata()
-				.getName());
+		.getName());
 
 		// findLatestRelease
 		Release latestRelease = this.releaseRepository.findLatestRelease(release1.getName());
@@ -279,7 +279,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		assertThat(latestRelease.getName()).isEqualTo(release3.getName());
 		assertThat(latestRelease.getVersion()).isEqualTo(release3.getVersion());
 		assertThat(latestRelease.getInfo().getStatus().getStatusCode())
-				.isEqualTo(release3.getInfo().getStatus().getStatusCode());
+		.isEqualTo(release3.getInfo().getStatus().getStatusCode());
 
 		// findReleaseRevisions
 		List<Release> releaseRevisions = this.releaseRepository.findReleaseRevisions(release1.getName(), 2);
@@ -288,25 +288,25 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		assertThat(releaseRevisions.get(0).getName()).isEqualTo(release3.getName());
 		assertThat(releaseRevisions.get(0).getVersion()).isEqualTo(release3.getVersion());
 		assertThat(releaseRevisions.get(0).getInfo().getStatus().getStatusCode())
-				.isEqualTo(release3.getInfo().getStatus().getStatusCode());
+		.isEqualTo(release3.getInfo().getStatus().getStatusCode());
 		assertThat(releaseRevisions.get(1).getName()).isEqualTo(release2.getName());
 		assertThat(releaseRevisions.get(1).getVersion()).isEqualTo(release2.getVersion());
 		assertThat(releaseRevisions.get(1).getInfo().getStatus().getStatusCode()).isEqualTo(release2.getInfo()
-				.getStatus().getStatusCode());
+		.getStatus().getStatusCode());
 
 		// findByNameIgnoreCaseContainingOrderByNameAscVersionDesc
 		List<Release> orderByVersion = this.releaseRepository
-				.findByNameIgnoreCaseContainingOrderByNameAscVersionDesc(release4.getName());
+		.findByNameIgnoreCaseContainingOrderByNameAscVersionDesc(release4.getName());
 		assertThat(orderByVersion).isNotEmpty();
 		assertThat(orderByVersion).hasSize(2);
 		assertThat(orderByVersion.get(0).getName()).isEqualTo(release5.getName());
 		assertThat(orderByVersion.get(0).getVersion()).isEqualTo(release5.getVersion());
 		assertThat(orderByVersion.get(0).getInfo().getStatus().getStatusCode()).isEqualTo(release5.getInfo()
-				.getStatus().getStatusCode());
+		.getStatus().getStatusCode());
 		assertThat(orderByVersion.get(1).getName()).isEqualTo(release4.getName());
 		assertThat(orderByVersion.get(1).getVersion()).isEqualTo(release4.getVersion());
 		assertThat(orderByVersion.get(1).getInfo().getStatus().getStatusCode()).isEqualTo(release4.getInfo()
-				.getStatus().getStatusCode());
+		.getStatus().getStatusCode());
 
 		// findByNameIgnoreCaseContaining
 		List<Release> byNameLike = this.releaseRepository.findByNameIgnoreCaseContaining("stable");
@@ -345,7 +345,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		}
 		catch (ReleaseNotFoundException e) {
 			assertThat(e.getMessage())
-					.isEqualTo(String.format("Release with the name [%s] doesn't exist", release4.getName()));
+			.isEqualTo(String.format("Release with the name [%s] doesn't exist", release4.getName()));
 		}
 		try {
 			this.releaseRepository.findLatestReleaseForUpdate(release16.getName());
@@ -353,24 +353,24 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		}
 		catch (ReleaseNotFoundException e) {
 			assertThat(e.getMessage())
-					.isEqualTo(String.format("Release with the name [%s] doesn't exist", release16.getName()));
+			.isEqualTo(String.format("Release with the name [%s] doesn't exist", release16.getName()));
 		}
 
 		this.packageMetadataRepository.deleteByRepositoryIdAndName(REMOTE_REPO, "package1");
 		foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
+		this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO, packageMetadataId1);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(6);
 
 		try {
 			this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata2.getName(),
-					PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
+			PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 			fail("SkipperException is expected");
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage())
-					.contains("Can not delete Package Metadata [package2:1.0.1] in Repository [local]")
-					.contains("Not all releases of this package have the status DELETED.")
-					.contains("Active Releases [multipleRevisions2,multipleRevisions3]");
+			.contains("Can not delete Package Metadata [package2:1.0.1] in Repository [local]")
+			.contains("Not all releases of this package have the status DELETED.")
+			.contains("Active Releases [multipleRevisions2,multipleRevisions3]");
 
 		}
 
@@ -379,14 +379,14 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 
 		try {
 			this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata2.getName(),
-					PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
+			PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 			fail("SkipperException is expected");
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage())
-					.contains("Can not delete Package Metadata [package2:1.0.1] in Repository [local]")
-					.contains("Not all releases of this package have the status DELETED.")
-					.contains("Active Releases [multipleRevisions2,multipleRevisions3]");
+			.contains("Can not delete Package Metadata [package2:1.0.1] in Repository [local]")
+			.contains("Not all releases of this package have the status DELETED.")
+			.contains("Active Releases [multipleRevisions2,multipleRevisions3]");
 
 		}
 	}
@@ -477,24 +477,24 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		Long ticktockPackageMetadataId = this.packageMetadataRepository.findByName("myticktock").get(0).getId();
 		try {
 			this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata1.getName(),
-					PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
+			PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 			fail("SkipperException is expected");
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage())
-					.contains("Can not delete Package Metadata [myticktock:1.0.0] in Repository [local]")
-					.contains("Not all releases of this package have the status DELETED.")
-					.contains("Active Releases [ticktock2]");
+			.contains("Can not delete Package Metadata [myticktock:1.0.0] in Repository [local]")
+			.contains("Not all releases of this package have the status DELETED.")
+			.contains("Active Releases [ticktock2]");
 
 		}
 
 		release3.setInfo(deletedInfo);
 		this.releaseRepository.save(release3);
 		this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata1.getName(),
-				PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
+		PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 		List<Release> foundByRepositoryIdAndPackageMetadataId =
-				this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO,
-						ticktockPackageMetadataId);
+		this.releaseRepository.findByRepositoryIdAndPackageMetadataIdOrderByNameAscVersionDesc(REMOTE_REPO,
+		ticktockPackageMetadataId);
 		assertThat(foundByRepositoryIdAndPackageMetadataId).hasSize(0);
 
 	}
@@ -516,12 +516,12 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		this.packageMetadataRepository.save(packageMetadata1);
 		try {
 			this.packageMetadataService.deleteIfAllReleasesDeleted(packageMetadata1.getName(),
-					PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
+			PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK);
 			fail("SkipperException is expected");
 		}
 		catch (SkipperException e) {
 			assertThat(e.getMessage())
-					.contains("Can not delete package [myticktock], associated repository [test] is remote.");
+			.contains("Can not delete package [myticktock], associated repository [test] is remote.");
 		}
 
 	}
@@ -548,7 +548,7 @@ public class ReleaseRepositoryTests extends AbstractIntegrationTest {
 		}
 		catch (ReleaseNotFoundException e) {
 			assertThat(e.getMessage().equals(
-					String.format("Release with the name [%s] and version [%s] doesn't exist", releaseName, version)));
+			String.format("Release with the name [%s] and version [%s] doesn't exist", releaseName, version)));
 		}
 	}
 }

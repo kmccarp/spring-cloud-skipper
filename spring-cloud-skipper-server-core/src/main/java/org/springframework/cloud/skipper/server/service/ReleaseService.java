@@ -82,11 +82,11 @@ public class ReleaseService {
 	private PackageMetadataService packageMetadataService;
 
 	public ReleaseService(PackageMetadataRepository packageMetadataRepository,
-						  ReleaseRepository releaseRepository,
-						  PackageService packageService,
-						  ReleaseManagerFactory releaseManagerFactory,
-						  DeployerRepository deployerRepository,
-						  PackageMetadataService packageMetadataService) {
+	ReleaseRepository releaseRepository,
+	PackageService packageService,
+	ReleaseManagerFactory releaseManagerFactory,
+	DeployerRepository deployerRepository,
+	PackageMetadataService packageMetadataService) {
 		this.packageMetadataRepository = packageMetadataRepository;
 		this.releaseRepository = releaseRepository;
 		this.packageService = packageService;
@@ -134,12 +134,14 @@ public class ReleaseService {
 			List<PackageMetadata> packageMetadataList = this.packageMetadataRepository.findByNameRequired(packageName);
 			if (packageMetadataList.size() == 1) {
 				packageMetadata = packageMetadataList.get(0);
-			} else {
+			}
+			else {
 				packageMetadata = this.packageMetadataRepository.findFirstByNameOrderByVersionDesc(packageName);
 			}
-		} else {
+		}
+		else {
 			packageMetadata = this.packageMetadataRepository.findByNameAndOptionalVersionRequired(packageName,
-					packageVersion);
+			packageVersion);
 		}
 		return install(packageMetadata, installRequest.getInstallProperties());
 	}
@@ -147,22 +149,22 @@ public class ReleaseService {
 	private void validateInstallRequest(InstallRequest installRequest) {
 		Assert.notNull(installRequest.getInstallProperties(), "Install properties must not be null");
 		Assert.isTrue(StringUtils.hasText(installRequest.getInstallProperties().getPlatformName()),
-				"Platform name must not be empty");
+		"Platform name must not be empty");
 		Assert.isTrue(StringUtils.hasText(installRequest.getInstallProperties().getReleaseName()),
-				"Release name must not be empty");
+		"Release name must not be empty");
 		Assert.notNull(installRequest.getPackageIdentifier(), "Package identifier must not be null");
 		Assert.isTrue(StringUtils.hasText(installRequest.getPackageIdentifier().getPackageName()),
-				"Package name must not be empty");
+		"Package name must not be empty");
 
 		try {
 			Release latestNonFailedRelease = this.releaseRepository
-					.findTopByNameAndInfoStatusStatusCodeNotOrderByVersionDesc(
-							installRequest.getInstallProperties().getReleaseName(), StatusCode.FAILED);
+			.findTopByNameAndInfoStatusStatusCodeNotOrderByVersionDesc(
+			installRequest.getInstallProperties().getReleaseName(), StatusCode.FAILED);
 			if (latestNonFailedRelease != null
-					&& !latestNonFailedRelease.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
+			&& !latestNonFailedRelease.getInfo().getStatus().getStatusCode().equals(StatusCode.DELETED)) {
 				throw new SkipperException(
-						"Release with the name [" + installRequest.getInstallProperties().getReleaseName()
-								+ "] already exists and it is not deleted.");
+				"Release with the name [" + installRequest.getInstallProperties().getReleaseName()
+				+ "] already exists and it is not deleted.");
 			}
 		} catch (ReleaseNotFoundException e) {
 			// ignore as this is expected.
@@ -179,7 +181,7 @@ public class ReleaseService {
 		int releaseVersion = latestRelease != null ? latestRelease.getVersion() + 1 : 1;
 
 		Release release = createInitialRelease(installProperties, this.packageService.downloadPackage(packageMetadata),
-				releaseVersion);
+		releaseVersion);
 		return install(release);
 	}
 
@@ -228,16 +230,16 @@ public class ReleaseService {
 			// in case of failure. Therefore we should call the package delete before the release delete!
 			String packageName = releaseToDelete.getPkg().getMetadata().getName();
 			if (this.packageMetadataService.filterReleasesFromLocalRepos(
-					Arrays.asList(releaseToDelete), packageName).isEmpty()) {
+			Arrays.asList(releaseToDelete), packageName).isEmpty()) {
 				throw new PackageDeleteException("Can't delete package: " + packageName + " from non-local repository");
 			}
 
 			this.packageMetadataService.deleteIfAllReleasesDeleted(packageName,
-					// Exclude the release being deleted from the is active check
-					// If not the deleted release follow the default package delete policies
-					r -> (r.getName().equals(releaseToDelete.getName())
-							&& r.getVersion() == releaseToDelete.getVersion()) ?
-							false : PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK.test(r));
+			// Exclude the release being deleted from the is active check
+			// If not the deleted release follow the default package delete policies
+			r -> (r.getName().equals(releaseToDelete.getName())
+			&& r.getVersion() == releaseToDelete.getVersion()) ?
+			false : PackageMetadataService.DEFAULT_RELEASE_ACTIVITY_CHECK.test(r));
 		}
 		String kind = ManifestUtils.resolveKind(releaseToDelete.getManifest().getData());
 		ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
@@ -253,16 +255,16 @@ public class ReleaseService {
 	@Transactional
 	public Mono<Map<String, Info>> statusReactive(String[] releaseNames) {
 		return Flux.fromArray(releaseNames)
-				.flatMap(releaseName -> {
-					Release release = this.releaseRepository.findTopByNameOrderByVersionDesc(releaseName);
-					return Mono.justOrEmpty(release);
-				})
-				.flatMap(release -> {
-					String kind = ManifestUtils.resolveKind(release.getManifest().getData());
-					ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
-					return releaseManager.statusReactive(release);
-				})
-				.collectMap(release -> release.getName(), release -> release.getInfo());
+		.flatMap(releaseName -> {
+			Release release = this.releaseRepository.findTopByNameOrderByVersionDesc(releaseName);
+			return Mono.justOrEmpty(release);
+		})
+		.flatMap(release -> {
+			String kind = ManifestUtils.resolveKind(release.getManifest().getData());
+			ReleaseManager releaseManager = this.releaseManagerFactory.getReleaseManager(kind);
+			return releaseManager.statusReactive(release);
+		})
+		.collectMap(release -> release.getName(), release -> release.getInfo());
 	}
 
 	/**
@@ -274,19 +276,19 @@ public class ReleaseService {
 	@Transactional
 	public Mono<Map<String, Map<String, DeploymentState>>> states(String[] releaseNames) {
 		return Flux.fromArray(releaseNames)
-				.flatMap(releaseName -> Mono.justOrEmpty(this.releaseRepository.findTopByNameOrderByVersionDesc(releaseName)))
-				.collectMultimap(release -> {
-					String kind = ManifestUtils.resolveKind(release.getManifest().getData());
-					return this.releaseManagerFactory.getReleaseManager(kind);
-				}, release -> release)
-				.flatMap(m -> {
-					return Flux.fromIterable(m.entrySet())
-							.flatMap(e -> e.getKey().deploymentState(new ArrayList<>(e.getValue())))
-							.reduce((to, from) -> {
-								to.putAll(from);
-								return to;
-							});
-				});
+		.flatMap(releaseName -> Mono.justOrEmpty(this.releaseRepository.findTopByNameOrderByVersionDesc(releaseName)))
+		.collectMultimap(release -> {
+			String kind = ManifestUtils.resolveKind(release.getManifest().getData());
+			return this.releaseManagerFactory.getReleaseManager(kind);
+		}, release -> release)
+		.flatMap(m -> {
+			return Flux.fromIterable(m.entrySet())
+			.flatMap(e -> e.getKey().deploymentState(new ArrayList<>(e.getValue())))
+			.reduce((to, from) -> {
+				to.putAll(from);
+				return to;
+			});
+		});
 	}
 
 	/**
@@ -393,7 +395,7 @@ public class ReleaseService {
 	}
 
 	protected Release createInitialRelease(InstallProperties installProperties, Package packageToInstall,
-										   int releaseVersion) {
+	int releaseVersion) {
 		Release release = new Release();
 		release.setName(installProperties.getReleaseName());
 		release.setPlatformName(installProperties.getPlatformName());

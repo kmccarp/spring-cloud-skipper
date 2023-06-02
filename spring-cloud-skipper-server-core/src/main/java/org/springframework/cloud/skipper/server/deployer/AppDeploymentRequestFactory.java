@@ -84,7 +84,7 @@ public class AppDeploymentRequestFactory {
 	 * @return a created AppDeploymentRequest
 	 */
 	public AppDeploymentRequest createAppDeploymentRequest(SpringCloudDeployerApplicationManifest applicationSpec, String releaseName,
-			String version) {
+	String version) {
 		SpringCloudDeployerApplicationSpec spec = applicationSpec.getSpec();
 		Map<String, String> applicationProperties = new TreeMap<>();
 		if (spec.getApplicationProperties() != null) {
@@ -94,14 +94,14 @@ public class AppDeploymentRequestFactory {
 		// app name needs to differentiate as otherwise it may result same deployment id and
 		// failure on a deployer.
 		AppDefinition appDefinition = new AppDefinition(applicationSpec.getApplicationName() + "-v" + version,
-				applicationProperties);
+		applicationProperties);
 		Resource resource;
 		try {
 			resource = delegatingResourceLoader.getResource(getResourceLocation(spec.getResource(), spec.getVersion()));
 		}
 		catch (Exception e) {
 			throw new SkipperException(
-					"Could not load Resource " + spec.getResource() + ". Message = " + e.getMessage(), e);
+			"Could not load Resource " + spec.getResource() + ". Message = " + e.getMessage(), e);
 		}
 
 		Map<String, String> deploymentProperties = new TreeMap<>();

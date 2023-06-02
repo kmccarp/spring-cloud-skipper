@@ -30,20 +30,20 @@ public class ReleaseDifferenceSummaryGenerator {
 	 * @return the textual summary
 	 */
 	public String generateSummary(String existingReleaseName, int existingReleaseVersion,
-			String replacingReleseName, int replacingReleaseVersion,
-			ReleaseDifference releaseDifference) {
+	String replacingReleseName, int replacingReleaseVersion,
+	ReleaseDifference releaseDifference) {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (releaseDifference.getDifferences() != null) {
 			stringBuilder.append("Release Difference Summary between existing release ");
 			stringBuilder.append("[name: " + existingReleaseName + "version: " + existingReleaseVersion + "]");
 			stringBuilder.append(" and replacing release ");
 			stringBuilder
-					.append("[name: " + replacingReleseName + "version: " + replacingReleaseVersion + "]\n");
+			.append("[name: " + replacingReleseName + "version: " + replacingReleaseVersion + "]\n");
 			ApplicationManifestDifferenceSummaryGenerator applicationManifestDifferenceSummaryGenerator = new ApplicationManifestDifferenceSummaryGenerator();
 			for (ApplicationManifestDifference applicationManifestDifference : releaseDifference.getDifferences()) {
 				if (!applicationManifestDifference.areEqual()) {
 					stringBuilder.append(applicationManifestDifferenceSummaryGenerator
-							.generateSummary(applicationManifestDifference));
+					.generateSummary(applicationManifestDifference));
 				}
 			}
 		}

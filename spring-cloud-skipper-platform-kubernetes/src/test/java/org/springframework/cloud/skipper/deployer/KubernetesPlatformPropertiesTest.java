@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = KubernetesPlatformPropertiesTest.TestConfig.class,
-		properties = { "spring.cloud.kubernetes.client.namespace=default" })
+properties = {"spring.cloud.kubernetes.client.namespace=default"})
 @ActiveProfiles("platform-properties")
 public class KubernetesPlatformPropertiesTest {
 

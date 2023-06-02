@@ -40,7 +40,7 @@ public class ActuatorService {
 	private final ReleaseRepository releaseRepository;
 
 	public ActuatorService(ReleaseService releaseService, DeployerRepository deployerRepository,
-			ReleaseRepository releaseRepository) {
+	ReleaseRepository releaseRepository) {
 		Assert.notNull(releaseService, "'releaseService' is required");
 		this.releaseService = releaseService;
 		Assert.notNull(deployerRepository, "'deployerRepository' is required");
@@ -60,10 +60,10 @@ public class ActuatorService {
 	 * @return JSON content as UTF-8 encoded string
 	 */
 	public String getFromActuator(String releaseName, String appName, String appId, String endpoint,
-			Optional<String> authorization) {
+	Optional<String> authorization) {
 
 		return actuatorOperations(releaseName).getFromActuator(deploymentId(releaseName, appName), appId, endpoint,
-				String.class, authHeader(authorization));
+		String.class, authHeader(authorization));
 	}
 
 	/**
@@ -76,18 +76,18 @@ public class ActuatorService {
 	 * @return the response object, if any
 	 */
 	public Object postToActuator(String releaseName, String appName, String appId, ActuatorPostRequest postRequest,
-			Optional<String> authorization) {
+	Optional<String> authorization) {
 		return actuatorOperations(releaseName)
-				.postToActuator(deploymentId(releaseName, appName), appId, postRequest.getEndpoint(),
-				postRequest.getBody(), Object.class, authHeader(authorization));
+		.postToActuator(deploymentId(releaseName, appName), appId, postRequest.getEndpoint(),
+		postRequest.getBody(), Object.class, authHeader(authorization));
 	}
 
 	private String deploymentId(String releaseName, String appName) {
 		return this.releaseService.status(releaseName).getStatus().getAppStatusList().stream()
-				.filter(as -> appName.equals(as.getDeploymentId()))
-				.map(as -> as.getDeploymentId())
-				.findFirst().orElseThrow(() -> new IllegalArgumentException(
-						String.format("app %s is not found in release %s", appName, releaseName)));
+		.filter(as -> appName.equals(as.getDeploymentId()))
+		.map(as -> as.getDeploymentId())
+		.findFirst().orElseThrow(() -> new IllegalArgumentException(
+		String.format("app %s is not found in release %s", appName, releaseName)));
 	}
 
 	private Optional<HttpHeaders> authHeader(Optional<String> authorization) {
@@ -101,6 +101,6 @@ public class ActuatorService {
 	private ActuatorOperations actuatorOperations(String releaseName) {
 		Release release = this.releaseRepository.findTopByNameOrderByVersionDesc(releaseName);
 		return this.deployerRepository.findByNameRequired(release.getPlatformName())
-				.getActuatorOperations();
+		.getActuatorOperations();
 	}
 }

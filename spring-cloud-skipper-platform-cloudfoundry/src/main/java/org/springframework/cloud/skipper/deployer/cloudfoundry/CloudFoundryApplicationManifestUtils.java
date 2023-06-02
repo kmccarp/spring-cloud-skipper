@@ -41,13 +41,13 @@ public class CloudFoundryApplicationManifestUtils {
 
 	public static ApplicationManifest updateApplicationPath(ApplicationManifest cfApplicationManifest, Resource application) {
 		ApplicationManifest.Builder applicationManifestBuilder = ApplicationManifest.builder()
-				.from(cfApplicationManifest);
+		.from(cfApplicationManifest);
 		try {
 			if (application != null && application instanceof DockerResource) {
 				String uriString = application.getURI().toString();
 				applicationManifestBuilder.docker(
-						Docker.builder().image(uriString.replaceFirst("docker:", "")).build())
-						.path(null);
+				Docker.builder().image(uriString.replaceFirst("docker:", "")).build())
+				.path(null);
 			}
 			else {
 				applicationManifestBuilder.path(application.getFile().toPath());
@@ -62,8 +62,8 @@ public class CloudFoundryApplicationManifestUtils {
 	public static ApplicationManifest updateApplicationName(Release release) {
 		String name = release.getName() + "-v" + release.getVersion();
 		ApplicationManifest cfApplicationManifest = ApplicationManifest.builder()
-				.name(name)
-				.build();
+		.name(name)
+		.build();
 		return cfApplicationManifest;
 	}
 
@@ -75,7 +75,7 @@ public class CloudFoundryApplicationManifestUtils {
 		}
 		if (applicationManifest.getBuildpacks() != null) {
 			applicationManifestMap.put("spec.manifest.buildpacks",
-					StringUtils.collectionToCommaDelimitedString(applicationManifest.getBuildpacks()));
+			StringUtils.collectionToCommaDelimitedString(applicationManifest.getBuildpacks()));
 		}
 		if (applicationManifest.getCommand() != null) {
 			applicationManifestMap.put("spec.manifest.command", applicationManifest.getCommand());

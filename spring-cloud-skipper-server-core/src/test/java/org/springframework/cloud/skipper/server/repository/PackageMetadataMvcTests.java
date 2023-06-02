@@ -42,7 +42,7 @@ public class PackageMetadataMvcTests extends AbstractMockMvcTests {
 	@Test
 	public void shouldReturnRepositoryIndex() throws Exception {
 		mockMvc.perform(get("/api")).andDo(print()).andExpect(status().isOk()).andExpect(
-				jsonPath("$._links.packageMetadata").exists());
+		jsonPath("$._links.packageMetadata").exists());
 	}
 
 	@Test
@@ -53,28 +53,28 @@ public class PackageMetadataMvcTests extends AbstractMockMvcTests {
 		packageMetadata = packageMetadataRepository.findByNameAndVersionByMaxRepoOrder("package2", "2.0.0");
 		assertThat(packageMetadata.getId()).isNotNull();
 		mockMvc.perform(get("/api/packageMetadata?projection=summary")).andDo(print()).andExpect(status().isOk())
-				.andExpect(jsonPath("$._embedded.packageMetadata[0].version").value("1.0.0"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[0].iconUrl")
-						.value("http://www.gilligansisle.com/images/a2.gif"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[0].maintainer").doesNotExist())
-				.andExpect(jsonPath("$._embedded.packageMetadata[0]._links.install.href")
-						.value("http://localhost/api/package/install/1"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1].version").value("2.0.0"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1].iconUrl")
-						.value("http://www.gilligansisle.com/images/a1.gif"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1]._links.install.href")
-						.value("http://localhost/api/package/install/2"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1].maintainer").doesNotExist());
+		.andExpect(jsonPath("$._embedded.packageMetadata[0].version").value("1.0.0"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[0].iconUrl")
+		.value("http://www.gilligansisle.com/images/a2.gif"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[0].maintainer").doesNotExist())
+		.andExpect(jsonPath("$._embedded.packageMetadata[0]._links.install.href")
+		.value("http://localhost/api/package/install/1"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1].version").value("2.0.0"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1].iconUrl")
+		.value("http://www.gilligansisle.com/images/a1.gif"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1]._links.install.href")
+		.value("http://localhost/api/package/install/2"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1].maintainer").doesNotExist());
 
 		mockMvc.perform(get("/api/packageMetadata")).andDo(print()).andExpect(status().isOk())
-				.andExpect(jsonPath("$._embedded.packageMetadata[0].version").value("1.0.0"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[0].description").value("A very cool project"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[0]._links.install.href")
-						.value("http://localhost/api/package/install/1"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1].version").value("2.0.0"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1].description").value("Another very cool project"))
-				.andExpect(jsonPath("$._embedded.packageMetadata[1]._links.install.href")
-						.value("http://localhost/api/package/install/2"));
+		.andExpect(jsonPath("$._embedded.packageMetadata[0].version").value("1.0.0"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[0].description").value("A very cool project"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[0]._links.install.href")
+		.value("http://localhost/api/package/install/1"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1].version").value("2.0.0"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1].description").value("Another very cool project"))
+		.andExpect(jsonPath("$._embedded.packageMetadata[1]._links.install.href")
+		.value("http://localhost/api/package/install/2"));
 	}
 
 }
